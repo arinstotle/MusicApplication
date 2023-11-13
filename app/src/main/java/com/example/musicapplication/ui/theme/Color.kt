@@ -21,3 +21,10 @@ val GreenCard = Color(0xFF578A2A)
 val YellowCard = Color(0xFFC9C24A)
 val PinkCard = Color(0xFF94596C)
 val OrangeCard = Color(0xFFCA7F3D)
+
+val SearchFieldBackground = Color(0xFF2F3237)
+
+val AuthLightBlue = Color(0xFF001D55)
+val AuthDarkBlue = Color(0xFF001235)
+val RegLightPurple = Color(0xFF7033B4)
+val RegDarkPurple = Color(0xFF2F1549)
