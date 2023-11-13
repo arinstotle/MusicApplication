@@ -1,6 +1,6 @@
 package com.example.musicapplication.model
 
-data class ProfileItem(
+data class UserItem(
     val photoUrl:String?,
     val nickname:String
 )

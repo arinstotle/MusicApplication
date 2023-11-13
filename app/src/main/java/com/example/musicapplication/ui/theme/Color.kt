@@ -12,3 +12,12 @@ val Pink40 = Color(0xFF7D5260)
 
 val DarkBackground = Color(0xFF1E1E1E)
 val TextWhite = Color(0xFFFFFFFF)
+val TextGrey = Color(0xFF929292)
+
+
+val BlueCard = Color(0xFF275DC9)
+val PurpleCard = Color(0xFF6650a4)
+val GreenCard = Color(0xFF578A2A)
+val YellowCard = Color(0xFFC9C24A)
+val PinkCard = Color(0xFF94596C)
+val OrangeCard = Color(0xFFCA7F3D)
