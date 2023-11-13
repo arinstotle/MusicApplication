@@ -6,9 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -20,10 +23,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.musicapplication.R
 import com.example.musicapplication.navigation.Screen
 
 @Composable
@@ -34,7 +42,7 @@ fun CustomBottomNavigation(
     val items = Screen.BottomScreens.list
     Row(
         modifier= Modifier
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.secondaryContainer)
             .padding(8.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -59,9 +67,9 @@ fun CustomButtonNavigationItem(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
     else
         Color.Transparent
-    val contentColor = if (isSelected) MaterialTheme.colorScheme.primary
+    val contentColor = if (isSelected) MaterialTheme.colorScheme.onTertiary
     else
-        MaterialTheme.colorScheme.onBackground
+        MaterialTheme.colorScheme.tertiary
     Box(
         modifier = Modifier
             .clip(CircleShape)
@@ -75,17 +83,25 @@ fun CustomButtonNavigationItem(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(30.dp),
                 imageVector = ImageVector.vectorResource(id = item.icon),
                 contentDescription =null,
                 tint = contentColor,
             )
+            Spacer(modifier = Modifier.width(4.dp))
             AnimatedVisibility(visible = isSelected) {
                 Text(
                     text = item.title,
                     color = contentColor,
-                    fontSize = 14.sp,
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight(600),
+                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                    ),
                     fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

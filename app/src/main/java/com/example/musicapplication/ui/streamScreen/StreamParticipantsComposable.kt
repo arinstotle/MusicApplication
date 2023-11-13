@@ -28,7 +28,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -36,6 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.musicapplication.R
 
 @Composable
@@ -112,12 +117,13 @@ fun ParticipantCard(participant: ParticipantUI, removeParticipantClick: () -> Un
                 .padding(12.dp)
                 .fillMaxWidth()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            AsyncImage(
+                model = participant.avatarURL,
+                placeholder = painterResource(id = R.drawable.sample_avatar),
+                error = painterResource(id = R.drawable.sample_avatar),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape)
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(60.dp).clip(CircleShape)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {

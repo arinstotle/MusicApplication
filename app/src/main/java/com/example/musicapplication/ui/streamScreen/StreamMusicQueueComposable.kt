@@ -1,5 +1,7 @@
 package com.example.musicapplication.ui.streamScreen
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,42 +17,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.musicapplication.R
 
 @Composable
-fun StreamMusicQueueComposable(songsList: List<SongUI>) {
+fun StreamMusicQueueComposable(songsList: List<SongUI>,
+                               songOnClick: (SongUI) -> Unit) {
     var selectedSong by remember { mutableStateOf<SongUI?>(null) }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 8.dp)
-            .background(Color(0xFF26292D))
+            .background(MaterialTheme.colorScheme.primary)
     ) {
-        SongsList(songsList = songsList, onSongSelected = { song ->
-            selectedSong = song
-        })
-        selectedSong?.let {
-            MediaPlayerCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .background(Color.Transparent),
-                it
-            )
-        }
-
+        SongsList(songsList = songsList, onSongSelected = songOnClick)
     }
 }
 
 
 @Composable
-fun SongsList(songsList: List<SongUI>, onSongSelected: (song: SongUI) -> Unit) {
+fun SongsList(songsList: List<SongUI>, onSongSelected: (SongUI) -> Unit) {
     var isSongSelected by remember { mutableStateOf(false) }
     LazyColumn(
         modifier = Modifier
@@ -60,23 +55,21 @@ fun SongsList(songsList: List<SongUI>, onSongSelected: (song: SongUI) -> Unit) {
             )
     ) {
         items(songsList.size) { song ->
-            SongCard(song = songsList[song], onClick = {
-
-            })
+            SongCard(song = songsList[song], onClick = onSongSelected)
         }
     }
 }
 
 @Composable
-fun SongCard(song: SongUI, onClick: () -> Unit) {
+fun SongCard(song: SongUI, onClick: (SongUI) -> Unit) {
     Card(
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.elevatedCardElevation(0.dp),
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .clickable { onClick() },
-        colors = CardDefaults.cardColors(Color(0xFF26292D))
+            .clickable { onClick(song) },
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -84,12 +77,13 @@ fun SongCard(song: SongUI, onClick: () -> Unit) {
                 .padding(12.dp)
                 .fillMaxWidth()
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            AsyncImage(
+                model = song.imageUrl,
+                placeholder = painterResource(id = R.drawable.sample_album),
+                error = painterResource(id = R.drawable.sample_album),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape)
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(60.dp).clip(CircleShape)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -98,11 +92,11 @@ fun SongCard(song: SongUI, onClick: () -> Unit) {
                     style = TextStyle(
                         fontSize = 13.sp,
                         fontWeight = FontWeight(600),
-                        color = Color(0xFFFFFFFF),
-
-                        ),
+                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        color = MaterialTheme.colorScheme.onTertiary
+                    ),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
+                    fontSize = 14.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -111,9 +105,8 @@ fun SongCard(song: SongUI, onClick: () -> Unit) {
                     style = TextStyle(
                         fontSize = 11.sp,
                         fontWeight = FontWeight(600),
-                        color = Color.DarkGray,
-
-                        ),
+                        fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                        color = MaterialTheme.colorScheme.tertiary),
                     fontSize = 14.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -121,18 +114,27 @@ fun SongCard(song: SongUI, onClick: () -> Unit) {
             }
             Text(
                 text = song.duration,
-                fontSize = 14.sp,
-                color = Color.White
+                style = TextStyle(
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight(600),
+                    fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                    color = MaterialTheme.colorScheme.onTertiary
+                ),
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.width(16.dp))
             IconButton(
-                onClick = { /* Обработка клика */ },
+                onClick = {
+
+                },
                 modifier = Modifier.size(24.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = "Play",
-                    tint = Color.DarkGray // Цвет иконки
+                    tint = MaterialTheme.colorScheme.tertiary
                 )
             }
         }
@@ -142,8 +144,6 @@ fun SongCard(song: SongUI, onClick: () -> Unit) {
 @Composable
 fun MediaPlayerCard(modifier: Modifier = Modifier, song: SongUI) {
     var songState by remember { mutableStateOf(false) }
-
-
     Card(modifier = modifier, elevation = CardDefaults.elevatedCardElevation(4.dp)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
