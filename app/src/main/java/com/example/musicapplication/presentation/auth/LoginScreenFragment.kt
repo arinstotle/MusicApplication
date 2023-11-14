@@ -1,8 +1,7 @@
-package com.example.musicapplication.presentation
+package com.example.musicapplication.presentation.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,13 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,40 +26,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.decode.ImageSource
+import androidx.navigation.NavController
 import com.example.musicapplication.R
+import com.example.musicapplication.presentation.Screen
 import com.example.musicapplication.ui.theme.AuthDarkBlue
 import com.example.musicapplication.ui.theme.AuthLightBlue
 import com.example.musicapplication.ui.theme.DarkBackground
 
-@Composable
-fun AuthScreen() {
-
-}
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview(showBackground = true)
-fun AuthScreenFragment(){
+fun LoginScreenFragment(navController: NavController){
     Column(modifier = Modifier
         .background(DarkBackground)
-        .fillMaxWidth()){
+        .fillMaxWidth()
+        .padding(start = 14.dp, end = 14.dp, bottom = 40.dp)){
         Card(modifier = Modifier
+            .background(DarkBackground)
             .fillMaxWidth()
-            .height(110.dp)
-            .background(DarkBackground),
+            .height(110.dp),
             shape = RoundedCornerShape(topStart = 34.dp, topEnd = 34.dp)
         ){
             Box(modifier = Modifier
@@ -81,11 +71,12 @@ fun AuthScreenFragment(){
         Card(modifier = Modifier
             .height(310.dp)
             .fillMaxWidth(),
-            shape = RectangleShape){
+            shape = RectangleShape
+        ){
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(color = Color(0xBF292929), shape = RoundedCornerShape(size = 0.dp))
+                .background(color = DarkBackground, shape = RoundedCornerShape(size = 0.dp))
                 .padding(start = 16.dp, top = 25.dp, end = 16.dp)){
                 Text(text = "Login",
                     style = TextStyle(
@@ -93,21 +84,22 @@ fun AuthScreenFragment(){
                         lineHeight = 28.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_bold)),
                         fontWeight = FontWeight(700),
-                        color = Color(0xFFFFFFFF))
+                        color = Color(0xFFFFFFFF)
+                    )
                 )
                 TextField(value = "Your e-mail",
                     modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 17.dp)
-                    .height(50.dp),
+                        .fillMaxWidth()
+                        .padding(top = 17.dp)
+                        .height(50.dp),
                     shape = RoundedCornerShape(5.dp),
                     onValueChange = {},
                     textStyle = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 22.sp,
-                            fontFamily = FontFamily(Font(R.font.spartan_regular)),
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF000000)
+                        fontSize = 14.sp,
+                        lineHeight = 22.sp,
+                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF000000)
                     )
                 )
                 TextField(modifier = Modifier
@@ -123,7 +115,8 @@ fun AuthScreenFragment(){
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
                         color = Color(0xFF000000)
-                    ))
+                    )
+                )
                 Row(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 35.dp),
@@ -138,18 +131,21 @@ fun AuthScreenFragment(){
                                 fontSize = 22.sp,
                                 fontFamily = FontFamily(Font(R.font.spartan_bold)),
                                 fontWeight = FontWeight(700),
-                                color = Color(0xFFFFFFFF),))
-                        Text(text = "Registration",
+                                color = Color(0xFFFFFFFF),)
+                        )
+                        ClickableText(text = AnnotatedString("Registration"),
                             style = TextStyle(
                                 fontSize = 13.sp,
                                 fontFamily = FontFamily(Font(R.font.spartan_regular)),
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF0984E3),
-
-                                ))
+                                color = Color(0xFF0984E3)),
+                            onClick = { navController.navigate(Screen.RegisterScreen.route) }
+                        )
                     }
-                    Button(onClick = { /*TODO*/ },
+                    TextButton(onClick = { /*TODO*/ },
                         modifier = Modifier
+                            .width(105.dp)
+                            .height(46.dp)
                             .background(color = Color(0xFFD1D1D1), shape = RoundedCornerShape(size = 38.dp))
                     ) {
                         Text(text = "Login",

@@ -1,4 +1,4 @@
-package com.example.musicapplication.presentation
+package com.example.musicapplication.presentation.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,12 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,16 +35,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musicapplication.R
-import com.example.musicapplication.ui.theme.AuthDarkBlue
-import com.example.musicapplication.ui.theme.AuthLightBlue
 import com.example.musicapplication.ui.theme.DarkBackground
 import com.example.musicapplication.ui.theme.RegDarkPurple
 import com.example.musicapplication.ui.theme.RegLightPurple
 import com.example.musicapplication.ui.theme.TextWhite
-
-@Composable
-fun RegistrationScreen() {
-}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,7 +47,8 @@ fun RegistrationScreen() {
 fun RegistrationScreenFragment(){
     Column(modifier = Modifier
         .background(DarkBackground)
-        .fillMaxWidth()){
+        .fillMaxWidth()
+        .padding(start = 14.dp, end = 14.dp, bottom = 40.dp)){
         Card(modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
@@ -75,14 +70,14 @@ fun RegistrationScreenFragment(){
             }
         }
         Card(modifier = Modifier
-            .height(580.dp)
+            .height(560.dp)
             .fillMaxWidth(),
             shape = RectangleShape
         ){
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(color = Color(0xBF292929), shape = RoundedCornerShape(size = 0.dp))
+                .background(color = DarkBackground, shape = RoundedCornerShape(size = 0.dp))
                 .padding(start = 16.dp, top = 25.dp, end = 16.dp)){
                 Text(text = "Create account",
                     style = TextStyle(
@@ -177,8 +172,10 @@ fun RegistrationScreenFragment(){
                             fontWeight = FontWeight(700),
                             color = Color(0xFFFFFFFF),)
                     )
-                    Button(onClick = { /*TODO*/ },
+                    TextButton(onClick = { /*TODO*/ },
                         modifier = Modifier
+                            .width(105.dp)
+                            .height(46.dp)
                             .background(color = Color(0xFFD1D1D1), shape = RoundedCornerShape(size = 38.dp))
                     ) {
                         Text(text = "Create",
