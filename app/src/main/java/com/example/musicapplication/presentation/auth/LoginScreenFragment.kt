@@ -14,13 +14,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material3.Button
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -32,18 +35,30 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.musicapplication.R
-import com.example.musicapplication.presentation.Screen
-import com.example.musicapplication.ui.theme.AuthDarkBlue
-import com.example.musicapplication.ui.theme.AuthLightBlue
-import com.example.musicapplication.ui.theme.DarkBackground
+import com.example.musicapplication.navigation.Screen
+import com.example.musicapplication.theme.AuthDarkBlue
+import com.example.musicapplication.theme.AuthLightBlue
+import com.example.musicapplication.theme.DarkBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreenFragment(navController: NavController){
+fun LoginScreenFragment(
+    navController: NavController,
+    onClick: (authState:AuthState) -> Unit
+    ){
+
+    val email = remember {
+        mutableStateOf("")
+    }
+    val password = remember {
+        mutableStateOf("")
+    }
+
     Column(modifier = Modifier
         .background(DarkBackground)
         .fillMaxWidth()
@@ -87,35 +102,44 @@ fun LoginScreenFragment(navController: NavController){
                         color = Color(0xFFFFFFFF)
                     )
                 )
-                TextField(value = "Your e-mail",
+                TextField(value = email.value,
+                    label = {Text(text = "Your email")},
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 17.dp)
                         .height(50.dp),
                     shape = RoundedCornerShape(5.dp),
-                    onValueChange = {},
+                    onValueChange = {
+                        email.value=it
+                    },
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
                         color = Color(0xFF000000)
-                    )
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 15.dp)
                     .height(50.dp),
                     shape = RoundedCornerShape(5.dp),
-                    value = "Password",
-                    onValueChange = {},
+                    value = password.value,
+                    label = {Text(text = "Password")},
+                    onValueChange = { password.value=it},
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
                         color = Color(0xFF000000)
-                    )
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    trailingIcon = {
+
+                    }
                 )
                 Row(modifier = Modifier
                     .fillMaxWidth()
@@ -131,7 +155,7 @@ fun LoginScreenFragment(navController: NavController){
                                 fontSize = 22.sp,
                                 fontFamily = FontFamily(Font(R.font.spartan_bold)),
                                 fontWeight = FontWeight(700),
-                                color = Color(0xFFFFFFFF),)
+                                color = Color(0xFFFFFFFF))
                         )
                         ClickableText(text = AnnotatedString("Registration"),
                             style = TextStyle(
@@ -139,14 +163,25 @@ fun LoginScreenFragment(navController: NavController){
                                 fontFamily = FontFamily(Font(R.font.spartan_regular)),
                                 fontWeight = FontWeight(400),
                                 color = Color(0xFF0984E3)),
-                            onClick = { navController.navigate(Screen.RegisterScreen.route) }
+                            onClick = { navController.navigate(Screen.RegistrationScreen.route) }
                         )
                     }
-                    TextButton(onClick = { /*TODO*/ },
+                    TextButton(onClick = {
+                        onClick(
+                            AuthState(
+                                name = null,
+                                email = email.value,
+                                password = password.value
+                            ))
+                        navController.navigate(Screen.MainScreen.route)
+                                         },
                         modifier = Modifier
                             .width(105.dp)
                             .height(46.dp)
-                            .background(color = Color(0xFFD1D1D1), shape = RoundedCornerShape(size = 38.dp))
+                            .background(
+                                color = Color(0xFFD1D1D1),
+                                shape = RoundedCornerShape(size = 38.dp)
+                            )
                     ) {
                         Text(text = "Login",
                             style = TextStyle(

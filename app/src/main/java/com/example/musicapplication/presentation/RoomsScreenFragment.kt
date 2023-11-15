@@ -31,14 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musicapplication.R
 import com.example.musicapplication.model.RoomItem
-import com.example.musicapplication.ui.theme.BlueCard
-import com.example.musicapplication.ui.theme.DarkBackground
-import com.example.musicapplication.ui.theme.GreenCard
-import com.example.musicapplication.ui.theme.OrangeCard
-import com.example.musicapplication.ui.theme.PinkCard
-import com.example.musicapplication.ui.theme.PurpleCard
-import com.example.musicapplication.ui.theme.TextWhite
-import com.example.musicapplication.ui.theme.YellowCard
+import com.example.musicapplication.theme.BlueCard
+import com.example.musicapplication.theme.DarkBackground
+import com.example.musicapplication.theme.GreenCard
+import com.example.musicapplication.theme.OrangeCard
+import com.example.musicapplication.theme.PinkCard
+import com.example.musicapplication.theme.PurpleCard
+import com.example.musicapplication.theme.TextWhite
+import com.example.musicapplication.theme.YellowCard
 import com.example.musicapplication.utils.Constants
 
 @Composable

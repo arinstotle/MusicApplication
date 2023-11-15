@@ -28,3 +28,5 @@ val AuthLightBlue = Color(0xFF001D55)
 val AuthDarkBlue = Color(0xFF001235)
 val RegLightPurple = Color(0xFF7033B4)
 val RegDarkPurple = Color(0xFF2F1549)
+
+val Red = Color(0xFFAC2929)

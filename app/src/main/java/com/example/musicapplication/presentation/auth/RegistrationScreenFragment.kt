@@ -1,3 +1,5 @@
+@file:Suppress("IMPLICIT_CAST_TO_ANY")
+
 package com.example.musicapplication.presentation.auth
 
 import androidx.compose.foundation.Image
@@ -13,38 +15,81 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.musicapplication.R
-import com.example.musicapplication.ui.theme.DarkBackground
-import com.example.musicapplication.ui.theme.RegDarkPurple
-import com.example.musicapplication.ui.theme.RegLightPurple
-import com.example.musicapplication.ui.theme.TextWhite
+import com.example.musicapplication.navigation.Screen
+import com.example.musicapplication.theme.DarkBackground
+import com.example.musicapplication.theme.RegDarkPurple
+import com.example.musicapplication.theme.RegLightPurple
+import com.example.musicapplication.theme.TextWhite
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview(showBackground = true)
-fun RegistrationScreenFragment(){
+fun RegistrationScreenFragment(
+     navController: NavController,
+     onClick:(authState:AuthState) -> Unit
+){
+    val email = remember {
+        mutableStateOf("")
+    }
+    val password = remember {
+        mutableStateOf("")
+    }
+
+    val nickname = remember {
+        mutableStateOf("")
+    }
+    val repeatedPassword = remember {
+        mutableStateOf("")
+    }
+
+    val passwordVisibility = remember {
+        mutableStateOf(false)
+    }
+
+    val repeatedPasswordVisibility = remember {
+        mutableStateOf(false)
+    }
+
+    val passwordMatch = remember {
+        mutableStateOf(true)
+    }
+
     Column(modifier = Modifier
         .background(DarkBackground)
         .fillMaxWidth()
@@ -93,8 +138,9 @@ fun RegistrationScreenFragment(){
                     .padding(top = 17.dp)
                     .height(50.dp),
                     shape = RoundedCornerShape(5.dp),
-                    value = "Your name",
-                    onValueChange = {},
+                    value = nickname.value,
+                    label = {Text(text = "Your name")},
+                    onValueChange = {nickname.value = it},
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
@@ -107,43 +153,120 @@ fun RegistrationScreenFragment(){
                     .padding(top = 15.dp)
                     .height(50.dp),
                     shape = RoundedCornerShape(5.dp),
-                    value = "Your e-mail",
-                    onValueChange = {},
+                    value = email.value,
+                    label = {Text(text = "Your email")},
+                    onValueChange = {email.value=it},
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
                         color = Color(0xFF000000)
-                    ))
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    colors = TextFieldDefaults.textFieldColors())
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp)
                     .height(50.dp),
                     shape = RoundedCornerShape(5.dp),
-                    value = "Password",
-                    onValueChange = {},
+                    value = password.value,
+                    label = {Text(text = "Password")},
+                    onValueChange = {password.value=it},
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
                         color = Color(0xFF000000)
-                    ))
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    trailingIcon = {
+                        if(passwordVisibility.value){ 
+                            IconButton(onClick = { 
+                                passwordVisibility.value=!passwordVisibility.value 
+                            }) {
+                                Image(painter = painterResource(id = R.drawable.ic_visibility_on),
+                                    contentDescription = "visible")
+                            }
+                        }
+                        else{
+                            IconButton(onClick = {
+                                passwordVisibility.value=!passwordVisibility.value
+                            }) {
+                                Image(painter = painterResource(id = R.drawable.ic_visibility_off),
+                                    contentDescription = "invisible")
+                            }
+                        }
+                    },
+                    visualTransformation =
+                    if(passwordVisibility.value) VisualTransformation.None
+                        else PasswordVisualTransformation(),
+                    colors = if (passwordMatch.value) {
+                        TextFieldDefaults.textFieldColors()
+                    } else {
+                        TextFieldDefaults.textFieldColors(
+                            unfocusedTextColor = Red,
+                            focusedTextColor = Red,
+                            disabledTextColor = Red,
+                            unfocusedLabelColor = Red,
+                            focusedLabelColor = Red,
+                            disabledLabelColor = Red
+                        )
+                    }
+                )
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 17.dp)
                     .height(50.dp),
                     shape = RoundedCornerShape(5.dp),
-                    value = "Repeat your password",
-                    onValueChange = {},
+                    value = repeatedPassword.value,
+                    label = {Text(text = "Repeat password")},
+                    onValueChange = {
+                        repeatedPassword.value=it
+                        passwordMatch.value=password.value==repeatedPassword.value },
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
                         color = Color(0xFF000000)
-                    ))
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    trailingIcon = {
+                        if(repeatedPasswordVisibility.value){
+                            IconButton(onClick = {
+                                repeatedPasswordVisibility.value=!repeatedPasswordVisibility.value
+                            }) {
+                                Image(painter = painterResource(id = R.drawable.ic_visibility_on),
+                                    contentDescription = "visible")
+                            }
+                        }
+                        else{
+                            IconButton(onClick = {
+                                repeatedPasswordVisibility.value=!repeatedPasswordVisibility.value
+                            }) {
+                                Image(painter = painterResource(id = R.drawable.ic_visibility_off),
+                                    contentDescription = "invisible")
+                            }
+                        }
+                    },
+                    visualTransformation =
+                    if(passwordVisibility.value) VisualTransformation.None
+                    else PasswordVisualTransformation(),
+                    colors = if (passwordMatch.value) {
+                        TextFieldDefaults.textFieldColors()
+                    } else {
+                        TextFieldDefaults.textFieldColors(
+                            unfocusedTextColor = Red,
+                            focusedTextColor = Red,
+                            disabledTextColor = Red,
+                            unfocusedLabelColor = Red,
+                            focusedLabelColor = Red,
+                            disabledLabelColor = Red,
+                        )
+                    }
+                )
                 Text(
                     text = "The password must contain a  8 characters at least including 1 uppercase letter, 1 number and 1 special character.",
                     style = TextStyle(
@@ -172,11 +295,24 @@ fun RegistrationScreenFragment(){
                             fontWeight = FontWeight(700),
                             color = Color(0xFFFFFFFF),)
                     )
-                    TextButton(onClick = { /*TODO*/ },
+                    TextButton(
+                        onClick = {
+                            if(passwordMatch.value){
+                                onClick(
+                                    AuthState(
+                                        name = nickname.value,
+                                        email = email.value,
+                                        password = password.value))
+                                navController.navigate(Screen.LoginScreen.route)
+                            }
+                         },
                         modifier = Modifier
                             .width(105.dp)
                             .height(46.dp)
-                            .background(color = Color(0xFFD1D1D1), shape = RoundedCornerShape(size = 38.dp))
+                            .background(
+                                color = Color(0xFFD1D1D1),
+                                shape = RoundedCornerShape(size = 38.dp)
+                            )
                     ) {
                         Text(text = "Create",
                             style = TextStyle(

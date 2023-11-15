@@ -63,12 +63,17 @@ import coil.request.ImageRequest
 import com.example.musicapplication.R
 import com.example.musicapplication.model.AudioItem
 import com.example.musicapplication.model.UserItem
-import com.example.musicapplication.ui.theme.DarkBackground
-import com.example.musicapplication.ui.theme.SearchFieldBackground
-import com.example.musicapplication.ui.theme.TextGrey
-import com.example.musicapplication.ui.theme.TextWhite
 import com.example.musicapplication.utils.Constants
-import com.google.android.material.search.SearchBar
+
+import com.example.musicapplication.theme.BlueCard
+import com.example.musicapplication.theme.DarkBackground
+import com.example.musicapplication.theme.GreenCard
+import com.example.musicapplication.theme.OrangeCard
+import com.example.musicapplication.theme.PinkCard
+import com.example.musicapplication.theme.PurpleCard
+import com.example.musicapplication.theme.TextGrey
+import com.example.musicapplication.theme.TextWhite
+import com.example.musicapplication.theme.YellowCard
 
 @Composable
 fun SearchScreenFragment() {

@@ -28,8 +28,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.musicapplication.R
 import com.example.musicapplication.model.UserItem
-import com.example.musicapplication.ui.theme.DarkBackground
-import com.example.musicapplication.ui.theme.TextWhite
+import com.example.musicapplication.theme.DarkBackground
+import com.example.musicapplication.theme.TextWhite
 import com.example.musicapplication.utils.Constants
 
 @Composable
