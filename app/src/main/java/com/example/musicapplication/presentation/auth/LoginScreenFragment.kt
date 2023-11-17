@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -36,6 +37,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -44,19 +47,25 @@ import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.theme.AuthDarkBlue
 import com.example.musicapplication.theme.AuthLightBlue
 import com.example.musicapplication.theme.DarkBackground
+import com.example.musicapplication.theme.TextWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreenFragment(
     navController: NavController,
+    authState: AuthState,
     onClick: (authState:AuthState) -> Unit
     ){
 
     val email = remember {
-        mutableStateOf("")
+        mutableStateOf(authState.email)
     }
     val password = remember {
-        mutableStateOf("")
+        mutableStateOf(authState.password)
+    }
+
+    val passwordVisibility = remember {
+        mutableStateOf(false)
     }
 
     Column(modifier = Modifier
@@ -117,7 +126,7 @@ fun LoginScreenFragment(
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF000000)
+                        color = TextWhite
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                 )
@@ -134,12 +143,30 @@ fun LoginScreenFragment(
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF000000)
+                        color = TextWhite
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     trailingIcon = {
-
-                    }
+                        if(passwordVisibility.value){
+                            IconButton(onClick = {
+                                passwordVisibility.value=!passwordVisibility.value
+                            }) {
+                                Image(painter = painterResource(id = R.drawable.ic_visibility_on),
+                                    contentDescription = "visible")
+                            }
+                        }
+                        else{
+                            IconButton(onClick = {
+                                passwordVisibility.value=!passwordVisibility.value
+                            }) {
+                                Image(painter = painterResource(id = R.drawable.ic_visibility_off),
+                                    contentDescription = "invisible")
+                            }
+                        }
+                    },
+                    visualTransformation =
+                    if(passwordVisibility.value) VisualTransformation.None
+                    else PasswordVisualTransformation()
                 )
                 Row(modifier = Modifier
                     .fillMaxWidth()

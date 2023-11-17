@@ -18,6 +18,8 @@ object NavigationRouter {
 
 @Composable
 fun Navigation(navController: NavHostController, context: Context) {
+
+
     NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
         composable(route = Screen.MainScreen.route) {
             MainScreen(navController = navController)

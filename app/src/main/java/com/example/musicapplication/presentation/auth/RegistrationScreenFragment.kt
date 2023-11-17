@@ -62,20 +62,21 @@ import com.example.musicapplication.theme.TextWhite
 @Composable
 fun RegistrationScreenFragment(
      navController: NavController,
+     authState: AuthState,
      onClick:(authState:AuthState) -> Unit
 ){
     val email = remember {
-        mutableStateOf("")
+        mutableStateOf(authState.email)
     }
     val password = remember {
-        mutableStateOf("")
+        mutableStateOf(authState.password)
     }
 
     val nickname = remember {
-        mutableStateOf("")
+        mutableStateOf(authState.name)
     }
     val repeatedPassword = remember {
-        mutableStateOf("")
+        mutableStateOf(authState.password)
     }
 
     val passwordVisibility = remember {
@@ -93,7 +94,7 @@ fun RegistrationScreenFragment(
     Column(modifier = Modifier
         .background(DarkBackground)
         .fillMaxWidth()
-        .padding(start = 14.dp, end = 14.dp, bottom = 40.dp)){
+        .padding(start = 14.dp, end = 14.dp, bottom = 50.dp)){
         Card(modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
@@ -138,7 +139,7 @@ fun RegistrationScreenFragment(
                     .padding(top = 17.dp)
                     .height(50.dp),
                     shape = RoundedCornerShape(5.dp),
-                    value = nickname.value,
+                    value = nickname.value?:"",
                     label = {Text(text = "Your name")},
                     onValueChange = {nickname.value = it},
                     textStyle = TextStyle(
@@ -146,7 +147,7 @@ fun RegistrationScreenFragment(
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF000000)
+                        color = TextWhite
                     ))
                 TextField(modifier = Modifier
                     .fillMaxWidth()
@@ -161,7 +162,7 @@ fun RegistrationScreenFragment(
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF000000)
+                        color = TextWhite
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     colors = TextFieldDefaults.textFieldColors())
@@ -178,7 +179,7 @@ fun RegistrationScreenFragment(
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF000000)
+                        color = TextWhite
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     trailingIcon = {
@@ -230,7 +231,7 @@ fun RegistrationScreenFragment(
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF000000)
+                        color = TextWhite
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     trailingIcon = {
@@ -252,7 +253,7 @@ fun RegistrationScreenFragment(
                         }
                     },
                     visualTransformation =
-                    if(passwordVisibility.value) VisualTransformation.None
+                    if(repeatedPasswordVisibility.value) VisualTransformation.None
                     else PasswordVisualTransformation(),
                     colors = if (passwordMatch.value) {
                         TextFieldDefaults.textFieldColors()
@@ -303,7 +304,7 @@ fun RegistrationScreenFragment(
                                         name = nickname.value,
                                         email = email.value,
                                         password = password.value))
-                                navController.navigate(Screen.LoginScreen.route)
+                                navController.navigateUp()
                             }
                          },
                         modifier = Modifier

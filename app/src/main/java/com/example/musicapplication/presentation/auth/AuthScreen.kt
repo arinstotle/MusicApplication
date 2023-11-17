@@ -15,24 +15,22 @@ fun AuthScreen(
     //временный "индикатор" назначения экрана
     a:String="l",
     navController:NavController,
-    viewModel: AuthViewModel = AuthViewModel()
+    viewModel: AuthViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-
-
 
     Column(modifier = Modifier
         .fillMaxSize()
         .background(DarkBackground),
         verticalArrangement = Arrangement.Bottom) {
         when(a){
-            "l" -> LoginScreenFragment(navController = navController) {
+            "l" -> LoginScreenFragment(navController = navController, authState = viewModel.authState.value) {
                 viewModel.onEvent(
                     AuthEvent.OnLogin(
                         viewModel.authState.value
                     )
                 )
             }
-            else -> RegistrationScreenFragment(navController = navController){
+            else -> RegistrationScreenFragment(navController = navController, authState = viewModel.authState.value){
                 viewModel.onEvent(
                     AuthEvent.OnRegister(
                         viewModel.authState.value

@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.musicapplication.navigation.Navigation
 import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
+import com.example.musicapplication.presentation.auth.AuthViewModel
 import com.example.musicapplication.theme.DarkBackground
 import com.example.musicapplication.theme.MusicApplicationTheme
 import com.example.musicapplication.ui.bottomNavigation.CustomBottomNavigation
@@ -25,6 +26,7 @@ import com.example.musicapplication.ui.bottomNavigation.CustomBottomNavigation
 
 @Suppress("UNUSED_EXPRESSION")
 class MainActivity : ComponentActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
