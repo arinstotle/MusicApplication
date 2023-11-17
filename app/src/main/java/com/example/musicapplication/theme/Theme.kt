@@ -17,34 +17,36 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = DarkBackground,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    background = DarkBackground
-
+    primary = Color(0xFF26292D),
+    onPrimary = Color(0xFF244975),
+    primaryContainer = Color(0x4D244975),
+    secondary = Color(0xFF0095E9),
+    onSecondary = Color(0xFF527297),
+    tertiary = Color(0xFF888885),
+    tertiaryContainer = Color(0x7EAFAFAF),
+    onTertiaryContainer = Color(0x85646464),
+    onTertiary = Color(0xFFFFFFFF),
+    surface = Color(0xFF0D2C48),
+    secondaryContainer = Color(0xFF41464B)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = DarkBackground,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    background = DarkBackground
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = Color(0xFF26292D),
+    onPrimary = Color(0xFF244975),
+    primaryContainer = Color(0x4D244975),
+    secondary = Color(0xFF0095E9),
+    onSecondary = Color(0xFF527297),
+    tertiary = Color(0xFF888885),
+    tertiaryContainer = Color(0x7EAFAFAF),
+    onTertiaryContainer = Color(0x85646464),
+    onTertiary = Color(0xFFFFFFFF),
+    surface = Color(0xFF0D2C48),
+    secondaryContainer = Color(0xFF41464B)
 )
 
 @Composable
 fun MusicApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {

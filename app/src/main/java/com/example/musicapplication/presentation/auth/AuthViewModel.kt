@@ -2,8 +2,11 @@ package com.example.musicapplication.presentation.auth
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AuthViewModel():ViewModel() {
+@HiltViewModel
+class AuthViewModel @Inject constructor(dummyParameter:String):ViewModel() {
 
     private var _authState= mutableStateOf(AuthState(name = "", email = "", password = ""))
     val authState = _authState

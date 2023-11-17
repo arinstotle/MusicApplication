@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.musicapplication.theme.DarkBackground
 
@@ -15,7 +16,7 @@ fun AuthScreen(
     //временный "индикатор" назначения экрана
     a:String="l",
     navController:NavController,
-    viewModel: AuthViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: AuthViewModel = hiltViewModel()
 ) {
 
     Column(modifier = Modifier
