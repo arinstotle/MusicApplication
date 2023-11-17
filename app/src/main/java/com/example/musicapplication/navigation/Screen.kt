@@ -9,11 +9,11 @@ sealed class Screen(val route : String, val icon : Int, val title : String) {
     object LoginScreen:Screen("login_screen", title = "Login", icon = -1)
 
     object RegistrationScreen:Screen("registration_screen", title = "Create account", icon = -1)
-
-
+    object StreamScreen : Screen("stream_screen",
+        title = "Stream", icon = R.drawable.stream_icon)
     object BottomScreens {
         val list = listOf(
-            MainScreen
+            MainScreen, StreamScreen
         )
     }
 }

@@ -11,6 +11,7 @@ import com.example.musicapplication.presentation.auth.AuthScreen
 import com.example.musicapplication.presentation.auth.authEnterAnimation
 import com.example.musicapplication.presentation.auth.authExitAnimation
 import com.example.musicapplication.ui.mainScreen.MainScreen
+import com.example.musicapplication.ui.streamScreen.StreamMainScreen
 
 object NavigationRouter {
     var currentScreen: MutableState<Screen> = mutableStateOf(Screen.LoginScreen)
@@ -60,6 +61,9 @@ fun Navigation(navController: NavHostController, context: Context) {
         ){
             AuthScreen("r", navController = navController)
             NavigationRouter.currentScreen.value = Screen.RegistrationScreen
+        }
+        composable(route = Screen.StreamScreen.route) {
+            StreamMainScreen(navController = navController)
         }
     }
 }
