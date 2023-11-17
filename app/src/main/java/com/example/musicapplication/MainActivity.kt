@@ -22,9 +22,11 @@ import com.example.musicapplication.presentation.auth.AuthViewModel
 import com.example.musicapplication.theme.DarkBackground
 import com.example.musicapplication.theme.MusicApplicationTheme
 import com.example.musicapplication.ui.bottomNavigation.CustomBottomNavigation
+import dagger.hilt.android.AndroidEntryPoint
 
 
 @Suppress("UNUSED_EXPRESSION")
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
 
@@ -61,6 +63,8 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
+
+                                else -> {}
                             }
                         }
                     ) {
