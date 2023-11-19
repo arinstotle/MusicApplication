@@ -1,6 +1,7 @@
 package com.example.musicapplication.presentation.auth
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.tween
 import androidx.navigation.NavBackStackEntry
 

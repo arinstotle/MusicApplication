@@ -1,4 +1,4 @@
-package com.example.musicapplication.presentation
+package com.example.musicapplication.forDeletion
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,14 +14,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -74,7 +70,7 @@ fun RoomItemView(item:RoomItem = Constants.mockedRoom){
             Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.horizontalGradient(listOf(colors[k%colors.size], colors[(k + 1) % colors.size])),
+                    Brush.horizontalGradient(listOf(colors[k %colors.size], colors[(k + 1) % colors.size])),
                     alpha = 0.8f
                 ))
         {

@@ -1,6 +1,5 @@
-package com.example.musicapplication.presentation
+package com.example.musicapplication.forDeletion
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,34 +18,23 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.twotone.AddCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -65,15 +53,9 @@ import com.example.musicapplication.model.AudioItem
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.utils.Constants
 
-import com.example.musicapplication.theme.BlueCard
 import com.example.musicapplication.theme.DarkBackground
-import com.example.musicapplication.theme.GreenCard
-import com.example.musicapplication.theme.OrangeCard
-import com.example.musicapplication.theme.PinkCard
-import com.example.musicapplication.theme.PurpleCard
 import com.example.musicapplication.theme.TextGrey
 import com.example.musicapplication.theme.TextWhite
-import com.example.musicapplication.theme.YellowCard
 
 @Composable
 fun SearchScreenFragment() {
@@ -271,7 +253,7 @@ fun UserItemView(item:UserItem = Constants.mockedUser){
                     .clip(CircleShape)
             )
             Text(
-                text = item.nickname,
+                text = item.name,
                 modifier = Modifier
                     .padding(start = 9.dp),
                 color = TextWhite,

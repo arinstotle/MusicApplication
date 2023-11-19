@@ -1,33 +1,39 @@
 package com.example.musicapplication.navigation
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.musicapplication.presentation.auth.AuthScreen
+import com.example.musicapplication.presentation.auth.AuthViewModel
 import com.example.musicapplication.presentation.auth.authEnterAnimation
 import com.example.musicapplication.presentation.auth.authExitAnimation
 import com.example.musicapplication.ui.mainScreen.MainScreen
 import com.example.musicapplication.ui.streamScreen.StreamMainScreen
 
 object NavigationRouter {
-    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.LoginScreen)
+    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.AuthScreen)
 }
 
 @Composable
 fun Navigation(navController: NavHostController, context: Context) {
 
 
-    NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.AuthScreen.route) {
         composable(route = Screen.MainScreen.route) {
             MainScreen(navController = navController)
             NavigationRouter.currentScreen.value = Screen.MainScreen
         }
         composable(
-            route = Screen.LoginScreen.route,
+            route = Screen.AuthScreen.route,
             enterTransition = {
                 authEnterAnimation()
             },
@@ -41,26 +47,14 @@ fun Navigation(navController: NavHostController, context: Context) {
                 authExitAnimation()
             }
         ){
-            AuthScreen("l", navController = navController)
-            NavigationRouter.currentScreen.value = Screen.LoginScreen
-        }
-        composable(
-            route = Screen.RegistrationScreen.route,
-            enterTransition = {
-                authEnterAnimation()
-            },
-            exitTransition = {
-                authExitAnimation()
-            },
-            popEnterTransition = {
-                authEnterAnimation()
-            },
-            popExitTransition = {
-                authExitAnimation()
+            AnimatedVisibility(
+                visible = true,
+                enter = expandVertically(expandFrom = Alignment.Bottom),
+                exit = shrinkVertically()
+            ){
+                AuthScreen( navController = navController)
             }
-        ){
-            AuthScreen("r", navController = navController)
-            NavigationRouter.currentScreen.value = Screen.RegistrationScreen
+            NavigationRouter.currentScreen.value = Screen.AuthScreen
         }
         composable(route = Screen.StreamScreen.route) {
             StreamMainScreen(navController = navController)

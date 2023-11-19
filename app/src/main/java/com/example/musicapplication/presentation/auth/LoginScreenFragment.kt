@@ -22,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.musicapplication.R
+import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.theme.AuthDarkBlue
 import com.example.musicapplication.theme.AuthLightBlue
@@ -52,16 +54,16 @@ import com.example.musicapplication.theme.TextWhite
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreenFragment(
-    navController: NavController,
     authState: AuthState,
-    onClick: (authState:AuthState) -> Unit
+    onLogin: (authState:AuthState) -> Unit,
+    goToRegister:() -> Unit
     ){
 
     val email = remember {
-        mutableStateOf(authState.email)
+        mutableStateOf(authState.user.email)
     }
     val password = remember {
-        mutableStateOf(authState.password)
+        mutableStateOf(authState.user.password)
     }
 
     val passwordVisibility = remember {
@@ -128,7 +130,19 @@ fun LoginScreenFragment(
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    colors = if (!authState.isWrongData) {
+                        TextFieldDefaults.textFieldColors()
+                    } else {
+                        TextFieldDefaults.textFieldColors(
+                            unfocusedTextColor = Color.Red,
+                            focusedTextColor = Color.Red,
+                            disabledTextColor = Color.Red,
+                            unfocusedLabelColor = Color.Red,
+                            focusedLabelColor = Color.Red,
+                            disabledLabelColor = Color.Red,
+                        )
+                    }
                 )
                 TextField(modifier = Modifier
                     .fillMaxWidth()
@@ -166,7 +180,19 @@ fun LoginScreenFragment(
                     },
                     visualTransformation =
                     if(passwordVisibility.value) VisualTransformation.None
-                    else PasswordVisualTransformation()
+                    else PasswordVisualTransformation(),
+                    colors = if (!authState.isWrongData) {
+                        TextFieldDefaults.textFieldColors()
+                    } else {
+                        TextFieldDefaults.textFieldColors(
+                            unfocusedTextColor = Color.Red,
+                            focusedTextColor = Color.Red,
+                            disabledTextColor = Color.Red,
+                            unfocusedLabelColor = Color.Red,
+                            focusedLabelColor = Color.Red,
+                            disabledLabelColor = Color.Red,
+                        )
+                    }
                 )
                 Row(modifier = Modifier
                     .fillMaxWidth()
@@ -190,17 +216,26 @@ fun LoginScreenFragment(
                                 fontFamily = FontFamily(Font(R.font.spartan_regular)),
                                 fontWeight = FontWeight(400),
                                 color = Color(0xFF0984E3)),
-                            onClick = { navController.navigate(Screen.RegistrationScreen.route) }
+                            onClick = {
+                                goToRegister()
+                            }
                         )
                     }
                     TextButton(onClick = {
-                        onClick(
+                        onLogin(
                             AuthState(
-                                name = null,
-                                email = email.value,
-                                password = password.value
-                            ))
-                        navController.navigate(Screen.MainScreen.route)
+                                user = UserItem(
+                                    id = 0,
+                                    photoUrl = null,
+                                    name = "",
+                                    email = email.value,
+                                    password = password.value
+                                ),
+                                isAuthorized = false,
+                                isWrongData = false,
+                                isCreated = true
+                            )
+                        )
                                          },
                         modifier = Modifier
                             .width(105.dp)

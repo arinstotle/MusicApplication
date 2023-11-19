@@ -55,7 +55,7 @@ fun ProfileScreenFragment(userItem:UserItem = Constants.mockedUser) {
                 .align(Alignment.CenterHorizontally),
         )
         Text(modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = userItem.nickname,
+            text = userItem.name,
             color = TextWhite,
             style = TextStyle(
                 fontSize = 26.sp,

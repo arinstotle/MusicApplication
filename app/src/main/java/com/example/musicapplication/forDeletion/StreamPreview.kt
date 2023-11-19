@@ -1,4 +1,4 @@
-package com.example.musicapplication.presentation
+package com.example.musicapplication.forDeletion
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

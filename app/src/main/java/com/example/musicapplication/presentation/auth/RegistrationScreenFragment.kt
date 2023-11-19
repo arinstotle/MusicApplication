@@ -2,6 +2,7 @@
 
 package com.example.musicapplication.presentation.auth
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.internal.composableLambda
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -51,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.musicapplication.R
+import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.theme.DarkBackground
 import com.example.musicapplication.theme.RegDarkPurple
@@ -61,22 +64,22 @@ import com.example.musicapplication.theme.TextWhite
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreenFragment(
-     navController: NavController,
      authState: AuthState,
-     onClick:(authState:AuthState) -> Unit
+     onRegister:(authState:AuthState) -> Unit,
+     goToLogin: () -> Unit
 ){
     val email = remember {
-        mutableStateOf(authState.email)
+        mutableStateOf(authState.user.email)
     }
     val password = remember {
-        mutableStateOf(authState.password)
+        mutableStateOf(authState.user.password)
     }
 
     val nickname = remember {
-        mutableStateOf(authState.name)
+        mutableStateOf(authState.user.name)
     }
     val repeatedPassword = remember {
-        mutableStateOf(authState.password)
+        mutableStateOf(authState.user.password)
     }
 
     val passwordVisibility = remember {
@@ -89,6 +92,10 @@ fun RegistrationScreenFragment(
 
     val passwordMatch = remember {
         mutableStateOf(true)
+    }
+
+    val user = remember {
+        mutableStateOf(authState.user)
     }
 
     Column(modifier = Modifier
@@ -141,7 +148,9 @@ fun RegistrationScreenFragment(
                     shape = RoundedCornerShape(5.dp),
                     value = nickname.value?:"",
                     label = {Text(text = "Your name")},
-                    onValueChange = {nickname.value = it},
+                    onValueChange = {
+                        nickname.value = it
+                        Log.d("NAME CHANGED", nickname.value.toString())},
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
@@ -299,12 +308,23 @@ fun RegistrationScreenFragment(
                     TextButton(
                         onClick = {
                             if(passwordMatch.value){
-                                onClick(
+                                user.value=user.value.copy(
+                                    photoUrl = null,
+                                    name = nickname.value,
+                                    email = email.value,
+                                    password = password.value
+                                )
+                                onRegister(
                                     AuthState(
-                                        name = nickname.value,
-                                        email = email.value,
-                                        password = password.value))
-                                navController.navigateUp()
+                                        user = user.value,
+                                        isAuthorized = false,
+                                        isWrongData = false,
+                                        isCreated = false
+                                    )
+                                )
+                                goToLogin()
+//                                Log.d("REG CLICK", UserItem(
+//                                    id = 0, name = nickname.value, email = email.value, password = password.value, photoUrl = null).toString())
                             }
                          },
                         modifier = Modifier
