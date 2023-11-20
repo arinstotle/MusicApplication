@@ -4,7 +4,7 @@ import com.example.musicapplication.data.network.api.NetworkSource
 import com.example.musicapplication.data.network.exceptions.MainNetworkException
 import com.example.musicapplication.data.network.exceptions.WrongDataException
 import com.example.musicapplication.data.network.state.NetworkState
-import com.example.musicapplication.domain.repo.Repository
+import com.example.musicapplication.domain.Repository
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.model.UserItem
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val networkSource: NetworkSource
-):Repository {
+): Repository {
     override suspend fun login(user: UserItem): UserItem? {
         val state = networkSource.login(user)
         when(state){

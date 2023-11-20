@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.musicapplication.navigation.Screen
-import com.example.musicapplication.theme.DarkBackground
+import com.example.musicapplication.presentation.theme.DarkBackground
 import kotlinx.coroutines.delay
 
 @Composable

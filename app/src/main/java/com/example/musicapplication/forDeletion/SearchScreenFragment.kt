@@ -53,9 +53,9 @@ import com.example.musicapplication.model.AudioItem
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.utils.Constants
 
-import com.example.musicapplication.theme.DarkBackground
-import com.example.musicapplication.theme.TextGrey
-import com.example.musicapplication.theme.TextWhite
+import com.example.musicapplication.presentation.theme.DarkBackground
+import com.example.musicapplication.presentation.theme.TextGrey
+import com.example.musicapplication.presentation.theme.TextWhite
 
 @Composable
 fun SearchScreenFragment() {

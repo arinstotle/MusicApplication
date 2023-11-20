@@ -27,14 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musicapplication.R
 import com.example.musicapplication.model.RoomItem
-import com.example.musicapplication.theme.BlueCard
-import com.example.musicapplication.theme.DarkBackground
-import com.example.musicapplication.theme.GreenCard
-import com.example.musicapplication.theme.OrangeCard
-import com.example.musicapplication.theme.PinkCard
-import com.example.musicapplication.theme.PurpleCard
-import com.example.musicapplication.theme.TextWhite
-import com.example.musicapplication.theme.YellowCard
+import com.example.musicapplication.presentation.theme.BlueCard
+import com.example.musicapplication.presentation.theme.DarkBackground
+import com.example.musicapplication.presentation.theme.GreenCard
+import com.example.musicapplication.presentation.theme.OrangeCard
+import com.example.musicapplication.presentation.theme.PinkCard
+import com.example.musicapplication.presentation.theme.PurpleCard
+import com.example.musicapplication.presentation.theme.TextWhite
+import com.example.musicapplication.presentation.theme.YellowCard
 import com.example.musicapplication.utils.Constants
 
 @Composable
@@ -57,8 +57,10 @@ var k = 0
 @Composable
 fun RoomItemView(item:RoomItem = Constants.mockedRoom){
 
-    val colors = listOf(PinkCard, PurpleCard, BlueCard, GreenCard,
-        YellowCard, OrangeCard)
+    val colors = listOf(
+        PinkCard, PurpleCard, BlueCard, GreenCard,
+        YellowCard, OrangeCard
+    )
 
 
     Card(modifier = Modifier

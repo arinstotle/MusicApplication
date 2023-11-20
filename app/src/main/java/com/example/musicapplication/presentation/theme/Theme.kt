@@ -1,4 +1,4 @@
-package com.example.musicapplication.theme
+package com.example.musicapplication.presentation.theme
 
 import android.app.Activity
 import android.os.Build

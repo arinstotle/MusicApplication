@@ -20,9 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.musicapplication.R
-import com.example.musicapplication.theme.DarkBackground
-import com.example.musicapplication.theme.TextGrey
-import com.example.musicapplication.theme.TextWhite
+import com.example.musicapplication.presentation.theme.DarkBackground
+import com.example.musicapplication.presentation.theme.TextGrey
+import com.example.musicapplication.presentation.theme.TextWhite
 
 @Composable
 @Preview(showBackground = true)
