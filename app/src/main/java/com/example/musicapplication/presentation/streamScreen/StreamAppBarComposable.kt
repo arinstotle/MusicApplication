@@ -52,12 +52,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.MutableLiveData
-import com.example.musicapplication.AppBarCollapsedHeight
-import com.example.musicapplication.AppBarExpendedHeight
 import com.example.musicapplication.R
-import com.example.musicapplication.loadingBar
-import com.example.musicapplication.pauseIcon
-import com.example.musicapplication.playIcon
+import com.example.musicapplication.utils.Constants.AppBarCollapsedHeight
+import com.example.musicapplication.utils.Constants.AppBarExpendedHeight
+import com.example.musicapplication.utils.Constants.loadingBar
+import com.example.musicapplication.utils.Constants.pauseIcon
+import com.example.musicapplication.utils.Constants.playIcon
+
 
 @Composable
 fun StreamAppBar(playOnClick: () -> Unit,
