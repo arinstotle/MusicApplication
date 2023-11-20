@@ -1,13 +1,10 @@
 package com.example.musicapplication.presentation.auth
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.musicapplication.data.network.repo.RepositoryImpl
-import com.example.musicapplication.model.UserItem
+import com.example.musicapplication.data.network.repo.RemoteRepositoryImpl
 import com.example.musicapplication.model.emptyUser
-import com.example.musicapplication.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val repo:RepositoryImpl
+    private val repo:RemoteRepositoryImpl
 ):ViewModel() {
 
     private var _authState= mutableStateOf(AuthState(

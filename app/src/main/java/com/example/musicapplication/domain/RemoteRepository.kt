@@ -4,7 +4,7 @@ import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.model.UserItem
 
-interface Repository {
+interface RemoteRepository {
     suspend fun login(user:UserItem): UserItem?
 
     suspend fun signup(user: UserItem): UserItem?
