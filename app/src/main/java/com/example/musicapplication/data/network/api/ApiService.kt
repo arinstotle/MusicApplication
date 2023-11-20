@@ -22,8 +22,6 @@ interface ApiService {
     ):Response<UserResponse>
 
     @GET(Constants.PATH_ME)
-    suspend fun me(
-        @Header(Constants.AUTH_TOKEN) token:String
-    ): Response<UserResponse>
+    suspend fun me(): Response<UserResponse>
 
 }

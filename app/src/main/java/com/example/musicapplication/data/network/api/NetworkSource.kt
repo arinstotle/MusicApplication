@@ -16,8 +16,7 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 
 class NetworkSource @Inject constructor(
-    private val api: ApiService,
-    private val sharedPreferencesHelper: SharedPreferencesHelper
+    private val api: ApiService
 ){
     suspend fun login(user:UserItem): DataState<UserItem> {
         try {
@@ -109,7 +108,7 @@ class NetworkSource @Inject constructor(
 
     suspend fun me(): DataState<UserItem> {
         try {
-            val response = api.me(sharedPreferencesHelper.getToken())
+            val response = api.me()
             if(response.isSuccessful){
                 if(response.body()!=null){
                     return DataState.Result(response.body()!!.toItem())

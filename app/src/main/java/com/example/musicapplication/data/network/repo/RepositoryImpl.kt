@@ -24,7 +24,7 @@ class RepositoryImpl @Inject constructor(
                 return state.data
             }
 
-            else -> {}
+            else -> return null
         }
         return null
     }
@@ -41,7 +41,7 @@ class RepositoryImpl @Inject constructor(
                 return state.data
             }
 
-            else -> {}
+            else -> return null
         }
         return null
     }
@@ -58,7 +58,7 @@ class RepositoryImpl @Inject constructor(
                 return state.data
             }
 
-            else -> {}
+            else -> return null
         }
         return null
     }

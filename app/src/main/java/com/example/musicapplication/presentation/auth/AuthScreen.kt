@@ -46,16 +46,17 @@ fun AuthScreen(
     LaunchedEffect(key1 = true) {
         visible=!visible
     }
-//    LaunchedEffect(key1 = viewModel.authState.value.isAuthorized) {
-//        visible=!visible
-//    }
 
     Column(modifier = Modifier
         .fillMaxSize()
         .background(DarkBackground),
         verticalArrangement = Arrangement.Bottom) {
 
-        if(!viewModel.authState.value.isCreated) {
+
+        if(viewModel.authState.value.isCreated && viewModel.authState.value.isAuthorized){
+            navController.navigate(Screen.MainScreen.route)
+        }
+        else if(!viewModel.authState.value.isCreated) {
 
             AnimatedVisibility(
                 visible = visible,
@@ -101,7 +102,6 @@ fun AuthScreen(
                 )
             }
         }
-        else navController.navigate(Screen.MainScreen.route)
     }
 }
 

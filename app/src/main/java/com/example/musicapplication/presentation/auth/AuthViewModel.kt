@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicapplication.data.network.repo.RepositoryImpl
 import com.example.musicapplication.model.UserItem
+import com.example.musicapplication.model.emptyUser
 import com.example.musicapplication.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,12 +19,16 @@ class AuthViewModel @Inject constructor(
 ):ViewModel() {
 
     private var _authState= mutableStateOf(AuthState(
-        user = UserItem(id = 0, name = "", email = "", password = "", photoUrl = null),
+        user = emptyUser(),
         isAuthorized = false,
         isCreated = true,
         isWrongData = false)
     )
     val authState = _authState
+
+    init {
+        me()
+    }
     fun onEvent(event: AuthEvent){
         when(event){
             is AuthEvent.OnLogin -> {
@@ -53,7 +58,7 @@ class AuthViewModel @Inject constructor(
                 _authState.value = authState.value.copy(user = logedUser, isAuthorized = true, isWrongData = false)
             }
             else{
-                _authState.value = authState.value.copy(isAuthorized = false, isWrongData = true)
+                _authState.value = authState.value.copy(user = emptyUser(),  isAuthorized = false, isWrongData = true)
             }
         }
     }
@@ -65,15 +70,18 @@ class AuthViewModel @Inject constructor(
                     .copy(user = signedUser, isAuthorized = false, isWrongData = false, isCreated = true)
             }
             else{
-                _authState.value = authState.value.copy(isAuthorized = false, isWrongData = true, isCreated = false)
+                _authState.value = authState.value.copy(user = emptyUser(), isAuthorized = false, isWrongData = true, isCreated = false)
             }
             //Log.d("VM STATE", authState.value.user.toString())
         }
     }
 
-//    private fun me(){
-//        viewModelScope.launch(Dispatchers.IO){
-//            _authState.value = authState.value.copy(repo.me(), isAuthorized = true)
-//        }
-//    }
+    private fun me(){
+        viewModelScope.launch(Dispatchers.IO){
+            val currentUser = repo.me()
+            if(currentUser!=null){
+                _authState.value = authState.value.copy(user = currentUser, isAuthorized = true, isCreated = true)
+            }
+        }
+    }
 }

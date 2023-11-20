@@ -2,6 +2,7 @@ package com.example.musicapplication.di
 
 import android.content.Context
 import com.example.musicapplication.data.network.CookieInterceptor
+import com.example.musicapplication.data.network.SetCookieJar
 import com.example.musicapplication.data.network.api.ApiService
 import com.example.musicapplication.data.network.api.NetworkSource
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
@@ -46,17 +47,17 @@ class NetworkModule {
     @Singleton
     fun provideHttpClient(
         httpLoggingInterceptor: Interceptor,
-        cookieInterceptor: CookieInterceptor): OkHttpClient =
+        setCookieJar: SetCookieJar): OkHttpClient =
         OkHttpClient.Builder().connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
             .retryOnConnectionFailure(false)
             .addInterceptor(httpLoggingInterceptor)
-            .addInterceptor(cookieInterceptor).build()
+            .cookieJar(setCookieJar).build()
 
     @Provides
     @Singleton
-    fun getHttpLoggingInterceptor(): Interceptor {
+    fun provideHttpLoggingInterceptor(): Interceptor {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         return interceptor
@@ -70,10 +71,13 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    fun provideCookieJar() = SetCookieJar()
+
+    @Provides
+    @Singleton
     fun provideNetworkSource(
-        apiService: ApiService,
-        sharedPreferencesHelper: SharedPreferencesHelper
-    ): NetworkSource = NetworkSource(apiService, sharedPreferencesHelper)
+        apiService: ApiService
+    ): NetworkSource = NetworkSource(apiService)
 
     @Provides
     fun provideConnectivityObserver(context: Context): NetworkConnectivityObserver =

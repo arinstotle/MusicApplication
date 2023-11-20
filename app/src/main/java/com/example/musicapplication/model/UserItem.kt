@@ -13,3 +13,5 @@ data class UserItem(
 fun UserItem.toRequest() = UserRequest(
     id, email, name, password
 )
+
+fun emptyUser() = UserItem(id = 0, name = "", email = "", password = "", photoUrl = null)
