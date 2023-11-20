@@ -1,4 +1,4 @@
-package com.example.musicapplication.ui.streamScreen
+package com.example.musicapplication.presentation.streamScreen
 
 import android.content.Context
 import android.util.Log

@@ -16,8 +16,8 @@ import com.example.musicapplication.presentation.auth.AuthScreen
 import com.example.musicapplication.presentation.auth.AuthViewModel
 import com.example.musicapplication.presentation.auth.authEnterAnimation
 import com.example.musicapplication.presentation.auth.authExitAnimation
-import com.example.musicapplication.ui.mainScreen.MainScreen
-import com.example.musicapplication.ui.streamScreen.StreamMainScreen
+import com.example.musicapplication.presentation.mainScreen.MainScreen
+import com.example.musicapplication.presentation.streamScreen.StreamMainScreen
 
 object NavigationRouter {
     var currentScreen: MutableState<Screen> = mutableStateOf(Screen.AuthScreen)

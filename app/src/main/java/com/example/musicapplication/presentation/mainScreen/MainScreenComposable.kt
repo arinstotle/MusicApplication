@@ -1,4 +1,4 @@
-package com.example.musicapplication.ui.mainScreen
+package com.example.musicapplication.presentation.mainScreen
 
 import androidx.compose.animation.core.*
 import androidx.compose.animation.core.infiniteRepeatable

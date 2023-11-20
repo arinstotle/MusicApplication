@@ -1,4 +1,4 @@
-package com.example.musicapplication.ui.streamScreen
+package com.example.musicapplication.presentation.streamScreen
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.background

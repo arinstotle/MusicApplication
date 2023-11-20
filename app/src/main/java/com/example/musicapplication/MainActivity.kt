@@ -21,7 +21,7 @@ import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.auth.AuthViewModel
 import com.example.musicapplication.theme.DarkBackground
 import com.example.musicapplication.theme.MusicApplicationTheme
-import com.example.musicapplication.ui.bottomNavigation.CustomBottomNavigation
+import com.example.musicapplication.presentation.bottomNavigation.CustomBottomNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 
