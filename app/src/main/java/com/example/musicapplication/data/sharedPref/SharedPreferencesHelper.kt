@@ -12,11 +12,10 @@ class SharedPreferencesHelper @Inject constructor(context: Context) {
         context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
     private val editor = sharedPreferences.edit()
 
-    fun putToken(token:String){
-        editor.putString(KEY, token)
+    fun putCookie(cookie:String){
+        editor.putString(KEY, cookie)
         editor.apply()
-        Log.println(Log.INFO, "TOKEN", token)
     }
 
-    fun getToken():String= sharedPreferences.getString(KEY,"")!!
+    fun getCookie():String= sharedPreferences.getString(KEY,"")!!
 }

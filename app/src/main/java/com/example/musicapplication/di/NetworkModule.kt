@@ -1,7 +1,7 @@
 package com.example.musicapplication.di
 
 import android.content.Context
-import com.example.musicapplication.data.network.CookieInterceptor
+import com.example.musicapplication.data.network.interceptors.GetCookieInterceptor
 import com.example.musicapplication.data.network.SetCookieJar
 import com.example.musicapplication.data.network.api.ApiService
 import com.example.musicapplication.data.network.api.NetworkSource
@@ -18,6 +18,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.CookieManager
+import java.net.CookiePolicy
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -47,12 +49,14 @@ class NetworkModule {
     @Singleton
     fun provideHttpClient(
         httpLoggingInterceptor: Interceptor,
+        getCookieInterceptor: GetCookieInterceptor,
         setCookieJar: SetCookieJar): OkHttpClient =
         OkHttpClient.Builder().connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
             .retryOnConnectionFailure(false)
             .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(getCookieInterceptor)
             .cookieJar(setCookieJar).build()
 
     @Provides
@@ -65,13 +69,14 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun getCookieInterceptor(sharedPreferencesHelper: SharedPreferencesHelper): CookieInterceptor {
-        return CookieInterceptor(sharedPreferencesHelper)
+    fun provideCookieInterceptor(sharedPreferencesHelper: SharedPreferencesHelper): GetCookieInterceptor {
+        return GetCookieInterceptor(sharedPreferencesHelper)
     }
 
     @Provides
     @Singleton
-    fun provideCookieJar() = SetCookieJar()
+    fun provideCookieJar(sharedPreferencesHelper: SharedPreferencesHelper) = SetCookieJar(sharedPreferencesHelper)
+
 
     @Provides
     @Singleton
