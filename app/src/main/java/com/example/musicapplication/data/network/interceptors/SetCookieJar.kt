@@ -1,12 +1,10 @@
-package com.example.musicapplication.data.network
+package com.example.musicapplication.data.network.interceptors
 
 import android.util.Log
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
-import com.example.musicapplication.utils.Constants
 import okhttp3.Cookie
 import okhttp3.CookieJar
 import okhttp3.HttpUrl
-import java.net.HttpCookie
 import javax.inject.Inject
 
 

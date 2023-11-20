@@ -2,7 +2,7 @@ package com.example.musicapplication.di
 
 import android.content.Context
 import com.example.musicapplication.data.network.interceptors.GetCookieInterceptor
-import com.example.musicapplication.data.network.SetCookieJar
+import com.example.musicapplication.data.network.interceptors.SetCookieJar
 import com.example.musicapplication.data.network.api.ApiService
 import com.example.musicapplication.data.network.api.NetworkSource
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
@@ -18,8 +18,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.CookieManager
-import java.net.CookiePolicy
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -50,7 +48,8 @@ class NetworkModule {
     fun provideHttpClient(
         httpLoggingInterceptor: Interceptor,
         getCookieInterceptor: GetCookieInterceptor,
-        setCookieJar: SetCookieJar): OkHttpClient =
+        setCookieJar: SetCookieJar
+    ): OkHttpClient =
         OkHttpClient.Builder().connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT, TimeUnit.SECONDS)

@@ -43,7 +43,11 @@ fun AuthScreen(
     var visible by remember { mutableStateOf(false) }
 
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = viewModel.fragmentState) {
+        if(visible){
+            visible=!visible
+            delay(300)
+        }
         visible=!visible
     }
 

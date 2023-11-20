@@ -7,12 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.musicapplication.data.network.repo.RepositoryImpl
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.model.emptyUser
+import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+enum class Fragment{
+    LOGIN,
+    REGISTER
+}
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val repo:RepositoryImpl
@@ -25,6 +29,9 @@ class AuthViewModel @Inject constructor(
         isWrongData = false)
     )
     val authState = _authState
+
+    private var _fragmentState = mutableStateOf(Fragment.LOGIN)
+    val fragmentState = _fragmentState
 
     init {
         me()
@@ -44,9 +51,11 @@ class AuthViewModel @Inject constructor(
 
             is AuthEvent.GoToLogin -> {
                 _authState.value=authState.value.copy(isCreated = true)
+                _fragmentState.value=Fragment.LOGIN
             }
             is AuthEvent.GoToRegister -> {
                 _authState.value=authState.value.copy(isCreated = false)
+                _fragmentState.value=Fragment.REGISTER
             }
         }
     }
