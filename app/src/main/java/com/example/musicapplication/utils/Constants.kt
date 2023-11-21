@@ -1,6 +1,9 @@
 package com.example.musicapplication.utils
 
+import androidx.compose.ui.unit.dp
 import com.example.musicapplication.model.AudioItem
+import com.example.musicapplication.model.MessageItem
+import com.example.musicapplication.model.MessageState
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.model.StreamMode
@@ -28,11 +31,26 @@ object Constants {
         mockedAudio
     )
     val mockedRoom = RoomItem(
-        roomName = "chilling with bros",
-        isStreaming = StreamMode.PAUSED,
-        roommates = mockedUserList,
-        queue = mockedAudioList
+        id = 1,
+        roomName = "Комната 1",
+        ownerId = 101,
+        messages = listOf(
+            MessageItem("Привет всем!", 201, MessageState.TEXT_MESSAGE),
+            MessageItem("Комната создана", 101, MessageState.ROOM_CREATED)
+        ),
+        password = "securePassword",
+        isPrivate = true,
+        isStreaming = StreamMode.GOING,
+        roommates = listOf(
+            UserItem(201, "user1@example.com", "password1", null, "User 1"),
+            UserItem(202, "user2@example.com", "password2", null, "User 2")
+        ),
+        queue = listOf(
+            AudioItem("https://audio1.mp3", 180, "best song", "best author"),
+            AudioItem("https://audio2.mp3", 240, "best song", "best author")
+        )
     )
+
     val mockedRoomList = listOf(
         mockedRoom,
         mockedRoom,
@@ -41,11 +59,25 @@ object Constants {
         mockedRoom
     )
 
+    val AppBarCollapsedHeight = 100.dp
+    val AppBarExpendedHeight = 140.dp
+    const val playIcon = 1
+    const val loadingBar = 2
+    const val pauseIcon = 3
+
     //api
     const val EMAIL = "email"
     const val ID = "id"
     const val NAME = "name"
     const val PASSWORD = "password"
+
+    const val MESSAGES = "messages"
+    const val OWNER = "owner_id"
+    const val PRIVATE = "private"
+    const val USERS = "user_ids"
+    const val CONTENT = "contents"
+    const val TYPE = "type"
+    const val USERID = "userId"
 
     const val BASE_URL = "http://46.19.65.33:8080/"
     const val PATH_LOGIN = "login/"
@@ -62,4 +94,7 @@ object Constants {
 
     const val HASH_FUNC = "SHA-256"
     const val HEADER_COOKIE = "Set-Cookie"
+
+    const val PATH_ROOMS = "/rooms"
+    const val PATH_ROOMS_WITH_ID = "/rooms/:"
 }

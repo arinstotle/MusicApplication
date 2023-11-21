@@ -1,4 +1,4 @@
-package com.example.musicapplication.ui.streamScreen
+package com.example.musicapplication.presentation.streamScreen
 
 data class SongUI(
     val imageUrl: String,

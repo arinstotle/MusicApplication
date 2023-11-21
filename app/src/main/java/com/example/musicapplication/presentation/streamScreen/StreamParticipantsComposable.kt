@@ -1,4 +1,4 @@
-package com.example.musicapplication.ui.streamScreen
+package com.example.musicapplication.presentation.streamScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -55,10 +55,10 @@ import androidx.navigation.NavController
 import com.example.musicapplication.R
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.navigation.Screen
-import com.example.musicapplication.theme.DarkBackground
-import com.example.musicapplication.theme.RegDarkPurple
-import com.example.musicapplication.theme.RegLightPurple
-import com.example.musicapplication.theme.TextWhite
+import com.example.musicapplication.presentation.theme.DarkBackground
+import com.example.musicapplication.presentation.theme.RegDarkPurple
+import com.example.musicapplication.presentation.theme.RegLightPurple
+import com.example.musicapplication.presentation.theme.TextWhite
 
 
 @OptIn(ExperimentalMaterial3Api::class)

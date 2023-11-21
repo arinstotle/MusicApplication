@@ -1,4 +1,4 @@
-package com.example.musicapplication.ui.streamScreen
+package com.example.musicapplication.presentation.streamScreen
 
 data class ParticipantUI (
     val avatarURL: String,

@@ -1,4 +1,4 @@
-package com.example.musicapplication.ui.streamScreen
+package com.example.musicapplication.presentation.streamScreen
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.background
@@ -22,8 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.musicapplication.theme.MusicApplicationTheme
-import com.example.musicapplication.viewModels.StreamViewModel
+import com.example.musicapplication.presentation.theme.MusicApplicationTheme
+import com.example.musicapplication.presentation.viewModels.StreamViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)

@@ -1,4 +1,4 @@
-package com.example.musicapplication.ui.bottomNavigation
+package com.example.musicapplication.presentation.bottomNavigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
