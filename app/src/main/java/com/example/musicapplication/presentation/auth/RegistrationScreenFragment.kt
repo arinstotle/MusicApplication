@@ -98,6 +98,20 @@ fun RegistrationScreenFragment(
         mutableStateOf(authState.user)
     }
 
+    val isNameEmpty = remember {
+        mutableStateOf(false)
+    }
+    val isEmailEmpty = remember {
+        mutableStateOf(false)
+    }
+    val isPasswordEmpty = remember {
+        mutableStateOf(false)
+    }
+    val isRepeatedEmpty = remember {
+        mutableStateOf(false)
+    }
+
+
     Column(modifier = Modifier
         .background(DarkBackground)
         .fillMaxWidth()
@@ -146,10 +160,11 @@ fun RegistrationScreenFragment(
                     .padding(top = 17.dp)
                     .height(50.dp),
                     shape = RoundedCornerShape(5.dp),
-                    value = nickname.value?:"",
+                    value = nickname.value,
                     label = {Text(text = "Your name")},
                     onValueChange = {
                         nickname.value = it
+                        if(it.isNotBlank()) isNameEmpty.value = false
                         Log.d("NAME CHANGED", nickname.value.toString())},
                     textStyle = TextStyle(
                         fontSize = 14.sp,
@@ -157,7 +172,19 @@ fun RegistrationScreenFragment(
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
-                    ))
+                    ),
+                    colors = if (!isNameEmpty.value) {
+                        TextFieldDefaults.textFieldColors()
+                    } else {
+                        TextFieldDefaults.textFieldColors(
+                            unfocusedTextColor = Red,
+                            focusedTextColor = Red,
+                            disabledTextColor = Red,
+                            unfocusedLabelColor = Red,
+                            focusedLabelColor = Red,
+                            disabledLabelColor = Red,
+                        )
+                    })
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 15.dp)
@@ -165,7 +192,10 @@ fun RegistrationScreenFragment(
                     shape = RoundedCornerShape(5.dp),
                     value = email.value,
                     label = {Text(text = "Your email")},
-                    onValueChange = {email.value=it},
+                    onValueChange = {
+                        email.value=it
+                        if(it.isNotBlank()) isEmailEmpty.value = false
+                    },
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
@@ -174,7 +204,19 @@ fun RegistrationScreenFragment(
                         color = TextWhite
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    colors = TextFieldDefaults.textFieldColors())
+                    colors = if (!isEmailEmpty.value) {
+                        TextFieldDefaults.textFieldColors()
+                    } else {
+                        TextFieldDefaults.textFieldColors(
+                            unfocusedTextColor = Red,
+                            focusedTextColor = Red,
+                            disabledTextColor = Red,
+                            unfocusedLabelColor = Red,
+                            focusedLabelColor = Red,
+                            disabledLabelColor = Red,
+                        )
+                    }
+                )
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp)
@@ -182,7 +224,10 @@ fun RegistrationScreenFragment(
                     shape = RoundedCornerShape(5.dp),
                     value = password.value,
                     label = {Text(text = "Password")},
-                    onValueChange = {password.value=it},
+                    onValueChange = {
+                        password.value=it
+                        if(it.isNotBlank()) isPasswordEmpty.value = false
+                    },
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
@@ -212,7 +257,7 @@ fun RegistrationScreenFragment(
                     visualTransformation =
                     if(passwordVisibility.value) VisualTransformation.None
                         else PasswordVisualTransformation(),
-                    colors = if (passwordMatch.value) {
+                    colors = if (passwordMatch.value && !isPasswordEmpty.value) {
                         TextFieldDefaults.textFieldColors()
                     } else {
                         TextFieldDefaults.textFieldColors(
@@ -221,7 +266,7 @@ fun RegistrationScreenFragment(
                             disabledTextColor = Red,
                             unfocusedLabelColor = Red,
                             focusedLabelColor = Red,
-                            disabledLabelColor = Red
+                            disabledLabelColor = Red,
                         )
                     }
                 )
@@ -234,6 +279,7 @@ fun RegistrationScreenFragment(
                     label = {Text(text = "Repeat password")},
                     onValueChange = {
                         repeatedPassword.value=it
+                        if(it.isNotBlank()) isRepeatedEmpty.value = false
                         passwordMatch.value=password.value==repeatedPassword.value },
                     textStyle = TextStyle(
                         fontSize = 14.sp,
@@ -264,7 +310,7 @@ fun RegistrationScreenFragment(
                     visualTransformation =
                     if(repeatedPasswordVisibility.value) VisualTransformation.None
                     else PasswordVisualTransformation(),
-                    colors = if (passwordMatch.value) {
+                    colors = if (passwordMatch.value && !isRepeatedEmpty.value) {
                         TextFieldDefaults.textFieldColors()
                     } else {
                         TextFieldDefaults.textFieldColors(
@@ -307,7 +353,17 @@ fun RegistrationScreenFragment(
                     )
                     TextButton(
                         onClick = {
-                            if(passwordMatch.value){
+
+                            isNameEmpty.value = nickname.value.isBlank()
+                            isEmailEmpty.value = email.value.isBlank()
+                            isPasswordEmpty.value = password.value.isBlank()
+                            isRepeatedEmpty.value = repeatedPassword.value.isBlank()
+
+                            if(passwordMatch.value
+                                && !isNameEmpty.value
+                                && !isEmailEmpty.value
+                                && !isPasswordEmpty.value
+                                && !isRepeatedEmpty.value){
                                 user.value=user.value.copy(
                                     photoUrl = null,
                                     name = nickname.value,

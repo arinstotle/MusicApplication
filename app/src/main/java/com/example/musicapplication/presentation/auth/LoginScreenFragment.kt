@@ -70,6 +70,13 @@ fun LoginScreenFragment(
         mutableStateOf(false)
     }
 
+    val isEmailEmpty = remember {
+        mutableStateOf(false)
+    }
+    val isPasswordEmpty = remember {
+        mutableStateOf(false)
+    }
+
     Column(modifier = Modifier
         .background(DarkBackground)
         .fillMaxWidth()
@@ -122,6 +129,7 @@ fun LoginScreenFragment(
                     shape = RoundedCornerShape(5.dp),
                     onValueChange = {
                         email.value=it
+                        if(it.isNotBlank()) isEmailEmpty.value = false
                     },
                     textStyle = TextStyle(
                         fontSize = 14.sp,
@@ -131,7 +139,7 @@ fun LoginScreenFragment(
                         color = TextWhite
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    colors = if (!authState.isWrongData) {
+                    colors = if (!authState.isWrongData && !isEmailEmpty.value) {
                         TextFieldDefaults.textFieldColors()
                     } else {
                         TextFieldDefaults.textFieldColors(
@@ -151,7 +159,10 @@ fun LoginScreenFragment(
                     shape = RoundedCornerShape(5.dp),
                     value = password.value,
                     label = {Text(text = "Password")},
-                    onValueChange = { password.value=it},
+                    onValueChange = {
+                        password.value=it
+                        if(it.isNotBlank()) isPasswordEmpty.value = false
+                                    },
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
@@ -181,7 +192,7 @@ fun LoginScreenFragment(
                     visualTransformation =
                     if(passwordVisibility.value) VisualTransformation.None
                     else PasswordVisualTransformation(),
-                    colors = if (!authState.isWrongData) {
+                    colors = if (!authState.isWrongData && !isPasswordEmpty.value) {
                         TextFieldDefaults.textFieldColors()
                     } else {
                         TextFieldDefaults.textFieldColors(
@@ -222,20 +233,27 @@ fun LoginScreenFragment(
                         )
                     }
                     TextButton(onClick = {
-                        onLogin(
-                            AuthState(
-                                user = UserItem(
-                                    id = 0,
-                                    photoUrl = null,
-                                    name = "",
-                                    email = email.value,
-                                    password = password.value
-                                ),
-                                isAuthorized = false,
-                                isWrongData = false,
-                                isCreated = true
+
+                        isEmailEmpty.value = email.value.isBlank()
+                        isPasswordEmpty.value = password.value.isBlank()
+
+                        if(!isEmailEmpty.value && !isPasswordEmpty.value){
+                            onLogin(
+                                AuthState(
+                                    user = UserItem(
+                                        id = 0,
+                                        photoUrl = null,
+                                        name = "",
+                                        email = email.value,
+                                        password = password.value
+                                    ),
+                                    isAuthorized = false,
+                                    isWrongData = false,
+                                    isCreated = true
+                                )
                             )
-                        )
+                        }
+
                                          },
                         modifier = Modifier
                             .width(105.dp)

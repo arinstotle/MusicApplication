@@ -7,4 +7,6 @@ sealed class AuthEvent{
     data object GoToRegister:AuthEvent()
 
     data object GoToLogin:AuthEvent()
+
+    data object Logout:AuthEvent()
 }

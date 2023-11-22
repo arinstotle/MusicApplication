@@ -63,11 +63,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.musicapplication.R
+import com.example.musicapplication.navigation.Screen
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(
+    navController: NavController
+) {
     var isLoading by remember {
         mutableStateOf(true)
     }
@@ -98,7 +101,7 @@ fun MainScreen(navController: NavController) {
                         )
                         .background(MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    GreetingSection()
+                    GreetingSection(navController)
                 }
                 RoomSection(
                     isLoading = isLoading,
@@ -163,9 +166,9 @@ fun Modifier.shimmerEffect(): Modifier = composed {
         }
 }
 
-@Preview
 @Composable
 fun GreetingSection(
+    navController: NavController,
     name: String = "John",
     imageResource: Int = R.drawable.sample_avatar
 ) {
@@ -192,6 +195,12 @@ fun GreetingSection(
                     .padding(8.dp)
                     .background(
                         MaterialTheme.colorScheme.secondaryContainer,
+                    )
+                    .clickable(
+                        enabled = true,
+                        onClick = {
+                            navController.navigate(Screen.ProfileScreen.route)
+                        }
                     )
             ) {
                 Image(
@@ -230,7 +239,6 @@ fun GreetingSection(
             }
             IconButton(
                 onClick = {
-
                 }
             ) {
                 Icon(

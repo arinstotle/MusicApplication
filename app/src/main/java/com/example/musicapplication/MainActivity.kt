@@ -54,6 +54,7 @@ class MainActivity : ComponentActivity() {
                         bottomBar = {
                             when (NavigationRouter.currentScreen.value) {
                                 Screen.AuthScreen -> null
+                                Screen.ProfileScreen,
                                 Screen.MainScreen -> {
                                     CustomBottomNavigation(currentScreenRoute = NavigationRouter.currentScreen.value.route) { screen ->
                                         if (screen.route != NavigationRouter.currentScreen.value.route) {

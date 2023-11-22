@@ -8,15 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.musicapplication.presentation.auth.AuthScreen
-import com.example.musicapplication.presentation.auth.AuthViewModel
 import com.example.musicapplication.presentation.auth.authEnterAnimation
 import com.example.musicapplication.presentation.auth.authExitAnimation
 import com.example.musicapplication.presentation.mainScreen.MainScreen
+import com.example.musicapplication.presentation.profile.ProfileScreen
 import com.example.musicapplication.presentation.streamScreen.StreamMainScreen
 
 object NavigationRouter {
@@ -58,6 +57,10 @@ fun Navigation(navController: NavHostController, context: Context) {
         }
         composable(route = Screen.StreamScreen.route) {
             StreamMainScreen(navController = navController)
+        }
+        composable(Screen.ProfileScreen.route){
+            ProfileScreen(navController = navController)
+            NavigationRouter.currentScreen.value=Screen.ProfileScreen
         }
     }
 }

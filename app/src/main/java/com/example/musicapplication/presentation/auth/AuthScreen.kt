@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.theme.DarkBackground
 import kotlinx.coroutines.delay
@@ -48,6 +49,7 @@ fun AuthScreen(
             visible=!visible
             delay(300)
         }
+        delay(300)
         visible=!visible
     }
 
@@ -56,9 +58,12 @@ fun AuthScreen(
         .background(DarkBackground),
         verticalArrangement = Arrangement.Bottom) {
 
-
         if(viewModel.authState.value.isCreated && viewModel.authState.value.isAuthorized){
-            navController.navigate(Screen.MainScreen.route)
+            navController.navigate(Screen.MainScreen.route){
+                popUpTo(Screen.MainScreen.route){
+                    inclusive=true
+                }
+            }
         }
         else if(!viewModel.authState.value.isCreated) {
 

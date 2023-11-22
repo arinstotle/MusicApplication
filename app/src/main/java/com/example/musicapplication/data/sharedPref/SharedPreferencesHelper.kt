@@ -18,4 +18,6 @@ class SharedPreferencesHelper @Inject constructor(context: Context) {
     }
 
     fun getCookie():String= sharedPreferences.getString(KEY,"")!!
+
+    fun clearCookie() = putCookie("")
 }

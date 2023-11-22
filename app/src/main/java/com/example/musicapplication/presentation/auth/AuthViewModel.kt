@@ -1,8 +1,10 @@
 package com.example.musicapplication.presentation.auth
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavBackStackEntry
 import com.example.musicapplication.data.network.repo.RemoteRepositoryImpl
 import com.example.musicapplication.model.emptyUser
 
@@ -31,6 +33,7 @@ class AuthViewModel @Inject constructor(
     val fragmentState = _fragmentState
 
     init {
+        _fragmentState.value = Fragment.LOGIN
         me()
     }
     fun onEvent(event: AuthEvent){
@@ -47,12 +50,15 @@ class AuthViewModel @Inject constructor(
             }
 
             is AuthEvent.GoToLogin -> {
-                _authState.value=authState.value.copy(isCreated = true)
                 _fragmentState.value=Fragment.LOGIN
+                _authState.value=authState.value.copy(isCreated = true)
             }
             is AuthEvent.GoToRegister -> {
-                _authState.value=authState.value.copy(isCreated = false)
                 _fragmentState.value=Fragment.REGISTER
+                _authState.value=authState.value.copy(isCreated = false, isAuthorized = false)
+            }
+            is AuthEvent.Logout ->{
+                _authState.value=authState.value.copy(isAuthorized = false)
             }
         }
     }
@@ -86,7 +92,8 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO){
             val currentUser = repo.me()
             if(currentUser!=null){
-                _authState.value = authState.value.copy(user = currentUser, isAuthorized = true, isCreated = true)
+                _authState.value = authState.value.copy(user = currentUser.copy(password = ""), isAuthorized = true, isCreated = true)
+                Log.d("ME DATA", currentUser.toString())
             }
         }
     }
