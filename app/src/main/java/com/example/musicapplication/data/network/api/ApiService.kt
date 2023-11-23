@@ -28,7 +28,7 @@ interface ApiService {
     suspend fun me(): Response<UserResponse>
 
     @GET(Constants.PATH_ROOMS)
-    suspend fun allRoomsFromServer(): Response<RoomsResponse>
+    suspend fun allRoomsFromServer(): Response<List<RoomResponse>>
 
     @POST(Constants.PATH_ROOMS)
     suspend fun createRoomInServer(

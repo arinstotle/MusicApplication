@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.musicapplication.data.network.interceptors.GetCookieInterceptor
 import com.example.musicapplication.data.network.SetCookieJar
 import com.example.musicapplication.data.network.api.ApiService
-import com.example.musicapplication.data.network.api.NetworkSource
+import com.example.musicapplication.data.network.repo.NetworkSource
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
 import com.example.musicapplication.utils.Constants
 import com.example.musicapplication.utils.Constants.TIMEOUT
@@ -18,8 +18,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.CookieManager
-import java.net.CookiePolicy
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 

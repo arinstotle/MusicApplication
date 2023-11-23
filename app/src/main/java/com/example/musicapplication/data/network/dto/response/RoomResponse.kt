@@ -9,7 +9,7 @@ data class RoomResponse(
     @SerializedName(Constants.ID)
     val id: Int,
     @SerializedName(Constants.MESSAGES)
-    val messages: List<MessageResponse>,
+    val messages: List<MessageResponse>?,
     @SerializedName(Constants.NAME)
     val name: String,
     @SerializedName(Constants.OWNER)
@@ -19,7 +19,7 @@ data class RoomResponse(
     @SerializedName(Constants.PRIVATE)
     val isPrivate: Boolean,
     @SerializedName(Constants.USERS)
-    val users: List<UserResponse>
+    val users: List<UserResponse>?
 )
 
 fun List<RoomResponse>.toRoomItemList(): List<RoomItem> =
@@ -28,11 +28,11 @@ fun List<RoomResponse>.toRoomItemList(): List<RoomItem> =
             id = roomResponse.id,
             roomName = roomResponse.name,
             ownerId = roomResponse.ownerId,
-            messages = roomResponse.messages.map { it.toMessageItem() },
+            messages = roomResponse.messages?.map { it.toMessageItem() },
             password = roomResponse.password,
             isPrivate = roomResponse.isPrivate,
             isStreaming = StreamMode.GOING,
-            roommates = roomResponse.users.map { it.toItem() },
+            roommates = roomResponse.users?.map { it.toItem() },
             queue = emptyList()
         )
     }
@@ -42,11 +42,11 @@ fun RoomResponse.toRoomItem(): RoomItem {
         id = id,
         roomName = name,
         ownerId = ownerId,
-        messages = messages.map { it.toMessageItem() },
+        messages = messages?.map { it.toMessageItem() },
         password = password,
         isPrivate = isPrivate,
         isStreaming = StreamMode.GOING,
-        roommates = users.map { it.toItem() },
+        roommates = users?.map { it.toItem() },
         queue = emptyList()
     )
 }

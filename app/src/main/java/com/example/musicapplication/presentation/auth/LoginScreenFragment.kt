@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.musicapplication.R
 import com.example.musicapplication.model.UserItem
+import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.theme.AuthDarkBlue
 import com.example.musicapplication.presentation.theme.AuthLightBlue
@@ -236,7 +237,8 @@ fun LoginScreenFragment(
                                 isCreated = true
                             )
                         )
-                                         },
+                        NavigationRouter.currentScreen.value = Screen.MainScreen
+                        },
                         modifier = Modifier
                             .width(105.dp)
                             .height(46.dp)
