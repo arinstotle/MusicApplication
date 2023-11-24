@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -158,7 +159,7 @@ fun RegistrationScreenFragment(
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 17.dp)
-                    .height(50.dp),
+                    .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = nickname.value,
                     label = {Text(text = "Your name")},
@@ -188,7 +189,7 @@ fun RegistrationScreenFragment(
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 15.dp)
-                    .height(50.dp),
+                    .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = email.value,
                     label = {Text(text = "Your email")},
@@ -220,7 +221,7 @@ fun RegistrationScreenFragment(
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp)
-                    .height(50.dp),
+                    .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = password.value,
                     label = {Text(text = "Password")},
@@ -273,7 +274,7 @@ fun RegistrationScreenFragment(
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 17.dp)
-                    .height(50.dp),
+                    .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = repeatedPassword.value,
                     label = {Text(text = "Repeat password")},

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -125,7 +126,7 @@ fun LoginScreenFragment(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 17.dp)
-                        .height(50.dp),
+                        .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     onValueChange = {
                         email.value=it
@@ -155,7 +156,7 @@ fun LoginScreenFragment(
                 TextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 15.dp)
-                    .height(50.dp),
+                    .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = password.value,
                     label = {Text(text = "Password")},
