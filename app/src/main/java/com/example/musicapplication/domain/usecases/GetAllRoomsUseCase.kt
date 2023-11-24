@@ -17,7 +17,6 @@ class GetAllRoomsUseCase @Inject constructor(
         emit(DataState.Initial)
         when (order) {
             OrdersTypes.NATURAL -> {
-                Log.d("UC ROOMS", "SUCC")
                 emit(DataState.Result(repository.getAllRooms()))
             }
             OrdersTypes.ALPHABETICAL -> {

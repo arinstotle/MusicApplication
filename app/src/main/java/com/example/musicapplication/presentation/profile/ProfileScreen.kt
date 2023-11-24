@@ -4,6 +4,7 @@ import android.text.Layout
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,6 +55,7 @@ import com.example.musicapplication.R
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
+import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.theme.DarkBackground
 import com.example.musicapplication.presentation.theme.TextWhite
 import com.example.musicapplication.utils.Constants
@@ -61,8 +64,8 @@ import com.example.musicapplication.utils.Constants
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    profileViewModel: ProfileViewModel = hiltViewModel(),
-    onLogout:()-> Unit = { profileViewModel.onEvent(ProfileEvent.OnLogout) }
+    viewModel: ProfileViewModel = hiltViewModel(),
+    onLogout:()-> Unit = { viewModel.onEvent(ProfileEvent.OnLogout) }
 ) {
 
     Scaffold(
@@ -102,13 +105,24 @@ fun ProfileScreen(
             )
         }
     ) { values ->
-        ProfileScreenFragment(values, profileState = profileViewModel.profileState.value)
+        if(viewModel.profileState.value is UiState.Success<*>){
+            ProfileScreenFragment(values, user = viewModel.profileState.value.data!!)
+        }
+        else{
+            Box(modifier = Modifier.fillMaxSize()
+                .background(DarkBackground)) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+
     }
 }
 @Composable
 fun ProfileScreenFragment(
     paddingValues: PaddingValues,
-    profileState: ProfileState
+    user: UserItem
 ) {
     Column(modifier = Modifier
         .background(DarkBackground, RectangleShape)
@@ -120,7 +134,7 @@ fun ProfileScreenFragment(
             bottom = paddingValues.calculateBottomPadding())){
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(profileState.user.photoUrl?: R.drawable.sample_avatar)
+                .data(user.photoUrl?: R.drawable.sample_avatar)
                 .crossfade(true)
                 .build(),
             placeholder = painterResource(R.drawable.sample_avatar),
@@ -135,7 +149,7 @@ fun ProfileScreenFragment(
         Text(modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(top = 100.dp),
-            text = profileState.user.name,
+            text = user.name,
             color = TextWhite,
             style = TextStyle(
                 fontSize = 26.sp,
@@ -145,7 +159,7 @@ fun ProfileScreenFragment(
         Text(modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(top = 20.dp),
-            text = profileState.user.email,
+            text = user.email,
             color = TextWhite,
             style = TextStyle(
                 fontSize = 16.sp,

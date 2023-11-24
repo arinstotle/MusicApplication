@@ -8,7 +8,9 @@ import com.example.musicapplication.domain.usecases.IAddNewRoomUseCase
 import com.example.musicapplication.domain.usecases.IClearAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.IEnterToTheRoomUseCase
 import com.example.musicapplication.domain.usecases.IGetAllRoomsUseCase
+import com.example.musicapplication.domain.usecases.IMeUseCase
 import com.example.musicapplication.domain.usecases.IOverwriteLocalDatabaseUseCase
+import com.example.musicapplication.domain.usecases.MeUseCase
 import com.example.musicapplication.domain.usecases.OverwriteLocalDatabaseUseCase
 import dagger.Binds
 import dagger.Module
@@ -32,4 +34,7 @@ interface UseCaseModule {
 
     @Binds
     fun bindOverwriteLocalDatabaseUseCase(useCase:OverwriteLocalDatabaseUseCase): IOverwriteLocalDatabaseUseCase
+
+    @Binds
+    fun bindMeUseCase(useCase: MeUseCase): IMeUseCase
 }

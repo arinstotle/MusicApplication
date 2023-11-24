@@ -26,7 +26,29 @@ class SharedPreferencesHelper @Inject constructor(context: Context) {
         editor.putInt("ID", userId)
         editor.apply()
     }
-
     fun getUserId():Int = sharedPreferences.getInt("ID", -1)
-    //fun putCurrentUser(userItem: UserItem)
+
+
+    fun putUserName(name:String){
+        editor.putString("NAME", name)
+        editor.apply()
+    }
+    fun getUserName():String = sharedPreferences.getString("NAME", "user")!!
+
+    fun putUserEmail(email:String){
+        editor.putString("EMAIL", email)
+        editor.apply()
+    }
+    fun getUserEmail():String = sharedPreferences.getString("EMAIL", "email")!!
+
+    fun putUserData(id:Int, name:String, email: String){
+        putUserId(id)
+        putUserName(name)
+        putUserEmail(email)
+    }
+    fun clearUserData(){
+        putUserId(-1)
+        putUserName("")
+        putUserEmail("")
+    }
 }

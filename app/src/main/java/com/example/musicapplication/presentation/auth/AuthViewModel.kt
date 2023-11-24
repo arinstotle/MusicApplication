@@ -117,7 +117,10 @@ class AuthViewModel @Inject constructor(
             val currentUser = remoteRepo.me()
             if(currentUser!=null){
                 _authState.value = authState.value.copy(user = currentUser.copy(password = ""), isAuthorized = true, isCreated = true)
-                sharedPreferencesHelper.putUserId(authState.value.user.id)
+                sharedPreferencesHelper.putUserData(
+                    authState.value.user.id,
+                    authState.value.user.name,
+                    authState.value.user.email)
                 Log.d("ME DATA", currentUser.toString())
             }
         }

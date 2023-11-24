@@ -28,6 +28,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -61,19 +62,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.musicapplication.R
+import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.navigation.Screen
+import com.example.musicapplication.presentation.UiState
+import com.example.musicapplication.presentation.theme.DarkBackground
+import com.example.musicapplication.presentation.viewModels.MainScreenViewModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: MainScreenViewModel = hiltViewModel()
 ) {
     var isLoading by remember {
-        mutableStateOf(true)
+        mutableStateOf(viewModel.isLoading.value)
     }
+
+    val rooms by viewModel.allRooms.collectAsState()
+
     LaunchedEffect(key1 = true) {
         delay(4000)
         isLoading = false
@@ -103,37 +113,31 @@ fun MainScreen(
                 ) {
                     GreetingSection(navController, iconClick = {
                         navController.navigate(Screen.SearchScreen.route)
-                    })
-                }
-                RoomSection(
-                    isLoading = isLoading,
-                    rooms = listOf(
-                        Room(
-                            title = "Room1",
-                            MaterialTheme.colorScheme.secondary,
-                            MaterialTheme.colorScheme.onPrimary,
-                            MaterialTheme.colorScheme.surface
-                        ),
-                        Room(
-                            title = "Room2",
-                            MaterialTheme.colorScheme.secondary,
-                            MaterialTheme.colorScheme.onPrimary,
-                            MaterialTheme.colorScheme.surface
-                        ),
-                        Room(
-                            title = "Room3",
-                            MaterialTheme.colorScheme.secondary,
-                            MaterialTheme.colorScheme.onPrimary,
-                            MaterialTheme.colorScheme.surface
-                        ),
-                        Room(
-                            title = "Room4",
-                            MaterialTheme.colorScheme.secondary,
-                            MaterialTheme.colorScheme.onPrimary,
-                            MaterialTheme.colorScheme.surface
-                        )
+                    },
+                        name = viewModel.userState.value.data?.name ?: "User"
                     )
-                )
+                }
+                if(rooms is UiState.Success<*>){
+                    RoomSection(
+                        isLoading = isLoading,
+                        rooms = (rooms.data as List<RoomItem>).map {
+                            Room(
+                                it.roomName,
+                                MaterialTheme.colorScheme.secondary,
+                                MaterialTheme.colorScheme.onPrimary,
+                                MaterialTheme.colorScheme.surface
+                            )
+                        }.toList()
+                    )
+                }
+                else{
+                    Box(modifier = Modifier.fillMaxSize()
+                        .background(DarkBackground)) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                }
             }
         }
     }
@@ -377,6 +381,7 @@ fun RoomSection(rooms: List<Room>, isLoading : Boolean) {
         ) {
             items(rooms.size) {
                 ShimmerListItem(isLoading = isLoading, contentAfterLoading = {
+                    RoomCard(room = rooms[it])
                 })
             }
         }
@@ -419,3 +424,30 @@ fun Path.standardQuadFromTo(from: Offset, to: Offset) {
         Math.abs(from.y + to.y) / 2f
     )
 }
+
+//val mockedRooms = listOf(
+//    Room(
+//        title = "Room1",
+//        MaterialTheme.colorScheme.secondary,
+//        MaterialTheme.colorScheme.onPrimary,
+//        MaterialTheme.colorScheme.surface
+//    ),
+//    Room(
+//        title = "Room2",
+//        MaterialTheme.colorScheme.secondary,
+//        MaterialTheme.colorScheme.onPrimary,
+//        MaterialTheme.colorScheme.surface
+//    ),
+//    Room(
+//        title = "Room3",
+//        MaterialTheme.colorScheme.secondary,
+//        MaterialTheme.colorScheme.onPrimary,
+//        MaterialTheme.colorScheme.surface
+//    ),
+//    Room(
+//        title = "Room4",
+//        MaterialTheme.colorScheme.secondary,
+//        MaterialTheme.colorScheme.onPrimary,
+//        MaterialTheme.colorScheme.surface
+//    )
+//)
