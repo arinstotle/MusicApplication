@@ -1,11 +1,11 @@
 package com.example.musicapplication.presentation.viewModels
 
-import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicapplication.domain.DataState
-import com.example.musicapplication.domain.usecases.AddNewRoomUseCase
+import com.example.musicapplication.domain.usecases.EnterToTheRoomUseCase
+import com.example.musicapplication.domain.usecases.IAddNewRoomUseCase
 import com.example.musicapplication.domain.usecases.IGetAllRoomsUseCase
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
@@ -13,26 +13,17 @@ import com.example.musicapplication.presentation.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchScreenViewModel @Inject constructor(
     private val getAllRoomsUseCase: IGetAllRoomsUseCase,
-    private val addNewRoomUseCase: AddNewRoomUseCase
+    private val addNewRoomUseCase: IAddNewRoomUseCase,
+    private val enterToTheRoomUseCase: EnterToTheRoomUseCase
 ):ViewModel() {
+
     private var _roomName: MutableStateFlow<String> = MutableStateFlow("")
     val roomName: StateFlow<String> = _roomName.asStateFlow()
 
@@ -143,6 +134,20 @@ class SearchScreenViewModel @Inject constructor(
         val isPrivate: Boolean = isPrivate.value
         val owner: Int = 1
         addNewRoomUseCase(roomName, password, isPrivate, owner).collect { state ->
+            when (state) {
+                is DataState.Initial -> emit(UiState.Start)
+                is DataState.Result -> emit(UiState.Success(state.data))
+                is DataState.Exception -> emit(UiState.FatalError(state.cause.message ?: state.cause.stackTraceToString()))
+                else -> {
+                }
+            }
+        }
+    }.catch {
+        emit(UiState.FatalError(it.cause?.message.toString()))
+    }
+
+    fun enterToTheRoom(roomId: Int): Flow<UiState<Any>> = flow {
+        enterToTheRoomUseCase(roomId).collect { state ->
             when (state) {
                 is DataState.Initial -> emit(UiState.Start)
                 is DataState.Result -> emit(UiState.Success(state.data))

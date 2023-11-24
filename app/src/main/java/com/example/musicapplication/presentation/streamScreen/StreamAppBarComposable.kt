@@ -133,7 +133,7 @@ fun StreamAppBar(playOnClick: () -> Unit,
                                     .padding(start = 16.dp, end = 16.dp)
                             ) {
                                 Text(
-                                    text = "Room 2",
+                                    text = roomName,
                                     style = TextStyle(
                                         fontSize = 21.sp,
                                         fontFamily = FontFamily(Font(R.font.spartan_bold)),

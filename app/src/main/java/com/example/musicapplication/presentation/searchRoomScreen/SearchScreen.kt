@@ -60,6 +60,7 @@ import androidx.navigation.NavHostController
 import com.example.musicapplication.R
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
+import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.mainScreen.ShimmerListItem
 import com.example.musicapplication.presentation.mainScreen.standardQuadFromTo
@@ -72,11 +73,13 @@ fun SearchScreen(
     navController: NavHostController,
     viewModel: SearchScreenViewModel = hiltViewModel()
 ) {
+
     val rooms by viewModel.allRooms.collectAsState()
     val loadingState by viewModel.isLoading.collectAsState(initial = false)
     val searchText by viewModel.searchText.collectAsState()
     val isSearching by viewModel.isSearching.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -108,6 +111,25 @@ fun SearchScreen(
                                         "A new room has been successfully created!",
                                         Toast.LENGTH_SHORT).show()
                                     viewModel.onDismissDialog()
+                                    viewModel.enterToTheRoom((uiState.data
+                                            as RoomItem).id!!).collect { enterUiState ->
+                                        when(enterUiState) {
+                                            is UiState.Success -> {
+                                                Toast.makeText(context,
+                                                    "Entering...",
+                                                    Toast.LENGTH_SHORT).show()
+                                                navController.navigate(Screen.StreamScreen.withArgs(((enterUiState.data
+                                                        as RoomItem).id).toString()))
+                                            }
+                                            is UiState.Error -> {
+                                                Toast.makeText(context,
+                                                    "Not entering, try again",
+                                                    Toast.LENGTH_SHORT).show()
+                                            }
+                                            else -> {
+                                            }
+                                        }
+                                    }
                                 }
                                 is UiState.Error -> {
                                     Toast.makeText(context,
@@ -517,7 +539,6 @@ fun CustomDialog(
                         },
                         keyboardOptions = KeyboardOptions.Default,
                         iconResource = {
-
                         }
                     )
                     Row(

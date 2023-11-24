@@ -369,9 +369,6 @@ fun RoomSection(rooms: List<Room>, isLoading : Boolean) {
         ) {
             items(rooms.size) {
                 ShimmerListItem(isLoading = isLoading, contentAfterLoading = {
-                    RoomCard(
-                        room = rooms[it]
-                    )
                 })
             }
         }

@@ -81,6 +81,25 @@ class RemoteRepositoryImpl @Inject constructor(
     }
 
     @Throws(MainNetworkException::class)
+    override suspend fun getAllUserRooms(userId: Int): List<RoomItem>? {
+        var rooms: List<RoomItem>? = null
+        networkSource.getUserRooms(userId).collect { state ->
+            rooms = if (state == null)
+                null
+            else {
+                when (state) {
+                    is NetworkState.Exception -> throw MainNetworkException("Internet is not available!")
+                    is NetworkState.Result -> {
+                        state.data
+                    }
+                    else -> emptyList()
+                }
+            }
+        }
+        return rooms
+    }
+
+    @Throws(MainNetworkException::class)
     override suspend fun createNewRoom(roomName: String, password: String?,
                                         isPrivate: Boolean,
                                         owner: Int): RoomItem? {

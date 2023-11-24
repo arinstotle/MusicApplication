@@ -169,6 +169,25 @@ class NetworkSource @Inject constructor(
         emit(NetworkState.Exception(it))
     }
 
+    fun getUserRooms(userId: Int): Flow<NetworkState<List<RoomItem>>?> = flow {
+        emit(NetworkState.Initial)
+        val response = api.getUserRoomsFromServer(userId)
+        if (response.isSuccessful) {
+            if (response.body() == null)
+                emit(null)
+            if (response.body() != null)
+                emit(NetworkState.Result(response.body()!!.toRoomItemList()))
+            else {
+                throw ResponseEmptyException("Empty body")
+            }
+        }
+        else {
+            throw ResponseUnsuccessfulException("Unsuccessful response")
+        }
+    }.catch {
+        emit(NetworkState.Exception(it))
+    }
+
     fun createRoom(
         room: RoomItem
     ): Flow<NetworkState<RoomItem>> = flow {
