@@ -12,6 +12,7 @@ import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.presentation.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -24,11 +25,19 @@ class SearchScreenViewModel @Inject constructor(
     private val enterToTheRoomUseCase: EnterToTheRoomUseCase
 ):ViewModel() {
 
+    private var job: Job? = null
+
+    private var _currentRoom: MutableStateFlow<RoomItem?> = MutableStateFlow(null)
+    val currentRoom: StateFlow<RoomItem?> = _currentRoom.asStateFlow()
+
     private var _roomName: MutableStateFlow<String> = MutableStateFlow("")
     val roomName: StateFlow<String> = _roomName.asStateFlow()
 
     private var _password: MutableStateFlow<String?> = MutableStateFlow(null)
     val password: StateFlow<String?> = _password.asStateFlow()
+
+    private var _enteringPassword: MutableStateFlow<String?> = MutableStateFlow(null)
+    val enteringPassword: StateFlow<String?> = _enteringPassword.asStateFlow()
 
     private var _isPrivate: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isPrivate: StateFlow<Boolean> = _isPrivate.asStateFlow()
@@ -44,15 +53,29 @@ class SearchScreenViewModel @Inject constructor(
 
     var isDialogShown by mutableStateOf(false)
         private set
+    var isEnterDialogShown by mutableStateOf(false)
+        private set
 
+    fun setEnteringRoom(enteringRoom: RoomItem) {
+        _currentRoom.value = enteringRoom
+    }
+    fun unsetEnteringRoom() {
+        _currentRoom.value = null
+    }
     fun onAddNewRoomClick() {
         isDialogShown = true
+    }
+    fun onEnterToTheRoomClick() {
+        isEnterDialogShown = true
     }
 
     fun onDismissDialog() {
         isDialogShown = false
     }
 
+    fun onDismissEnterDialog() {
+        isEnterDialogShown = false
+    }
     fun renameRoom(newName: String) {
         _roomName.value = newName
     }
@@ -63,6 +86,24 @@ class SearchScreenViewModel @Inject constructor(
 
     fun changeRoomPassword(password: String) {
         _password.value = password
+    }
+
+    fun changeEnteringRoomPassword(password: String) {
+        _enteringPassword.value = password
+    }
+
+    fun unsetEnteringRoomPassword() {
+        _enteringPassword.value = null
+    }
+
+    fun unsetRoomPassword() {
+        _password.value = null
+    }
+    fun unsetRoomName() {
+        _roomName.value = ""
+    }
+    fun unsetRoomType() {
+        _isPrivate.value = false
     }
 
     private var _allRooms: MutableStateFlow<UiState<List<RoomItem>>> = MutableStateFlow(UiState.Start)
@@ -91,7 +132,7 @@ class SearchScreenViewModel @Inject constructor(
     private val _sortType = MutableStateFlow(OrdersTypes.NATURAL)
 
     init {
-        viewModelScope.launch {
+        job = viewModelScope.launch {
             _isLoading.value = true
             getAllRoomsUseCase(OrdersTypes.NATURAL).collect { state ->
                 when (state) {
@@ -158,6 +199,11 @@ class SearchScreenViewModel @Inject constructor(
         }
     }.catch {
         emit(UiState.FatalError(it.cause?.message.toString()))
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        job?.cancel()
     }
 
 }
