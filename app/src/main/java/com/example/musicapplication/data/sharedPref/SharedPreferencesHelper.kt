@@ -2,6 +2,7 @@ package com.example.musicapplication.data.sharedPref
 
 import android.content.Context
 import android.util.Log
+import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.utils.Constants.KEY
 import com.example.musicapplication.utils.Constants.SHARED_PREF
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,4 +21,12 @@ class SharedPreferencesHelper @Inject constructor(context: Context) {
     fun getCookie():String= sharedPreferences.getString(KEY,"")!!
 
     fun clearCookie() = putCookie("")
+
+    fun putUserId(userId:Int){
+        editor.putInt("ID", userId)
+        editor.apply()
+    }
+
+    fun getUserId():Int = sharedPreferences.getInt("ID", -1)
+    //fun putCurrentUser(userItem: UserItem)
 }

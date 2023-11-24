@@ -1,5 +1,6 @@
 package com.example.musicapplication.domain.usecases
 
+import android.util.Log
 import com.example.musicapplication.domain.DataState
 import com.example.musicapplication.domain.RemoteRepository
 import com.example.musicapplication.model.OrdersTypes
@@ -16,6 +17,7 @@ class GetAllRoomsUseCase @Inject constructor(
         emit(DataState.Initial)
         when (order) {
             OrdersTypes.NATURAL -> {
+                Log.d("UC ROOMS", "SUCC")
                 emit(DataState.Result(repository.getAllRooms()))
             }
             OrdersTypes.ALPHABETICAL -> {
@@ -26,6 +28,7 @@ class GetAllRoomsUseCase @Inject constructor(
             }
         }
     }.catch {
+        Log.d("UC ROOMS", "EXC")
         emit(DataState.Exception(it))
     }
 }

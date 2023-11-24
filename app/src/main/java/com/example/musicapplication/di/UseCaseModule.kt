@@ -1,11 +1,15 @@
 package com.example.musicapplication.di
 
 import com.example.musicapplication.domain.usecases.AddNewRoomUseCase
+import com.example.musicapplication.domain.usecases.ClearAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.EnterToTheRoomUseCase
 import com.example.musicapplication.domain.usecases.GetAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.IAddNewRoomUseCase
+import com.example.musicapplication.domain.usecases.IClearAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.IEnterToTheRoomUseCase
 import com.example.musicapplication.domain.usecases.IGetAllRoomsUseCase
+import com.example.musicapplication.domain.usecases.IOverwriteLocalDatabaseUseCase
+import com.example.musicapplication.domain.usecases.OverwriteLocalDatabaseUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,4 +26,10 @@ interface UseCaseModule {
 
     @Binds
     fun bindEnterToTheRoomUseCase(useCase: EnterToTheRoomUseCase): IEnterToTheRoomUseCase
+
+    @Binds
+    fun bindClearAllRoomsUseCase(useCase:ClearAllRoomsUseCase): IClearAllRoomsUseCase
+
+    @Binds
+    fun bindOverwriteLocalDatabaseUseCase(useCase:OverwriteLocalDatabaseUseCase): IOverwriteLocalDatabaseUseCase
 }

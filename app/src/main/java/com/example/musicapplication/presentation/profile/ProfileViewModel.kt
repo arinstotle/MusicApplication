@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicapplication.data.network.repo.RemoteRepositoryImpl
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
+import com.example.musicapplication.domain.usecases.ClearAllRoomsUseCase
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.model.emptyUser
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val repo:RemoteRepositoryImpl,
-    private val sharedPreferencesHelper: SharedPreferencesHelper
+    private val sharedPreferencesHelper: SharedPreferencesHelper,
+    private val clearAllRoomsUseCase: ClearAllRoomsUseCase
 ):ViewModel() {
 
     private val _profileState = mutableStateOf(ProfileState(user = emptyUser()))
@@ -29,7 +31,7 @@ class ProfileViewModel @Inject constructor(
     fun onEvent(event: ProfileEvent){
         when(event){
             ProfileEvent.OnLogout -> {
-                sharedPreferencesHelper.clearCookie()
+                logout()
             }
         }
     }
@@ -40,6 +42,13 @@ class ProfileViewModel @Inject constructor(
                 _profileState.value = profileState.value.copy(user = currentUser)
                 Log.d("PROFILE DATA", currentUser.toString())
             }
+        }
+    }
+
+    private fun logout(){
+        sharedPreferencesHelper.clearCookie()
+        viewModelScope.launch(Dispatchers.IO) {
+            clearAllRoomsUseCase.invoke()
         }
     }
 }

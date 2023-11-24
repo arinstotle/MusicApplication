@@ -1,5 +1,6 @@
 package com.example.musicapplication.data.room.repo
 
+import android.util.Log
 import com.example.musicapplication.data.network.exceptions.MainNetworkException
 import com.example.musicapplication.data.room.RoomEntity
 import com.example.musicapplication.data.room.RoomState
@@ -59,8 +60,10 @@ class LocalRepositoryImpl @Inject constructor(
     @Throws(MainNetworkException::class)
     override suspend fun overwriteLocalDatabase(userId: Int) {
         val rooms = remoteRepository.getAllUserRooms(userId)
-        if (rooms != null)
+        if (rooms != null){
             databaseSource.overwriteDatabase(rooms)
+            Log.d("ROOMS", rooms.toString())
+        }
     }
 
     @Throws(ValidationException::class)
