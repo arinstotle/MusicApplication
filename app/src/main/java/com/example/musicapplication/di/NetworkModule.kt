@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.musicapplication.data.network.interceptors.GetCookieInterceptor
 import com.example.musicapplication.data.network.interceptors.SetCookieJar
 import com.example.musicapplication.data.network.api.ApiService
-import com.example.musicapplication.data.network.api.NetworkSource
+import com.example.musicapplication.data.network.repo.NetworkSource
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
 import com.example.musicapplication.utils.Constants
 import com.example.musicapplication.utils.Constants.TIMEOUT

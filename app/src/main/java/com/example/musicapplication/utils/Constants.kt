@@ -80,6 +80,7 @@ object Constants {
     const val USERID = "userId"
 
     const val BASE_URL = "http://46.19.65.33:8080/"
+    const val PATH_USERS = "/users/"
     const val PATH_LOGIN = "login/"
     const val PATH_ME = "me/"
     const val PATH_SIGNUP = "signup/"
@@ -96,5 +97,5 @@ object Constants {
     const val HEADER_COOKIE = "Set-Cookie"
 
     const val PATH_ROOMS = "/rooms"
-    const val PATH_ROOMS_WITH_ID = "/rooms/:"
+    const val PATH_ROOMS_WITH_ID = "/rooms/"
 }

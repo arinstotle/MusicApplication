@@ -1,10 +1,10 @@
-package com.example.musicapplication.data.network.api
+package com.example.musicapplication.data.network.repo
 
 import android.util.Log
 import com.example.cinopoisk.utils.exceptions.ResponseEmptyException
 import com.example.cinopoisk.utils.exceptions.ResponseUnsuccessfulException
+import com.example.musicapplication.data.network.api.ApiService
 import com.example.musicapplication.data.network.dto.request.toRoomRequest
-import com.example.musicapplication.data.network.dto.response.RoomResponse
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.model.toRequest
 import com.example.musicapplication.data.network.state.NetworkState
@@ -157,13 +157,33 @@ class NetworkSource @Inject constructor(
         val response = api.allRoomsFromServer()
         if (response.isSuccessful) {
             if (response.body() != null)
-                emit(NetworkState.Result(response.body()!!.rooms.toRoomItemList()))
-            else
+                emit(NetworkState.Result(response.body()!!.toRoomItemList()))
+            else {
                 throw ResponseEmptyException("Empty body")
+            }
         }
-        else
+        else {
             throw ResponseUnsuccessfulException("Unsuccessful response")
+        }
+    }.catch {
+        emit(NetworkState.Exception(it))
+    }
 
+    fun getUserRooms(userId: Int): Flow<NetworkState<List<RoomItem>>?> = flow {
+        emit(NetworkState.Initial)
+        val response = api.getUserRoomsFromServer(userId)
+        if (response.isSuccessful) {
+            if (response.body() == null)
+                emit(null)
+            if (response.body() != null)
+                emit(NetworkState.Result(response.body()!!.toRoomItemList()))
+            else {
+                throw ResponseEmptyException("Empty body")
+            }
+        }
+        else {
+            throw ResponseUnsuccessfulException("Unsuccessful response")
+        }
     }.catch {
         emit(NetworkState.Exception(it))
     }

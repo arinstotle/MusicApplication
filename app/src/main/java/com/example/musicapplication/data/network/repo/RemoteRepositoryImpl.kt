@@ -1,12 +1,13 @@
 package com.example.musicapplication.data.network.repo
 
-import com.example.musicapplication.data.network.api.NetworkSource
+import android.util.Log
 import com.example.musicapplication.data.network.exceptions.MainNetworkException
 import com.example.musicapplication.data.network.exceptions.WrongDataException
 import com.example.musicapplication.data.network.state.NetworkState
 import com.example.musicapplication.domain.RemoteRepository
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
+import com.example.musicapplication.model.StreamMode
 import com.example.musicapplication.model.UserItem
 import javax.inject.Inject
 
@@ -65,17 +66,13 @@ class RemoteRepositoryImpl @Inject constructor(
     }
 
     @Throws(MainNetworkException::class)
-    override suspend fun getAllRooms(order: OrdersTypes): List<RoomItem> {
+    override suspend fun getAllRooms(): List<RoomItem> {
         var rooms: List<RoomItem> = emptyList()
         networkSource.getRooms().collect { state ->
             rooms = when (state) {
                 is NetworkState.Exception -> throw MainNetworkException("Internet is not available!")
                 is NetworkState.Result -> {
-                    when (order) {
-                        OrdersTypes.NATURAL -> state.data
-                        OrdersTypes.ALPHABETICAL -> state.data.sortedBy { it.roomName.toLowerCase() }
-                        OrdersTypes.REVERSE_ALPHABETICAL -> state.data.sortedByDescending { it.roomName.toLowerCase() }
-                    }
+                   state.data
                 }
                 else -> emptyList()
             }
@@ -84,13 +81,37 @@ class RemoteRepositoryImpl @Inject constructor(
     }
 
     @Throws(MainNetworkException::class)
-    override suspend fun createNewRoom(roomItem: RoomItem): RoomItem? {
+    override suspend fun getAllUserRooms(userId: Int): List<RoomItem>? {
+        var rooms: List<RoomItem>? = null
+        networkSource.getUserRooms(userId).collect { state ->
+            rooms = if (state == null)
+                null
+            else {
+                when (state) {
+                    is NetworkState.Exception -> throw MainNetworkException("Internet is not available!")
+                    is NetworkState.Result -> {
+                        state.data
+                    }
+                    else -> emptyList()
+                }
+            }
+        }
+        return rooms
+    }
+
+    @Throws(MainNetworkException::class)
+    override suspend fun createNewRoom(roomName: String, password: String?,
+                                        isPrivate: Boolean,
+                                        owner: Int): RoomItem? {
         var room: RoomItem? = null
+        val roomItem = buildRoomModel(roomName, password, isPrivate, owner)
         networkSource.createRoom(
             roomItem
             ).collect {
-                when (it) {
-                    is NetworkState.Exception -> throw MainNetworkException("Room is not created!")
+            when (it) {
+                    is NetworkState.Exception -> {
+                        throw MainNetworkException("Room is not created!")
+                    }
                     is NetworkState.Result -> room = it.data
                     else -> {}
                 }
@@ -125,5 +146,21 @@ class RemoteRepositoryImpl @Inject constructor(
         }
         return room
     }
+
+    private fun buildRoomModel(
+        roomName: String, password: String?,
+        isPrivate: Boolean,
+        owner: Int
+    ): RoomItem = RoomItem(
+        null,
+        roomName,
+        owner,
+        null,
+        password,
+        isPrivate,
+        StreamMode.SLEEP,
+        null,
+        null
+    )
 
 }

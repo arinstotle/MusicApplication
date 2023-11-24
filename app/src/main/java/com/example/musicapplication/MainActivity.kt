@@ -28,23 +28,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @Suppress("UNUSED_EXPRESSION")
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-//            MusicApplicationTheme {
-//                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = DarkBackground
-//                ) {}
-//            }
-
             val navController = rememberNavController()
             window.statusBarColor = MaterialTheme.colorScheme.background.toArgb()
             window.navigationBarColor = MaterialTheme.colorScheme.background.toArgb()
-
             MusicApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize().background(DarkBackground),
@@ -54,8 +43,8 @@ class MainActivity : ComponentActivity() {
                         bottomBar = {
                             when (NavigationRouter.currentScreen.value) {
                                 Screen.AuthScreen -> null
-                                Screen.ProfileScreen,
-                                Screen.MainScreen -> {
+                                Screen.MainScreen, Screen.SearchScreen,
+                                Screen.ProfileScreen -> {
                                     CustomBottomNavigation(currentScreenRoute = NavigationRouter.currentScreen.value.route) { screen ->
                                         if (screen.route != NavigationRouter.currentScreen.value.route) {
                                             NavigationRouter.currentScreen.value = screen
@@ -63,7 +52,6 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
-
                                 else -> {}
                             }
                         }

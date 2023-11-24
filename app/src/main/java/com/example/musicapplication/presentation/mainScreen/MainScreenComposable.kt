@@ -101,7 +101,9 @@ fun MainScreen(
                         )
                         .background(MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    GreetingSection(navController)
+                    GreetingSection(iconClick = {
+                        navController.navigate(Screen.SearchScreen.route)
+                    })
                 }
                 RoomSection(
                     isLoading = isLoading,
@@ -170,7 +172,10 @@ fun Modifier.shimmerEffect(): Modifier = composed {
 fun GreetingSection(
     navController: NavController,
     name: String = "John",
-    imageResource: Int = R.drawable.sample_avatar
+    imageResource: Int = R.drawable.sample_avatar,
+    iconClick: () -> Unit = {
+
+    }
 ) {
     Card(
         modifier = Modifier
@@ -238,8 +243,7 @@ fun GreetingSection(
                 )
             }
             IconButton(
-                onClick = {
-                }
+                onClick = iconClick
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.search),
@@ -373,9 +377,6 @@ fun RoomSection(rooms: List<Room>, isLoading : Boolean) {
         ) {
             items(rooms.size) {
                 ShimmerListItem(isLoading = isLoading, contentAfterLoading = {
-                    RoomCard(
-                        room = rooms[it]
-                    )
                 })
             }
         }

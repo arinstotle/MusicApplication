@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable fun StreamMainScreen(
     navController: NavHostController,
+    roomId: Int?,
     viewModel: StreamViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -51,7 +52,7 @@ import kotlinx.coroutines.launch
                 StreamAppBar(
                     playOnClick = { viewModel.loadTheSong() },
                     songState = viewModel.songLoaded,
-                    roomName = "",
+                    roomName = "$roomId",
                     message = "",
                     backButtonClickListener = {
                     },
