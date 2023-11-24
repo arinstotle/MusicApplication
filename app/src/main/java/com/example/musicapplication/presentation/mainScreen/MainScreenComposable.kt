@@ -101,7 +101,7 @@ fun MainScreen(
                         )
                         .background(MaterialTheme.colorScheme.secondaryContainer)
                 ) {
-                    GreetingSection(iconClick = {
+                    GreetingSection(navController, iconClick = {
                         navController.navigate(Screen.SearchScreen.route)
                     })
                 }

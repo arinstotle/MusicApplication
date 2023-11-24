@@ -304,7 +304,7 @@ fun RoomSectionSearch(rooms: UiState<List<RoomItem>>, isLoading : Boolean) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             color = MaterialTheme.colorScheme.onTertiary,
-            text = "My Rooms",
+            text = "Rooms",
             style = TextStyle(
                 fontSize = 13.sp,
                 fontWeight = FontWeight(600),

@@ -12,7 +12,7 @@ sealed class Screen(val route : String, val icon : Int, val title : String) {
         title = "Search", icon = R.drawable.stream_icon)
     object BottomScreens {
         val list = listOf(
-            MainScreen, SearchScreen
+            MainScreen, SearchScreen, ProfileScreen
         )
     }
     fun withArgs(vararg args: String): String {
