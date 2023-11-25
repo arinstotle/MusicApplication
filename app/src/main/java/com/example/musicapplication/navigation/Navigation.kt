@@ -20,17 +20,18 @@ import com.example.musicapplication.presentation.auth.authExitAnimation
 import com.example.musicapplication.presentation.mainScreen.MainScreen
 import com.example.musicapplication.presentation.searchRoomScreen.SearchScreen
 import com.example.musicapplication.presentation.profile.ProfileScreen
+import com.example.musicapplication.presentation.splashScreen.LogoWithShimmer
 import com.example.musicapplication.presentation.streamScreen.StreamMainScreen
 import com.example.musicapplication.presentation.viewModels.StreamViewModel
 
 object NavigationRouter {
-    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.AuthScreen)
-    var prevScreen: MutableState<Screen> = mutableStateOf(Screen.AuthScreen)
+    var currentScreen: MutableState<Screen> = mutableStateOf(Screen.SplashScreen)
+    var prevScreen: MutableState<Screen> = mutableStateOf(Screen.SplashScreen)
 }
 
 @Composable
 fun Navigation(navController: NavHostController, context: Context) {
-    NavHost(navController = navController, startDestination = Screen.AuthScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.SplashScreen.route) {
         composable(route = Screen.MainScreen.route) {
             MainScreen(navController = navController)
             NavigationRouter.prevScreen.value = NavigationRouter.currentScreen.value
@@ -82,6 +83,11 @@ fun Navigation(navController: NavHostController, context: Context) {
             ProfileScreen(navController = navController)
             NavigationRouter.prevScreen.value = NavigationRouter.currentScreen.value
             NavigationRouter.currentScreen.value=Screen.ProfileScreen
+        }
+        composable(Screen.SplashScreen.route){
+            LogoWithShimmer(navController = navController)
+            NavigationRouter.prevScreen.value = NavigationRouter.currentScreen.value
+            NavigationRouter.currentScreen.value=Screen.SplashScreen
         }
     }
 }

@@ -10,7 +10,10 @@ import com.example.musicapplication.domain.usecases.IGetAllRoomsUseCase
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.presentation.UiState
+import com.example.musicapplication.utils.ConnectivityObserver
+import com.example.musicapplication.utils.NetworkConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,10 +25,14 @@ import javax.inject.Inject
 class SearchScreenViewModel @Inject constructor(
     private val getAllRoomsUseCase: IGetAllRoomsUseCase,
     private val addNewRoomUseCase: IAddNewRoomUseCase,
-    private val enterToTheRoomUseCase: EnterToTheRoomUseCase
-):ViewModel() {
+    private val enterToTheRoomUseCase: EnterToTheRoomUseCase,
+    private val connectivityObserver: NetworkConnectivityObserver,
+    ):ViewModel() {
 
     private var job: Job? = null
+
+    private val _connectionState = MutableStateFlow(ConnectivityObserver.Status.Unavailable)
+    val connectionState = _connectionState.asStateFlow()
 
     private var _currentRoom: MutableStateFlow<RoomItem?> = MutableStateFlow(null)
     val currentRoom: StateFlow<RoomItem?> = _currentRoom.asStateFlow()
@@ -106,6 +113,14 @@ class SearchScreenViewModel @Inject constructor(
         _isPrivate.value = false
     }
 
+    private fun observeNetwork() {
+        viewModelScope.launch(Dispatchers.IO) {
+            connectivityObserver.observe().collectLatest {
+                _connectionState.emit(it)
+            }
+        }
+    }
+
     private var _allRooms: MutableStateFlow<UiState<List<RoomItem>>> = MutableStateFlow(UiState.Start)
 
     @OptIn(FlowPreview::class)
@@ -132,6 +147,7 @@ class SearchScreenViewModel @Inject constructor(
     private val _sortType = MutableStateFlow(OrdersTypes.NATURAL)
 
     init {
+        observeNetwork()
         job = viewModelScope.launch {
             _isLoading.value = true
             getAllRoomsUseCase(OrdersTypes.NATURAL).collect { state ->

@@ -1,17 +1,15 @@
-package com.example.musicapplication.presentation.profile
+package com.example.musicapplication.presentation.viewModels
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.musicapplication.data.network.repo.RemoteRepositoryImpl
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
 import com.example.musicapplication.domain.usecases.ClearAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.MeUseCase
 import com.example.musicapplication.model.UserItem
-import com.example.musicapplication.model.emptyUser
 import com.example.musicapplication.presentation.UiState
+import com.example.musicapplication.presentation.profile.ProfileEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

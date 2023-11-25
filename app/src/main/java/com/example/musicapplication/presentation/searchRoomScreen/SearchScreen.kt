@@ -67,6 +67,7 @@ import com.example.musicapplication.presentation.mainScreen.ShimmerListItem
 import com.example.musicapplication.presentation.mainScreen.standardQuadFromTo
 import com.example.musicapplication.presentation.streamScreen.roommates
 import com.example.musicapplication.presentation.viewModels.SearchScreenViewModel
+import com.example.musicapplication.utils.ConnectivityObserver
 import kotlinx.coroutines.launch
 import javax.annotation.Untainted
 
@@ -83,6 +84,7 @@ fun SearchScreen(
     val searchText by viewModel.searchText.collectAsState()
     val isSearching by viewModel.isSearching.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+    val connectionState = viewModel.connectionState.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -119,7 +121,7 @@ fun SearchScreen(
                                             "Entering...",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                        viewModel.onDismissDialog()
+                                        viewModel.onDismissEnterDialog()
                                         viewModel.unsetEnteringRoomPassword()
                                         NavigationRouter.prevScreen.value = Screen.SearchScreen
                                         navController.navigate(
@@ -358,7 +360,28 @@ fun SearchScreen(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
-        } else {
+        } else if(connectionState.value == ConnectivityObserver.Status.Unavailable) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No internet connection!",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight(600),
+                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        color = MaterialTheme.colorScheme.onSurface
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(16.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+        else {
             val lambda: (RoomItem) -> Unit = { roomItem ->
                 viewModel.onEnterToTheRoomClick()
                 viewModel.setEnteringRoom(roomItem)

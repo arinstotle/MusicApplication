@@ -70,6 +70,7 @@ import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.theme.DarkBackground
 import com.example.musicapplication.presentation.viewModels.MainScreenViewModel
+import com.example.musicapplication.utils.ConnectivityObserver
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -81,9 +82,8 @@ fun MainScreen(
     var isLoading by remember {
         mutableStateOf(viewModel.isLoading.value)
     }
-
+    val connectionState = viewModel.connectionState.collectAsState()
     val rooms by viewModel.allRooms.collectAsState()
-
     LaunchedEffect(key1 = true) {
         delay(4000)
         isLoading = false
@@ -93,53 +93,77 @@ fun MainScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primary)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Column {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = 0.dp,
-                                topEnd = 0.dp,
-                                bottomStart = 16.dp,
-                                bottomEnd = 16.dp
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Column {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(
+                                RoundedCornerShape(
+                                    topStart = 0.dp,
+                                    topEnd = 0.dp,
+                                    bottomStart = 16.dp,
+                                    bottomEnd = 16.dp
+                                )
                             )
-                        )
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                ) {
-                    GreetingSection(navController, iconClick = {
-                        navController.navigate(Screen.SearchScreen.route)
-                    },
-                        name = viewModel.userState.value.data?.name ?: "User"
-                    )
-                }
-                if(rooms is UiState.Success<*>){
-                    RoomSection(
-                        isLoading = isLoading,
-                        rooms = (rooms.data as List<RoomItem>).map {
-                            Room(
-                                it.roomName,
-                                MaterialTheme.colorScheme.secondary,
-                                MaterialTheme.colorScheme.onPrimary,
-                                MaterialTheme.colorScheme.surface
-                            )
-                        }.toList()
-                    )
-                }
-                else{
-                    Box(modifier = Modifier.fillMaxSize()
-                        .background(DarkBackground)) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center)
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                    ) {
+                        GreetingSection(
+                            navController, iconClick = {
+                                navController.navigate(Screen.SearchScreen.route)
+                            },
+                            name = viewModel.userState.value.data?.name ?: "User"
                         )
                     }
-                }
-            }
-        }
+                    if (connectionState.value == ConnectivityObserver.Status.Available) {
+                        if (rooms is UiState.Success<*>) {
+                            RoomSection(
+                                isLoading = isLoading,
+                                rooms = (rooms.data as List<RoomItem>).map {
+                                    Room(
+                                        it.roomName,
+                                        MaterialTheme.colorScheme.secondary,
+                                        MaterialTheme.colorScheme.onPrimary,
+                                        MaterialTheme.colorScheme.surface
+                                    )
+                                }.toList()
+                            )
+                        } else {
+                            Box(
+                                modifier = Modifier.fillMaxSize()
+                                    .background(DarkBackground)
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
+                        }
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "No internet connection!",
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight(600),
+                                    fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                                    color = MaterialTheme.colorScheme.onSurface
+                                ),
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(16.dp)
+                            )
+                        }
+                    }
+                } }
     }
 }
 

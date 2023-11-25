@@ -15,6 +15,7 @@ sealed class Screen(val route : String, val icon : Int, val title : String) {
             MainScreen, SearchScreen, ProfileScreen
         )
     }
+    object SplashScreen: Screen("splash_screen", title = "Splash", icon = -1)
     fun withArgs(vararg args: String): String {
         return buildString {
             append(route)
