@@ -31,8 +31,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            window.statusBarColor = MaterialTheme.colorScheme.background.toArgb()
-            window.navigationBarColor = MaterialTheme.colorScheme.background.toArgb()
+            window.statusBarColor = MaterialTheme.colorScheme.primary.toArgb()
+            window.navigationBarColor = MaterialTheme.colorScheme.primary.toArgb()
             MusicApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize().background(DarkBackground),
