@@ -60,12 +60,15 @@ import androidx.navigation.NavHostController
 import com.example.musicapplication.R
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
+import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.mainScreen.ShimmerListItem
 import com.example.musicapplication.presentation.mainScreen.standardQuadFromTo
+import com.example.musicapplication.presentation.streamScreen.roommates
 import com.example.musicapplication.presentation.viewModels.SearchScreenViewModel
 import kotlinx.coroutines.launch
+import javax.annotation.Untainted
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -73,13 +76,13 @@ fun SearchScreen(
     navController: NavHostController,
     viewModel: SearchScreenViewModel = hiltViewModel()
 ) {
-
+    val currentRoom by viewModel.currentRoom.collectAsState()
+    val enteringPassword by viewModel.enteringPassword.collectAsState()
     val rooms by viewModel.allRooms.collectAsState()
     val loadingState by viewModel.isLoading.collectAsState(initial = false)
     val searchText by viewModel.searchText.collectAsState()
     val isSearching by viewModel.isSearching.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,10 +100,72 @@ fun SearchScreen(
         var expanded by remember { mutableStateOf(false) }
         var selectedOptionText by remember { mutableStateOf(options[0]) }
         val context = LocalContext.current
+        if(viewModel.isEnterDialogShown && currentRoom != null) {
+            CustomEnterDialog(
+                isPrivateRoomOrNo = currentRoom!!.isPrivate,
+                onDismiss = {
+                    viewModel.onDismissEnterDialog()
+                    viewModel.unsetEnteringRoom()
+                    viewModel.unsetEnteringRoomPassword()
+                },
+                onConfirm = {
+                    val lambda: (RoomItem) -> Unit = { roomItem ->
+                        coroutineScope.launch {
+                            viewModel.enterToTheRoom(roomItem).collect { enterUiState ->
+                                when (enterUiState) {
+                                    is UiState.Success -> {
+                                        Toast.makeText(
+                                            context,
+                                            "Entering...",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        viewModel.onDismissDialog()
+                                        viewModel.unsetEnteringRoomPassword()
+                                        NavigationRouter.prevScreen.value = Screen.SearchScreen
+                                        navController.navigate(
+                                            Screen.StreamScreen.withArgs(
+                                                ((enterUiState.data
+                                                        as RoomItem).id).toString()
+                                            )
+                                        )
+                                    }
+                                    is UiState.Error -> {
+                                        Toast.makeText(
+                                            context,
+                                            "Not entering, try again",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                    else -> {
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (currentRoom!!.isPrivate) {
+                        if (currentRoom!!.password != enteringPassword) {
+                            Toast.makeText(context,
+                                "Wrong password!",
+                                Toast.LENGTH_SHORT).show()
+                        } else {
+                            lambda.invoke(currentRoom!!)
+                        }
+                    } else {
+                        lambda.invoke(currentRoom!!)
+                    }
+                },
+                changePassword = { password ->
+                    viewModel.changeEnteringRoomPassword(password)
+                }
+            )
+        }
         if(viewModel.isDialogShown) {
             CustomDialog(
                 onDismiss = {
                     viewModel.onDismissDialog()
+                    viewModel.unsetRoomPassword()
+                    viewModel.unsetRoomName()
+                    viewModel.unsetRoomType()
                 },
                 onConfirm = {
                     coroutineScope.launch {
@@ -111,13 +176,17 @@ fun SearchScreen(
                                         "A new room has been successfully created!",
                                         Toast.LENGTH_SHORT).show()
                                     viewModel.onDismissDialog()
-                                    viewModel.enterToTheRoom((uiState.data
-                                            as RoomItem).id!!).collect { enterUiState ->
+                                    viewModel.enterToTheRoom(uiState.data
+                                            as RoomItem).collect { enterUiState ->
                                         when(enterUiState) {
                                             is UiState.Success -> {
                                                 Toast.makeText(context,
                                                     "Entering...",
                                                     Toast.LENGTH_SHORT).show()
+                                                viewModel.onDismissDialog()
+                                                viewModel.unsetRoomPassword()
+                                                viewModel.unsetRoomName()
+                                                viewModel.unsetRoomType()
                                                 navController.navigate(Screen.StreamScreen.withArgs(((enterUiState.data
                                                         as RoomItem).id).toString()))
                                             }
@@ -282,25 +351,33 @@ fun SearchScreen(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
         if(isSearching) {
+            Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
         } else {
+            val lambda: (RoomItem) -> Unit = { roomItem ->
+                viewModel.onEnterToTheRoomClick()
+                viewModel.setEnteringRoom(roomItem)
+            }
             if (rooms is List<*>)
-                RoomSectionSearchList(rooms = rooms as List<RoomItem>, isLoading = loadingState)
+                RoomSectionSearchList(rooms = rooms as List<RoomItem>, isLoading = loadingState,
+                    lambda)
             else
-                RoomSectionSearch(rooms = rooms as UiState<List<RoomItem>>, isLoading = loadingState)
+                RoomSectionSearch(rooms = rooms as UiState<List<RoomItem>>, isLoading = loadingState,
+                    lambda)
         }
     }
 }
 
 @ExperimentalFoundationApi
 @Composable
-fun RoomSectionSearch(rooms: UiState<List<RoomItem>>, isLoading : Boolean) {
+fun RoomSectionSearch(rooms: UiState<List<RoomItem>>, isLoading : Boolean,
+                      roomEnterAction: (RoomItem) -> Unit
+                      ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             color = MaterialTheme.colorScheme.onTertiary,
@@ -331,7 +408,8 @@ fun RoomSectionSearch(rooms: UiState<List<RoomItem>>, isLoading : Boolean) {
                         items(rooms.data.size) {
                             ShimmerListItem(isLoading = isLoading, contentAfterLoading = {
                                 RoomCardSearch(
-                                    room = rooms.data[it]
+                                    room = rooms.data[it],
+                                    roomEnterAction
                                 )
                             })
                         }
@@ -350,7 +428,9 @@ fun RoomSectionSearch(rooms: UiState<List<RoomItem>>, isLoading : Boolean) {
 
 @ExperimentalFoundationApi
 @Composable
-fun RoomSectionSearchList(rooms: List<RoomItem>, isLoading : Boolean) {
+fun RoomSectionSearchList(rooms: List<RoomItem>, isLoading : Boolean,
+                          roomEnterAction: (RoomItem) -> Unit
+                          ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             color = MaterialTheme.colorScheme.onTertiary,
@@ -365,7 +445,7 @@ fun RoomSectionSearchList(rooms: List<RoomItem>, isLoading : Boolean) {
             fontSize = 20.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
         )
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -378,7 +458,8 @@ fun RoomSectionSearchList(rooms: List<RoomItem>, isLoading : Boolean) {
             items(rooms.size) {
                 ShimmerListItem(isLoading = isLoading, contentAfterLoading = {
                     RoomCardSearch(
-                        room = rooms[it]
+                        room = rooms[it],
+                        roomEnterAction
                     )
                 })
             }
@@ -388,7 +469,8 @@ fun RoomSectionSearchList(rooms: List<RoomItem>, isLoading : Boolean) {
 
 @Composable
 fun RoomCardSearch(
-    room: RoomItem
+    room: RoomItem,
+    enterAction: (RoomItem) -> Unit
 ) {
     val mediumColor = MaterialTheme.colorScheme.onPrimary
     val lightColor = MaterialTheme.colorScheme.surface
@@ -452,37 +534,98 @@ fun RoomCardSearch(
                 .fillMaxSize()
                 .padding(15.dp)
         ) {
-            Text(
-                text = room.roomName,
-                style = TextStyle(
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight(600),
-                    fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
-                    color = MaterialTheme.colorScheme.onTertiary
-                ),
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                lineHeight = 26.sp,
+            Column(
                 modifier = Modifier.align(Alignment.TopStart)
-            )
-            Text(
-                text = "Enter",
-                color = MaterialTheme.colorScheme.onTertiary,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .clickable {
-                    }
-                    .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(vertical = 6.dp, horizontal = 15.dp)
-            )
+            ) {
+                Text(
+                    text = room.roomName,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight(600),
+                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        color = MaterialTheme.colorScheme.onTertiary
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = 26.sp,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = buildString {
+                     append("Number of participants: ")
+                        if (room.roommates != null)
+                            append(room.roommates.size.toString())
+                        else
+                            append("0")
+                    },
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight(600),
+                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        color = MaterialTheme.colorScheme.onTertiary
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = 26.sp,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = buildString {
+                        append("Tracks in the queue: ")
+                        if (room.queue != null)
+                            append(room.queue.size.toString())
+                        else
+                            append("0")
+                    },
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight(600),
+                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        color = MaterialTheme.colorScheme.onTertiary
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = 26.sp,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = if (room.isPrivate) "Private" else "",
+                    style = TextStyle(
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight(600),
+                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        color = MaterialTheme.colorScheme.onSurface
+                    ),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 13.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = 26.sp,
+                )
+            }
+                Text(
+                    text = "Enter",
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .clickable {
+                            enterAction.invoke(room)
+                        }
+                        .align(Alignment.BottomEnd)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colorScheme.onSurface)
+                        .padding(vertical = 6.dp, horizontal = 15.dp)
+                )
+            }
         }
     }
-}
 
 @Composable
 fun CustomDialog(
@@ -617,6 +760,107 @@ fun CustomDialog(
                     }
                 }
 
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomEnterDialog(
+    isPrivateRoomOrNo: Boolean,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+    changePassword: (String) -> Unit
+) {
+    val isPrivateRoom by remember {
+        mutableStateOf(isPrivateRoomOrNo)
+    }
+    Dialog(
+        onDismissRequest = {
+            onDismiss()
+        },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
+    ) {
+        Card(
+            shape = RoundedCornerShape(15.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+                .border(
+                    2.dp,
+                    color = MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(15.dp)
+                ),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primary
+            )
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalArrangement = Arrangement.spacedBy(25.dp)
+            ){
+                Text(
+                    text = if (!isPrivateRoom) "Are you sure you want to enter the room?"
+                    else
+                        "Enter the password:"
+                    ,
+                    fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center
+                )
+                if (isPrivateRoom) {
+                    PasswordTextFieldComponent(labelValue = "", onChangeTextAction = {
+
+                    })
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(30.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Button(
+                        onClick = {
+                            onDismiss()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                        ,
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            onConfirm()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Confirm",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
             }
         }
     }

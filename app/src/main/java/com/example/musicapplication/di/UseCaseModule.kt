@@ -4,11 +4,13 @@ import com.example.musicapplication.domain.usecases.AddNewRoomUseCase
 import com.example.musicapplication.domain.usecases.ClearAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.EnterToTheRoomUseCase
 import com.example.musicapplication.domain.usecases.GetAllRoomsUseCase
+import com.example.musicapplication.domain.usecases.GetRoomInfoByIdUseCase
 import com.example.musicapplication.domain.usecases.GetUsersRoomsUseCase
 import com.example.musicapplication.domain.usecases.IAddNewRoomUseCase
 import com.example.musicapplication.domain.usecases.IClearAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.IEnterToTheRoomUseCase
 import com.example.musicapplication.domain.usecases.IGetAllRoomsUseCase
+import com.example.musicapplication.domain.usecases.IGetRoomInfoByIdUseCase
 import com.example.musicapplication.domain.usecases.IGetUsersRoomsUseCase
 import com.example.musicapplication.domain.usecases.IMeUseCase
 import com.example.musicapplication.domain.usecases.IOverwriteLocalDatabaseUseCase
@@ -42,4 +44,7 @@ interface UseCaseModule {
 
     @Binds
     fun bindMeUseCase(useCase: MeUseCase): IMeUseCase
+
+    @Binds
+    fun bindGetRoomByIdUseCase(useCase: GetRoomInfoByIdUseCase): IGetRoomInfoByIdUseCase
 }

@@ -34,7 +34,9 @@ interface ApiService {
     ): Response<RoomResponse>
 
     @POST("/rooms/{id}")
-    suspend fun joiningARoomInServer(@Path("id") id: Int): Response<RoomResponse>
+    suspend fun joiningARoomInServer(@Path("id") id: Int,
+                                     @Body password: String = ""
+                                     ): Response<RoomResponse>
 
     @GET("${Constants.PATH_ROOMS_WITH_ID}{id}")
     suspend fun getRoomInfoFromServerById( @Path("id") id: Int): Response<RoomResponse>

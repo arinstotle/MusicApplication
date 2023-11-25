@@ -119,10 +119,11 @@ class RemoteRepositoryImpl @Inject constructor(
         return room
     }
     @Throws(MainNetworkException::class)
-    override suspend fun joinARoom(roomId: Int): RoomItem? {
+    override suspend fun joinARoom(roomId: Int, password: String): RoomItem? {
         var room: RoomItem? = null
         networkSource.joining(
-            roomId
+            roomId,
+            password
         ).collect {
             when (it) {
                 is NetworkState.Exception -> throw MainNetworkException("Unable to connect to the room!")

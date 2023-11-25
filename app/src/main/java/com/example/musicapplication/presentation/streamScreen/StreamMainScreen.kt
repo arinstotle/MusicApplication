@@ -1,5 +1,6 @@
 package com.example.musicapplication.presentation.streamScreen
 
+import android.util.Log
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
+import com.example.musicapplication.navigation.NavigationRouter
+import com.example.musicapplication.navigation.Screen
+import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.theme.MusicApplicationTheme
 import com.example.musicapplication.presentation.viewModels.StreamViewModel
 import kotlinx.coroutines.launch
@@ -29,20 +35,18 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable fun StreamMainScreen(
     navController: NavHostController,
-    roomId: Int?,
-    viewModel: StreamViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    viewModel: StreamViewModel,
 ) {
+    val currentRoom = viewModel.currentRoom.collectAsState()
+    val loading = viewModel.isLoading.collectAsState()
     val scope = rememberCoroutineScope()
-
     val songSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
     var showSongBottomSheet by remember { mutableStateOf(false) }
-
     var currentSong by remember {
         mutableStateOf<SongUI?>(null)
     }
-
     MusicApplicationTheme {
         Scaffold(
             modifier = Modifier
@@ -52,9 +56,17 @@ import kotlinx.coroutines.launch
                 StreamAppBar(
                     playOnClick = { viewModel.loadTheSong() },
                     songState = viewModel.songLoaded,
-                    roomName = "$roomId",
+                    roomName = if (currentRoom.value is UiState.Start ||
+                        currentRoom.value.data == null) "Loading..." else currentRoom.value.data!!.roomName,
                     message = "",
                     backButtonClickListener = {
+                        when (NavigationRouter.prevScreen.value) {
+                        Screen.MainScreen -> navController.navigate(Screen.MainScreen.route)
+                        Screen.SearchScreen -> navController.navigate(Screen.SearchScreen.route)
+                        else -> {
+                            navController.navigate(Screen.MainScreen.route)
+                        }
+                    }
                     },
                     pauseClickListener = { },
                     scrollState = LazyListState()
