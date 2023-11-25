@@ -42,6 +42,9 @@ import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,6 +58,7 @@ import com.example.musicapplication.chatioandroid.data.api.socketio.ChatViewMode
 import com.example.musicapplication.model.MessageItem
 import com.example.musicapplication.model.MessageState
 import com.example.musicapplication.model.MessageType
+import com.example.musicapplication.presentation.theme.MtsBackgroundGreyDark2
 
 
 private const val TAG = "ChatDetails"
@@ -246,7 +250,7 @@ fun StreamChatComposable(
                         } else {
                             FriendMessageContainer(
                                 message = messages[message],
-                                showPartDetail = false,
+                                showPartDetail = true,
                                 messageContent = messageContent
                             )
                         }
@@ -268,17 +272,24 @@ fun ChatRow(sendMessageClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center
     ) {
         TextField(
+            textStyle = TextStyle(
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium))
+            ),
             value = message,
             onValueChange = { message = it },
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 8.dp),
-            placeholder = { Text("Type a message") },
+            placeholder = { Text("Type a message",
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium))
+                ) },
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White
+                focusedContainerColor = MaterialTheme.colorScheme.onTertiary,
+                unfocusedContainerColor = MtsBackgroundGreyDark2
             ),
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Send
@@ -292,11 +303,14 @@ fun ChatRow(sendMessageClick: () -> Unit) {
         Button(
             onClick = sendMessageClick,
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+                containerColor = MaterialTheme.colorScheme.onPrimary
             ),
             shape = RoundedCornerShape(20.dp)
         ) {
-            Text("Send")
+            Text("Send",
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
+                color = MaterialTheme.colorScheme.onTertiary
+            )
         }
     }
 }
@@ -365,6 +379,7 @@ private fun FriendMessageContainer(
                 Text(
                     modifier = Modifier.padding(end = 30.dp),
                     text = message.senderName,
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                     fontSize = 13.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -427,6 +442,7 @@ private fun TextMessage(
             )
             .padding(horizontal = 14.dp, vertical = 8.dp),
         text = message.contents,
+        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
         fontSize = 16.sp,
         color = if (message.isOwnMessage) {
             Color.White
@@ -445,11 +461,12 @@ private fun SystemMessage(message: MessageItem) {
             .padding(top = 20.dp, bottom = 20.dp)
             .wrapContentWidth(align = Alignment.CenterHorizontally)
             .background(
-                color = Color.LightGray.copy(alpha = 0.4f),
-                shape = RoundedCornerShape(size = 4.dp)
+                color = MtsBackgroundGreyDark2,
+                shape = RoundedCornerShape(size = 20.dp)
             )
             .padding(all = 4.dp),
         text = message.contents,
+        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
         fontSize = 12.sp
     )
 }

@@ -44,6 +44,7 @@ val VeryDarkRed = Color(0xFA1F0000)
 
 val MtsBackgroundBlack = Color(0xFF000000)
 val MtsBackgroundGreyDark = Color(0xFF1E1E1E)
+val MtsBackgroundGreyDark2 = Color(0xFF353535)
 val MtsBackgroundGreyLight2 = Color(0xFF4E4D4E)
 val MtsBackgroundGreyLight = Color(0xFF666465)
 val MtsIconsGrey = Color(0xFFADAFAF)
