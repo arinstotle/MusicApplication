@@ -16,7 +16,6 @@ import dagger.hilt.android.components.FragmentComponent
 @Module
 @InstallIn(FragmentComponent::class)
 class FragmentModule {
-
     @Provides
     fun provideOnItemClickListener(fragment: Fragment) = fragment as OnItemClickListener
 }

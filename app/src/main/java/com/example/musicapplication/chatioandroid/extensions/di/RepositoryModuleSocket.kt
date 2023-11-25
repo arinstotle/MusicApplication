@@ -11,7 +11,6 @@ import dagger.hilt.android.components.ViewModelComponent
 @Module
 @InstallIn(ViewModelComponent::class)
 abstract class RepositoryModuleSocket {
-
     @Binds
     abstract  fun bindChatRepository(chatRepositoryImpl: ChatRepositoryImpl): ChatRepository
 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.Navigation
+import com.example.musicapplication.chatioandroid.data.api.socketio.ChatViewModel
 import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.UiState
@@ -113,7 +114,7 @@ import kotlinx.coroutines.launch
                     1 -> StreamParticipantsComposable(participantsList = roommates,
                         addParticipantClick = {},
                         removeParticipantClick = {})
-                    2 -> Text("Тут будет чат")
+                    2 -> StreamChatComposable()
                     3 -> StreamMusicQueueComposable(songList) { song ->
                         currentSong = song
                         showSongBottomSheet = true

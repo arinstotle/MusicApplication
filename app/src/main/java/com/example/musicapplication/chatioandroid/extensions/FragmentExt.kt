@@ -16,7 +16,6 @@ import com.example.musicapplication.chatioandroid.data.model.response.ApiRespons
 import com.example.musicapplication.chatioandroid.utils.DataState
 import com.example.musicapplication.chatioandroid.utils.livedata.Event
 import com.example.musicapplication.chatioandroid.utils.livedata.EventObserver
-import timber.log.Timber
 
 fun Fragment.toast(message: String) {
     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -80,9 +79,6 @@ fun <T> Fragment.observeLiveDataEvent(
             is DataState.Error -> {
                 progressBar?.isVisible = false
                 toast(response.message)
-
-                Timber.tag(TAG).d(response.message)
-
             }
             is DataState.Success -> {
                 progressBar?.isVisible = false

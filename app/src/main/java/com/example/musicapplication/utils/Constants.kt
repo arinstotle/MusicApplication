@@ -3,7 +3,7 @@ package com.example.musicapplication.utils
 import androidx.compose.ui.unit.dp
 import com.example.musicapplication.model.AudioItem
 import com.example.musicapplication.model.MessageItem
-import com.example.musicapplication.model.MessageState
+import com.example.musicapplication.model.MessageType
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.model.StreamMode
@@ -35,8 +35,9 @@ object Constants {
         roomName = "Комната 1",
         ownerId = 101,
         messages = listOf(
-            MessageItem("Привет всем!", 201, MessageState.TEXT_MESSAGE),
-            MessageItem("Комната создана", 101, MessageState.ROOM_CREATED)
+            MessageItem("Комната комната1 создана", "System", -1, "12:30", false, MessageType.ROOM_CREATED),
+            MessageItem("Шашлык вошел в чат", "System", -1, "12:32", false, MessageType.USER_ENTERED),
+            MessageItem("Помидорка вошел в чат", "System", -1, "12:32", false, MessageType.USER_ENTERED)
         ),
         password = "securePassword",
         isPrivate = true,
