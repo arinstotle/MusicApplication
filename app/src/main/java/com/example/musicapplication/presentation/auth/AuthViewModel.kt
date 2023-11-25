@@ -6,11 +6,6 @@ import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import com.example.musicapplication.App
 import com.example.musicapplication.data.network.repo.RemoteRepositoryImpl
@@ -114,7 +109,11 @@ class AuthViewModel @Inject constructor(
             if(logedUser!=null){
                 Log.d("LOGED USER", logedUser.toString())
                 _authState.value = authState.value.copy(user = logedUser, isAuthorized = true, isWrongData = false)
-                sharedPreferencesHelper.putUserId(authState.value.user.id)
+                sharedPreferencesHelper.putUserData(
+                    authState.value.user.id,
+                    authState.value.user.name,
+                    authState.value.user.email
+                )
                 overwriteLocalDatabaseUseCase.invoke(sharedPreferencesHelper.getUserId())
             }
             else{
