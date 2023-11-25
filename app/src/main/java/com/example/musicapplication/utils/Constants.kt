@@ -79,7 +79,7 @@ object Constants {
     const val TYPE = "type"
     const val USERID = "userId"
 
-    const val BASE_URL = "http://46.19.65.33:8080/"
+    const val BASE_URL = "http://85.193.80.129:8080/"
     const val PATH_USERS = "/users/"
     const val PATH_LOGIN = "login/"
     const val PATH_ME = "me/"

@@ -114,4 +114,8 @@ dependencies {
     implementation ("androidx.compose.runtime:runtime-livedata:1.5.4")
     annotationProcessor ("androidx.room:room-compiler:$room_version")
     kapt ("androidx.room:room-compiler:$room_version")
+
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-common-java8:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 }

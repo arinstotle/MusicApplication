@@ -3,6 +3,7 @@
 package com.example.musicapplication.presentation.auth
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -60,15 +62,19 @@ import com.example.musicapplication.presentation.theme.DarkBackground
 import com.example.musicapplication.presentation.theme.RegDarkPurple
 import com.example.musicapplication.presentation.theme.RegLightPurple
 import com.example.musicapplication.presentation.theme.TextWhite
+import com.example.musicapplication.utils.ConnectivityObserver
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreenFragment(
      authState: AuthState,
+     connectionState:ConnectivityObserver.Status,
      onRegister:(authState:AuthState) -> Unit,
      goToLogin: () -> Unit
 ){
+
+    val context = LocalContext.current
     val email = remember {
         mutableStateOf(authState.user.email)
     }
@@ -365,23 +371,26 @@ fun RegistrationScreenFragment(
                                 && !isEmailEmpty.value
                                 && !isPasswordEmpty.value
                                 && !isRepeatedEmpty.value){
-                                user.value=user.value.copy(
-                                    photoUrl = null,
-                                    name = nickname.value,
-                                    email = email.value,
-                                    password = password.value
-                                )
-                                onRegister(
-                                    AuthState(
-                                        user = user.value,
-                                        isAuthorized = false,
-                                        isWrongData = false,
-                                        isCreated = false
+                                if(connectionState==ConnectivityObserver.Status.Available){
+                                    user.value=user.value.copy(
+                                        photoUrl = null,
+                                        name = nickname.value,
+                                        email = email.value,
+                                        password = password.value
                                     )
-                                )
-                                goToLogin()
-//                                Log.d("REG CLICK", UserItem(
-//                                    id = 0, name = nickname.value, email = email.value, password = password.value, photoUrl = null).toString())
+                                    onRegister(
+                                        AuthState(
+                                            user = user.value,
+                                            isAuthorized = false,
+                                            isWrongData = false,
+                                            isCreated = false
+                                        )
+                                    )
+                                    goToLogin()
+                                }
+                                else{
+                                    Toast.makeText(context, "Oops! Bad internet connection, try later", Toast.LENGTH_SHORT).show()
+                                }
                             }
                          },
                         modifier = Modifier

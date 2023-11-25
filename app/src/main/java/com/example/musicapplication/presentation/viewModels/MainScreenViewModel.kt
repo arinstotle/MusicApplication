@@ -8,6 +8,7 @@ import com.example.musicapplication.data.network.repo.RemoteRepositoryImpl
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
 import com.example.musicapplication.domain.DataState
 import com.example.musicapplication.domain.usecases.GetAllRoomsUseCase
+import com.example.musicapplication.domain.usecases.GetUsersRoomsUseCase
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.model.UserItem
@@ -29,7 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
     private val sharedPreferencesHelper: SharedPreferencesHelper,
-    private val getAllRoomsUseCase: GetAllRoomsUseCase
+    private val getUsersRoomsUseCase: GetUsersRoomsUseCase
 ): ViewModel() {
 
     private var _allRooms: MutableStateFlow<UiState<List<RoomItem>>> = MutableStateFlow(UiState.Start)
@@ -71,7 +72,7 @@ class MainScreenViewModel @Inject constructor(
     fun loadRooms(){
         viewModelScope.launch {
             _isLoading.value = true
-            getAllRoomsUseCase(OrdersTypes.NATURAL).collect { state ->
+            getUsersRoomsUseCase(sharedPreferencesHelper.getUserId()).collect { state ->
                 when (state) {
                     is DataState.Result -> {
                         _allRooms.emit(UiState.Success(state.data))

@@ -1,5 +1,6 @@
 package com.example.musicapplication.presentation.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -51,14 +53,18 @@ import com.example.musicapplication.presentation.theme.AuthDarkBlue
 import com.example.musicapplication.presentation.theme.AuthLightBlue
 import com.example.musicapplication.presentation.theme.DarkBackground
 import com.example.musicapplication.presentation.theme.TextWhite
+import com.example.musicapplication.utils.ConnectivityObserver
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreenFragment(
     authState: AuthState,
+    connectionState:ConnectivityObserver.Status,
     onLogin: (authState:AuthState) -> Unit,
     goToRegister:() -> Unit
     ){
+
+    val context = LocalContext.current
 
     val email = remember {
         mutableStateOf(authState.user.email)
@@ -239,20 +245,25 @@ fun LoginScreenFragment(
                         isPasswordEmpty.value = password.value.isBlank()
 
                         if(!isEmailEmpty.value && !isPasswordEmpty.value){
-                            onLogin(
-                                AuthState(
-                                    user = UserItem(
-                                        id = 0,
-                                        photoUrl = null,
-                                        name = "",
-                                        email = email.value,
-                                        password = password.value
-                                    ),
-                                    isAuthorized = false,
-                                    isWrongData = false,
-                                    isCreated = true
+                            if(connectionState== ConnectivityObserver.Status.Available) {
+                                onLogin(
+                                    AuthState(
+                                        user = UserItem(
+                                            id = 0,
+                                            photoUrl = null,
+                                            name = "",
+                                            email = email.value,
+                                            password = password.value
+                                        ),
+                                        isAuthorized = false,
+                                        isWrongData = false,
+                                        isCreated = true
+                                    )
                                 )
-                            )
+                            }
+                            else{
+                                Toast.makeText(context, "Oops! Bad internet connection, try later", Toast.LENGTH_SHORT).show()
+                            }
                         }
 
                                          },

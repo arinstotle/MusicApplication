@@ -12,6 +12,7 @@ import com.example.musicapplication.utils.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -84,6 +85,6 @@ class NetworkModule {
     ): NetworkSource = NetworkSource(apiService)
 
     @Provides
-    fun provideConnectivityObserver(context: Context): NetworkConnectivityObserver =
+    fun provideConnectivityObserver(@ApplicationContext context: Context): NetworkConnectivityObserver =
         NetworkConnectivityObserver(context)
 }

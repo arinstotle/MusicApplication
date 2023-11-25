@@ -19,12 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,6 +44,8 @@ fun AuthScreen(
 ) {
 
     var visible by remember { mutableStateOf(false) }
+
+    val connectionState = viewModel.connectionState.collectAsState()
 
 
     LaunchedEffect(key1 = viewModel.fragmentState) {
@@ -80,6 +84,7 @@ fun AuthScreen(
                 exit = slideOutVertically(targetOffsetY = { it }) + shrinkVertically() + fadeOut()) {
                 RegistrationScreenFragment(
                     authState = viewModel.authState.value,
+                    connectionState = connectionState.value,
                     goToLogin = { viewModel.onEvent(AuthEvent.GoToLogin) },
                     onRegister = {viewModel.onEvent(AuthEvent.OnRegister(it))}
                 )
@@ -106,6 +111,7 @@ fun AuthScreen(
             ) {
                 LoginScreenFragment(
                     authState = viewModel.authState.value,
+                    connectionState = connectionState.value,
                     goToRegister = {viewModel.onEvent(AuthEvent.GoToRegister)},
                     onLogin = {viewModel.onEvent(AuthEvent.OnLogin(it))}
                 )

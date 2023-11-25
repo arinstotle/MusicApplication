@@ -1,9 +1,18 @@
 package com.example.musicapplication.presentation.auth
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
+import com.example.musicapplication.App
 import com.example.musicapplication.data.network.repo.RemoteRepositoryImpl
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
 import com.example.musicapplication.domain.DataState
@@ -13,8 +22,11 @@ import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.model.emptyUser
 import com.example.musicapplication.presentation.UiState
+import com.example.musicapplication.utils.ConnectivityObserver
+import com.example.musicapplication.utils.NetworkConnectivityObserver
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +34,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 
 enum class Fragment{
@@ -32,9 +45,13 @@ enum class Fragment{
 class AuthViewModel @Inject constructor(
     private val remoteRepo:RemoteRepositoryImpl,
     private val overwriteLocalDatabaseUseCase: OverwriteLocalDatabaseUseCase,
-    private val getAllRoomsUseCase: GetAllRoomsUseCase,
+    private val connectivityObserver: NetworkConnectivityObserver,
     private val sharedPreferencesHelper: SharedPreferencesHelper
 ):ViewModel() {
+
+
+    private val _connectionState = MutableStateFlow(ConnectivityObserver.Status.Unavailable)
+    val connectionState = _connectionState.asStateFlow()
 
     private var _authState= mutableStateOf(AuthState(
         user = emptyUser(),
@@ -51,20 +68,29 @@ class AuthViewModel @Inject constructor(
     val allRooms = _allRooms.asStateFlow()
 
     init {
+        observeNetwork()
         Log.d("SAVED ROOMS", _allRooms.value.data.toString())
         _fragmentState.value = Fragment.LOGIN
         me()
+    }
+
+
+    private fun observeNetwork() {
+        viewModelScope.launch(Dispatchers.IO) {
+            connectivityObserver.observe().collectLatest {
+                _connectionState.emit(it)
+            }
+        }
     }
     fun onEvent(event: AuthEvent){
         when(event){
             is AuthEvent.OnLogin -> {
                 _authState.value=event.authState.copy()
                 login()
+
             }
             is AuthEvent.OnRegister -> {
-                //Log.d("REG_EVENT", event.authState.toString())
-                _authState.value=event.authState.copy()
-                //Log.d("REG", authState.value.user.toString())
+                _authState.value = event.authState.copy()
                 signup()
             }
 

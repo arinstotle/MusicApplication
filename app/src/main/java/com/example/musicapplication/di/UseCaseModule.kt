@@ -4,10 +4,12 @@ import com.example.musicapplication.domain.usecases.AddNewRoomUseCase
 import com.example.musicapplication.domain.usecases.ClearAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.EnterToTheRoomUseCase
 import com.example.musicapplication.domain.usecases.GetAllRoomsUseCase
+import com.example.musicapplication.domain.usecases.GetUsersRoomsUseCase
 import com.example.musicapplication.domain.usecases.IAddNewRoomUseCase
 import com.example.musicapplication.domain.usecases.IClearAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.IEnterToTheRoomUseCase
 import com.example.musicapplication.domain.usecases.IGetAllRoomsUseCase
+import com.example.musicapplication.domain.usecases.IGetUsersRoomsUseCase
 import com.example.musicapplication.domain.usecases.IMeUseCase
 import com.example.musicapplication.domain.usecases.IOverwriteLocalDatabaseUseCase
 import com.example.musicapplication.domain.usecases.MeUseCase
@@ -22,6 +24,9 @@ import dagger.hilt.components.SingletonComponent
 interface UseCaseModule {
     @Binds
     fun bindGetAllRoomsUseCase(useCase: GetAllRoomsUseCase): IGetAllRoomsUseCase
+
+    @Binds
+    fun bindGetUsersRoomsUseCase(useCase: GetUsersRoomsUseCase): IGetUsersRoomsUseCase
 
     @Binds
     fun bindAddNewRoomUseCase(useCase: AddNewRoomUseCase): IAddNewRoomUseCase

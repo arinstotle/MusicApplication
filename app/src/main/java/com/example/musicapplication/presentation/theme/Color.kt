@@ -30,3 +30,12 @@ val RegLightPurple = Color(0xFF7033B4)
 val RegDarkPurple = Color(0xFF2F1549)
 
 val Red = Color(0xFFAC2929)
+
+
+val MtsRed = Color(0xFFE30611)
+val MtsBackgroundBlack = Color(0xFF000000)
+val MtsBackgroundGreyDark = Color(0xFF1E1E1E)
+val MtsBackgroundGreyLight = Color(0xFF666465)
+val MtsIconsGrey = Color(0xFFADAFAF)
+val MtsTextWhite = Color(0xFFFFFFFF)
+val MtsTextGrey = Color(0xFF8A8D8F)
