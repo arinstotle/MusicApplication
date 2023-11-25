@@ -1,6 +1,7 @@
 package com.example.musicapplication.presentation.viewModels
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.example.musicapplication.domain.usecases.GetRoomInfoByIdUseCase
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.presentation.UiState
+import com.example.musicapplication.presentation.streamScreen.StreamUserEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -37,6 +39,9 @@ class StreamViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
 
     val isLoading = _isLoading.asStateFlow()
+
+    private val _inviteEmail = mutableStateOf("")
+    val inviteState = _inviteEmail
     init {
         job = viewModelScope.launch {
             _isLoading.value = true
@@ -68,5 +73,14 @@ class StreamViewModel @Inject constructor(
     }
     private fun songLoadedSuccessful() {
         songLoaded.value = true
+    }
+
+    fun onEvent(event: StreamUserEvent){
+        when(event){
+            is StreamUserEvent.OnInvite -> inviteUser(event.email)
+        }
+    }
+    fun inviteUser(email:String){
+
     }
 }

@@ -1,6 +1,10 @@
 package com.example.musicapplication
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -14,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.rememberNavController
 import com.example.musicapplication.navigation.Navigation
 import com.example.musicapplication.navigation.NavigationRouter
@@ -26,7 +31,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @Suppress("UNUSED_EXPRESSION")
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity() : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -66,6 +72,39 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val action:String = intent?.action!!
+        val data:String = intent.dataString!!
+
+        if (Intent.ACTION_VIEW == action) {
+            val roomId = data.substring(data.lastIndexOf("/") + 1).toInt()
+        }
+    }
+
+    @SuppressLint("IntentReset")
+    private fun sendEmail(recipient: String, subject: String, link: String) {
+
+        val intent = Intent(Intent.ACTION_SEND)
+
+        intent.data = Uri.parse("mailto:")
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        intent.putExtra(Intent.EXTRA_TEXT, link)
+
+
+        try {
+            if(intent.resolveActivity(packageManager)!=null){
+                ContextCompat.startActivity(this, intent, null)
+            }
+        }
+        catch (e: Exception){
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+        }
+
     }
 }
 
