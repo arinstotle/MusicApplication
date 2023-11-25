@@ -97,7 +97,11 @@ class AuthViewModel @Inject constructor(
             val logedUser = remoteRepo.login(authState.value.user)
             if(logedUser!=null){
                 _authState.value = authState.value.copy(user = logedUser, isAuthorized = true, isWrongData = false)
-                sharedPreferencesHelper.putUserId(authState.value.user.id)
+                sharedPreferencesHelper.putUserData(
+                    authState.value.user.id,
+                    authState.value.user.name,
+                    authState.value.user.email
+                )
                 overwriteLocalDatabaseUseCase.invoke(sharedPreferencesHelper.getUserId())
             }
             else{

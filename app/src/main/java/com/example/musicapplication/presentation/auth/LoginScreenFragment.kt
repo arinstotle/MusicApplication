@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -109,13 +110,13 @@ fun LoginScreenFragment(
             }
         }
         Card(modifier = Modifier
-            .height(310.dp)
+            .wrapContentHeight()
             .fillMaxWidth(),
             shape = RectangleShape
         ){
             Column(modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
+                .wrapContentHeight()
                 .background(color = DarkBackground, shape = RoundedCornerShape(size = 0.dp))
                 .padding(start = 16.dp, top = 25.dp, end = 16.dp)){
                 Text(text = "Login",
@@ -214,6 +215,7 @@ fun LoginScreenFragment(
                 )
                 Row(modifier = Modifier
                     .fillMaxWidth()
+                    .wrapContentHeight()
                     .padding(top = 35.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically) {
@@ -268,8 +270,8 @@ fun LoginScreenFragment(
 
                                          },
                         modifier = Modifier
-                            .width(105.dp)
-                            .height(46.dp)
+                            .wrapContentWidth()
+                            .wrapContentHeight()
                             .background(
                                 color = Color(0xFFD1D1D1),
                                 shape = RoundedCornerShape(size = 38.dp)
