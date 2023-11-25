@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -20,9 +21,11 @@ import com.example.musicapplication.presentation.mainScreen.MainScreen
 import com.example.musicapplication.presentation.searchRoomScreen.SearchScreen
 import com.example.musicapplication.presentation.profile.ProfileScreen
 import com.example.musicapplication.presentation.streamScreen.StreamMainScreen
+import com.example.musicapplication.presentation.viewModels.StreamViewModel
 
 object NavigationRouter {
     var currentScreen: MutableState<Screen> = mutableStateOf(Screen.AuthScreen)
+    var prevScreen: MutableState<Screen> = mutableStateOf(Screen.AuthScreen)
 }
 
 @Composable
@@ -30,6 +33,7 @@ fun Navigation(navController: NavHostController, context: Context) {
     NavHost(navController = navController, startDestination = Screen.AuthScreen.route) {
         composable(route = Screen.MainScreen.route) {
             MainScreen(navController = navController)
+            NavigationRouter.prevScreen.value = NavigationRouter.currentScreen.value
             NavigationRouter.currentScreen.value = Screen.MainScreen
         }
         composable(
@@ -54,6 +58,7 @@ fun Navigation(navController: NavHostController, context: Context) {
             ){
                 AuthScreen(navController = navController)
             }
+            NavigationRouter.prevScreen.value = NavigationRouter.currentScreen.value
             NavigationRouter.currentScreen.value = Screen.AuthScreen
         }
         composable(route = Screen.StreamScreen.route + "/{roomId}",
@@ -62,16 +67,20 @@ fun Navigation(navController: NavHostController, context: Context) {
                     type = NavType.IntType
                 }
             )
-            ) { entry ->
-            StreamMainScreen(navController = navController, roomId = entry.arguments?.getInt("roomId"))
+            ) {
+            val streamViewModel = hiltViewModel<StreamViewModel>()
+            StreamMainScreen(navController = navController, viewModel = streamViewModel)
+            NavigationRouter.prevScreen.value = NavigationRouter.currentScreen.value
             NavigationRouter.currentScreen.value = Screen.StreamScreen
         }
         composable(route = Screen.SearchScreen.route) {
             SearchScreen(navController = navController)
+            NavigationRouter.prevScreen.value = NavigationRouter.currentScreen.value
             NavigationRouter.currentScreen.value = Screen.SearchScreen
         }
         composable(Screen.ProfileScreen.route){
             ProfileScreen(navController = navController)
+            NavigationRouter.prevScreen.value = NavigationRouter.currentScreen.value
             NavigationRouter.currentScreen.value=Screen.ProfileScreen
         }
     }

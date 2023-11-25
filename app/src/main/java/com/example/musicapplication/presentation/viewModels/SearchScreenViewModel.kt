@@ -187,13 +187,33 @@ class SearchScreenViewModel @Inject constructor(
         emit(UiState.FatalError(it.cause?.message.toString()))
     }
 
-    fun enterToTheRoom(roomId: Int): Flow<UiState<Any>> = flow {
-        enterToTheRoomUseCase(roomId).collect { state ->
-            when (state) {
-                is DataState.Initial -> emit(UiState.Start)
-                is DataState.Result -> emit(UiState.Success(state.data))
-                is DataState.Exception -> emit(UiState.FatalError(state.cause.message ?: state.cause.stackTraceToString()))
-                else -> {
+    fun enterToTheRoom(room: RoomItem): Flow<UiState<Any>> = flow {
+        if (room.isPrivate) {
+            enterToTheRoomUseCase(room.id!!, room.password!!).collect { state ->
+                when (state) {
+                    is DataState.Initial -> emit(UiState.Start)
+                    is DataState.Result -> emit(UiState.Success(state.data))
+                    is DataState.Exception -> emit(
+                        UiState.FatalError(
+                            state.cause.message ?: state.cause.stackTraceToString()
+                        )
+                    )
+                    else -> {
+                    }
+                }
+            }
+        } else {
+            enterToTheRoomUseCase(room.id!!).collect { state ->
+                when (state) {
+                    is DataState.Initial -> emit(UiState.Start)
+                    is DataState.Result -> emit(UiState.Success(state.data))
+                    is DataState.Exception -> emit(
+                        UiState.FatalError(
+                            state.cause.message ?: state.cause.stackTraceToString()
+                        )
+                    )
+                    else -> {
+                    }
                 }
             }
         }

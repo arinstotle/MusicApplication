@@ -60,6 +60,7 @@ import androidx.navigation.NavHostController
 import com.example.musicapplication.R
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
+import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.mainScreen.ShimmerListItem
@@ -108,9 +109,9 @@ fun SearchScreen(
                     viewModel.unsetEnteringRoomPassword()
                 },
                 onConfirm = {
-                    val lambda: (Int) -> Unit = { id ->
+                    val lambda: (RoomItem) -> Unit = { roomItem ->
                         coroutineScope.launch {
-                            viewModel.enterToTheRoom(id).collect { enterUiState ->
+                            viewModel.enterToTheRoom(roomItem).collect { enterUiState ->
                                 when (enterUiState) {
                                     is UiState.Success -> {
                                         Toast.makeText(
@@ -120,6 +121,7 @@ fun SearchScreen(
                                         ).show()
                                         viewModel.onDismissDialog()
                                         viewModel.unsetEnteringRoomPassword()
+                                        NavigationRouter.prevScreen.value = Screen.SearchScreen
                                         navController.navigate(
                                             Screen.StreamScreen.withArgs(
                                                 ((enterUiState.data
@@ -146,14 +148,10 @@ fun SearchScreen(
                                 "Wrong password!",
                                 Toast.LENGTH_SHORT).show()
                         } else {
-                            currentRoom!!.id?.let { id ->
-                                lambda.invoke(id)
-                            }
+                            lambda.invoke(currentRoom!!)
                         }
                     } else {
-                        currentRoom!!.id?.let { id ->
-                            lambda.invoke(id)
-                        }
+                        lambda.invoke(currentRoom!!)
                     }
                 },
                 changePassword = { password ->
@@ -178,8 +176,8 @@ fun SearchScreen(
                                         "A new room has been successfully created!",
                                         Toast.LENGTH_SHORT).show()
                                     viewModel.onDismissDialog()
-                                    viewModel.enterToTheRoom((uiState.data
-                                            as RoomItem).id!!).collect { enterUiState ->
+                                    viewModel.enterToTheRoom(uiState.data
+                                            as RoomItem).collect { enterUiState ->
                                         when(enterUiState) {
                                             is UiState.Success -> {
                                                 Toast.makeText(context,

@@ -5,5 +5,5 @@ import com.example.musicapplication.model.RoomItem
 import kotlinx.coroutines.flow.Flow
 
 interface  IEnterToTheRoomUseCase {
-    suspend operator fun invoke(roomId: Int): Flow<DataState<RoomItem?>>
+    suspend operator fun invoke(roomId: Int, password: String = ""): Flow<DataState<RoomItem?>>
 }

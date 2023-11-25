@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.net.UnknownHostException
 import kotlinx.coroutines.flow.Flow
+import okhttp3.Response
 import javax.inject.Inject
 
 class NetworkSource @Inject constructor(
@@ -206,11 +207,12 @@ class NetworkSource @Inject constructor(
     }
 
     fun joining(
-        id: Int
+        id: Int,
+        password: String = ""
     ): Flow<NetworkState<RoomItem>> = flow {
         emit(NetworkState.Initial)
         val response = api.joiningARoomInServer(
-           id = id
+                id = id
         )
         if (response.isSuccessful) {
             if (response.body() != null) {

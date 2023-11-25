@@ -12,7 +12,7 @@ interface RemoteRepository {
     suspend fun createNewRoom( roomName: String, password: String?,
                                isPrivate: Boolean,
                                owner: Int): RoomItem?
-    suspend fun joinARoom(roomId: Int): RoomItem?
+    suspend fun joinARoom(roomId: Int, password: String = ""): RoomItem?
     suspend fun roomInfoById(roomId: Int): RoomItem?
     suspend fun getAllUserRooms(userId: Int): List<RoomItem>?
 }
