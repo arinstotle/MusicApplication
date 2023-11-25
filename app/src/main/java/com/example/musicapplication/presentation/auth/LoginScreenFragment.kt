@@ -22,6 +22,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -64,33 +66,28 @@ fun LoginScreenFragment(
     onLogin: (authState:AuthState) -> Unit,
     goToRegister:() -> Unit
     ){
-
     val context = LocalContext.current
-
     val email = remember {
         mutableStateOf(authState.user.email)
     }
     val password = remember {
         mutableStateOf(authState.user.password)
     }
-
     val passwordVisibility = remember {
         mutableStateOf(false)
     }
-
     val isEmailEmpty = remember {
         mutableStateOf(false)
     }
     val isPasswordEmpty = remember {
         mutableStateOf(false)
     }
-
     Column(modifier = Modifier
-        .background(DarkBackground)
+        .background(MaterialTheme.colorScheme.primary)
         .fillMaxWidth()
         .padding(start = 14.dp, end = 14.dp, bottom = 40.dp)){
         Card(modifier = Modifier
-            .background(DarkBackground)
+            .background(MaterialTheme.colorScheme.primary)
             .fillMaxWidth()
             .height(110.dp),
             shape = RoundedCornerShape(topStart = 34.dp, topEnd = 34.dp)
@@ -98,7 +95,8 @@ fun LoginScreenFragment(
             Box(modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.horizontalGradient(listOf(AuthLightBlue, AuthDarkBlue)),
+                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.secondary,
+                        MaterialTheme.colorScheme.surface)),
                     alpha = 0.8f
                 )){
                 Image(modifier = Modifier
@@ -117,7 +115,7 @@ fun LoginScreenFragment(
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .background(color = DarkBackground, shape = RoundedCornerShape(size = 0.dp))
+                .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(size = 0.dp))
                 .padding(start = 16.dp, top = 25.dp, end = 16.dp)){
                 Text(text = "Login",
                     style = TextStyle(
@@ -125,7 +123,7 @@ fun LoginScreenFragment(
                         lineHeight = 28.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_bold)),
                         fontWeight = FontWeight(700),
-                        color = Color(0xFFFFFFFF)
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 )
                 TextField(value = email.value,
@@ -144,13 +142,18 @@ fun LoginScreenFragment(
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
-                        color = TextWhite
+                        color = MaterialTheme.colorScheme.onTertiary
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     colors = if (!authState.isWrongData && !isEmailEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                        )
                     } else {
                         TextFieldDefaults.textFieldColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                             unfocusedTextColor = Color.Red,
                             focusedTextColor = Color.Red,
                             disabledTextColor = Color.Red,
@@ -176,7 +179,7 @@ fun LoginScreenFragment(
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_regular)),
                         fontWeight = FontWeight(400),
-                        color = TextWhite
+                        color = MaterialTheme.colorScheme.onTertiary
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     trailingIcon = {
@@ -191,7 +194,8 @@ fun LoginScreenFragment(
                         else{
                             IconButton(onClick = {
                                 passwordVisibility.value=!passwordVisibility.value
-                            }) {
+                            }
+                            ) {
                                 Image(painter = painterResource(id = R.drawable.ic_visibility_off),
                                     contentDescription = "invisible")
                             }
@@ -201,9 +205,14 @@ fun LoginScreenFragment(
                     if(passwordVisibility.value) VisualTransformation.None
                     else PasswordVisualTransformation(),
                     colors = if (!authState.isWrongData && !isPasswordEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                            )
                     } else {
                         TextFieldDefaults.textFieldColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                             unfocusedTextColor = Color.Red,
                             focusedTextColor = Color.Red,
                             disabledTextColor = Color.Red,
@@ -228,24 +237,23 @@ fun LoginScreenFragment(
                                 fontSize = 22.sp,
                                 fontFamily = FontFamily(Font(R.font.spartan_bold)),
                                 fontWeight = FontWeight(700),
-                                color = Color(0xFFFFFFFF))
+                                color = MaterialTheme.colorScheme.onTertiary
+                            )
                         )
                         ClickableText(text = AnnotatedString("Registration"),
                             style = TextStyle(
                                 fontSize = 13.sp,
                                 fontFamily = FontFamily(Font(R.font.spartan_regular)),
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF0984E3)),
+                                color = MaterialTheme.colorScheme.onPrimary),
                             onClick = {
                                 goToRegister()
                             }
                         )
                     }
                     TextButton(onClick = {
-
                         isEmailEmpty.value = email.value.isBlank()
                         isPasswordEmpty.value = password.value.isBlank()
-
                         if(!isEmailEmpty.value && !isPasswordEmpty.value){
                             if(connectionState== ConnectivityObserver.Status.Available) {
                                 onLogin(
@@ -264,16 +272,15 @@ fun LoginScreenFragment(
                                 )
                             }
                             else{
-                                Toast.makeText(context, "Oops! Bad internet connection, try later", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context,
+                                    "Oops! Bad internet connection, try later", Toast.LENGTH_SHORT).show()
                             }
-                        }
-
-                                         },
+                        } },
                         modifier = Modifier
                             .wrapContentWidth()
                             .wrapContentHeight()
                             .background(
-                                color = Color(0xFFD1D1D1),
+                                color = MaterialTheme.colorScheme.secondaryContainer,
                                 shape = RoundedCornerShape(size = 38.dp)
                             )
                     ) {
@@ -282,9 +289,8 @@ fun LoginScreenFragment(
                                 fontSize = 17.sp,
                                 fontFamily = FontFamily(Font(R.font.spartan_regular)),
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF979797),
-
-                                )
+                                color = MaterialTheme.colorScheme.onTertiary
+                            )
                         )
                     }
                 }

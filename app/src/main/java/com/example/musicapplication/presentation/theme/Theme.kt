@@ -27,7 +27,7 @@ private val DarkColorScheme = darkColorScheme(
     onTertiaryContainer = MtsTextGrey,
     onTertiary = MtsTextWhite,
     surface = MtsRed3,
-    secondaryContainer = MtsTextGrey,
+    secondaryContainer = MtsRed6,
     onSurface = MtsBackgroundBlack
 )
 
@@ -39,10 +39,10 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = MtsRed4,
     tertiary = MtsBackgroundGreyDark,
     tertiaryContainer = MtsIconsGrey,
-    onTertiaryContainer = MtsBackgroundGreyLight,
+    onTertiaryContainer = MtsIconsGrey,
     onTertiary = MtsBackgroundBlack,
     surface = MtsRed3,
-    secondaryContainer = MtsTextGrey,
+    secondaryContainer = MtsRed6,
     onSurface = MtsBackgroundBlack
 )
 

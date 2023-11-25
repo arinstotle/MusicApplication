@@ -26,6 +26,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -74,7 +75,6 @@ fun RegistrationScreenFragment(
      onRegister:(authState:AuthState) -> Unit,
      goToLogin: () -> Unit
 ){
-
     val context = LocalContext.current
     val email = remember {
         mutableStateOf(authState.user.email)
@@ -82,30 +82,24 @@ fun RegistrationScreenFragment(
     val password = remember {
         mutableStateOf(authState.user.password)
     }
-
     val nickname = remember {
         mutableStateOf(authState.user.name)
     }
     val repeatedPassword = remember {
         mutableStateOf(authState.user.password)
     }
-
     val passwordVisibility = remember {
         mutableStateOf(false)
     }
-
     val repeatedPasswordVisibility = remember {
         mutableStateOf(false)
     }
-
     val passwordMatch = remember {
         mutableStateOf(true)
     }
-
     val user = remember {
         mutableStateOf(authState.user)
     }
-
     val isNameEmpty = remember {
         mutableStateOf(false)
     }
@@ -118,22 +112,21 @@ fun RegistrationScreenFragment(
     val isRepeatedEmpty = remember {
         mutableStateOf(false)
     }
-
-
     Column(modifier = Modifier
-        .background(DarkBackground)
+        .background(MaterialTheme.colorScheme.primary)
         .fillMaxWidth()
         .padding(start = 14.dp, end = 14.dp, bottom = 50.dp)){
         Card(modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
-            .background(DarkBackground),
+            .background(MaterialTheme.colorScheme.primary),
             shape = RoundedCornerShape(topStart = 34.dp, topEnd = 34.dp)
         ){
             Box(modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.horizontalGradient(listOf(RegLightPurple, RegDarkPurple)),
+                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.secondary,
+                        MaterialTheme.colorScheme.surface)),
                     alpha = 0.8f
                 )){
                 Image(modifier = Modifier
@@ -152,7 +145,7 @@ fun RegistrationScreenFragment(
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .background(color = DarkBackground, shape = RoundedCornerShape(size = 0.dp))
+                .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(size = 0.dp))
                 .padding(start = 16.dp, top = 25.dp, end = 16.dp)){
                 Text(text = "Create account",
                     style = TextStyle(
@@ -173,7 +166,7 @@ fun RegistrationScreenFragment(
                     onValueChange = {
                         nickname.value = it
                         if(it.isNotBlank()) isNameEmpty.value = false
-                        Log.d("NAME CHANGED", nickname.value.toString())},
+                        },
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
