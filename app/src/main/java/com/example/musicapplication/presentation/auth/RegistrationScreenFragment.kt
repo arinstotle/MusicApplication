@@ -153,7 +153,7 @@ fun RegistrationScreenFragment(
                         lineHeight = 28.sp,
                         fontFamily = FontFamily(Font(R.font.spartan_bold)),
                         fontWeight = FontWeight(700),
-                        color = Color(0xFFFFFFFF)
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 )
                 TextField(modifier = Modifier
@@ -175,7 +175,16 @@ fun RegistrationScreenFragment(
                         color = TextWhite
                     ),
                     colors = if (!isNameEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
+                        )
                     } else {
                         TextFieldDefaults.textFieldColors(
                             unfocusedTextColor = Red,
@@ -184,6 +193,11 @@ fun RegistrationScreenFragment(
                             unfocusedLabelColor = Red,
                             focusedLabelColor = Red,
                             disabledLabelColor = Red,
+                            errorLabelColor = Red,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     })
                 TextField(modifier = Modifier
@@ -206,7 +220,16 @@ fun RegistrationScreenFragment(
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     colors = if (!isEmailEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
+                        )
                     } else {
                         TextFieldDefaults.textFieldColors(
                             unfocusedTextColor = Red,
@@ -215,6 +238,11 @@ fun RegistrationScreenFragment(
                             unfocusedLabelColor = Red,
                             focusedLabelColor = Red,
                             disabledLabelColor = Red,
+                            errorLabelColor = Red,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     }
                 )
@@ -259,7 +287,16 @@ fun RegistrationScreenFragment(
                     if(passwordVisibility.value) VisualTransformation.None
                         else PasswordVisualTransformation(),
                     colors = if (passwordMatch.value && !isPasswordEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
+                        )
                     } else {
                         TextFieldDefaults.textFieldColors(
                             unfocusedTextColor = Red,
@@ -268,6 +305,11 @@ fun RegistrationScreenFragment(
                             unfocusedLabelColor = Red,
                             focusedLabelColor = Red,
                             disabledLabelColor = Red,
+                            errorLabelColor = Red,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     }
                 )
@@ -312,7 +354,16 @@ fun RegistrationScreenFragment(
                     if(repeatedPasswordVisibility.value) VisualTransformation.None
                     else PasswordVisualTransformation(),
                     colors = if (passwordMatch.value && !isRepeatedEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
+                        )
                     } else {
                         TextFieldDefaults.textFieldColors(
                             unfocusedTextColor = Red,
@@ -321,6 +372,11 @@ fun RegistrationScreenFragment(
                             unfocusedLabelColor = Red,
                             focusedLabelColor = Red,
                             disabledLabelColor = Red,
+                            errorLabelColor = Red,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     }
                 )
@@ -351,7 +407,7 @@ fun RegistrationScreenFragment(
                             fontSize = 22.sp,
                             fontFamily = FontFamily(Font(R.font.spartan_bold)),
                             fontWeight = FontWeight(700),
-                            color = Color(0xFFFFFFFF),)
+                            color = MaterialTheme.colorScheme.onTertiary)
                     )
                     TextButton(
                         onClick = {
@@ -392,7 +448,7 @@ fun RegistrationScreenFragment(
                             .wrapContentWidth()
                             .wrapContentHeight()
                             .background(
-                                color = Color(0xFFD1D1D1),
+                                color = MaterialTheme.colorScheme.secondaryContainer,
                                 shape = RoundedCornerShape(size = 38.dp)
                             )
                     ) {
@@ -401,7 +457,7 @@ fun RegistrationScreenFragment(
                                 fontSize = 17.sp,
                                 fontFamily = FontFamily(Font(R.font.spartan_regular)),
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF979797)
+                                color = MaterialTheme.colorScheme.onTertiary
                             )
                         )
                     }

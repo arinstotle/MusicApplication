@@ -17,7 +17,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
+    //задники
     primary = MtsBackgroundGreyDark,
+    //красное
     onPrimary = MtsRed,
     primaryContainer = MtsRed2,
     secondary = MtsRed5,

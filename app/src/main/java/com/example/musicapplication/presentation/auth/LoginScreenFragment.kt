@@ -148,7 +148,13 @@ fun LoginScreenFragment(
                     colors = if (!authState.isWrongData && !isEmailEmpty.value) {
                         TextFieldDefaults.textFieldColors(
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     } else {
                         TextFieldDefaults.textFieldColors(
@@ -160,6 +166,9 @@ fun LoginScreenFragment(
                             unfocusedLabelColor = Color.Red,
                             focusedLabelColor = Color.Red,
                             disabledLabelColor = Color.Red,
+                            errorLabelColor = Color.Red,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     }
                 )
@@ -207,7 +216,13 @@ fun LoginScreenFragment(
                     colors = if (!authState.isWrongData && !isPasswordEmpty.value) {
                         TextFieldDefaults.textFieldColors(
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                             )
                     } else {
                         TextFieldDefaults.textFieldColors(
@@ -219,6 +234,9 @@ fun LoginScreenFragment(
                             unfocusedLabelColor = Color.Red,
                             focusedLabelColor = Color.Red,
                             disabledLabelColor = Color.Red,
+                            errorLabelColor = Color.Red,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     }
                 )
