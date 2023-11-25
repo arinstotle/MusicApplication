@@ -52,6 +52,10 @@ android {
 }
 
 dependencies {
+
+    implementation ("io.socket:socket.io-client:2.1.0")
+    implementation ( "com.jakewharton.timber:timber:5.0.1")
+
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.23.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")

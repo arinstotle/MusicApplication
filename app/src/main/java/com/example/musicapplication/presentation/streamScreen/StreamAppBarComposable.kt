@@ -136,7 +136,7 @@ fun StreamAppBar(playOnClick: () -> Unit,
                                     text = roomName,
                                     style = TextStyle(
                                         fontSize = 21.sp,
-                                        fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                                         color = MaterialTheme.colorScheme.onTertiary
                                     )
                                 )
@@ -145,7 +145,7 @@ fun StreamAppBar(playOnClick: () -> Unit,
                                     text = "Translation is going",
                                     style = TextStyle(
                                         fontSize = 11.sp,
-                                        fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                                         fontWeight = FontWeight(700),
                                         color = MaterialTheme.colorScheme.onSecondary,
                                         textAlign = TextAlign.End
@@ -191,6 +191,7 @@ fun PanelSection(
                 textAlign = TextAlign.Center,
                 letterSpacing = 2.09.sp,
             ),
+            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
             modifier = Modifier.padding(top = 32.dp, start = 8.dp, bottom = 8.dp)
         )
         Row(

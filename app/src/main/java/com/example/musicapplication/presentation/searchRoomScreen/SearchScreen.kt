@@ -66,6 +66,11 @@ import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.mainScreen.ShimmerListItem
 import com.example.musicapplication.presentation.mainScreen.standardQuadFromTo
 import com.example.musicapplication.presentation.streamScreen.roommates
+import com.example.musicapplication.presentation.theme.DarkRed
+import com.example.musicapplication.presentation.theme.MtsBackgroundBlack
+import com.example.musicapplication.presentation.theme.MtsRed
+import com.example.musicapplication.presentation.theme.MtsTextWhite
+import com.example.musicapplication.presentation.theme.VeryDarkRed
 import com.example.musicapplication.presentation.viewModels.SearchScreenViewModel
 import com.example.musicapplication.utils.ConnectivityObserver
 import kotlinx.coroutines.launch
@@ -87,14 +92,18 @@ fun SearchScreen(
     val connectionState = viewModel.connectionState.collectAsState()
     Column(
         modifier = Modifier
+            .background(MaterialTheme.colorScheme.primary)
             .fillMaxSize()
             .padding(16.dp)
     ) {
         val colors: TextFieldColors = TextFieldDefaults.colors(
-            cursorColor = MaterialTheme.colorScheme.primary,
-            focusedContainerColor = MaterialTheme.colorScheme.primary,
-            unfocusedContainerColor = MaterialTheme.colorScheme.primary,
-            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            focusedTextColor = MaterialTheme.colorScheme.onTertiary,
+            unfocusedTextColor = MaterialTheme.colorScheme.onTertiary,
+            disabledTextColor = MaterialTheme.colorScheme.onTertiary,
+            cursorColor = MaterialTheme.colorScheme.onTertiary,
+            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         )
@@ -235,8 +244,8 @@ fun SearchScreen(
                 label = {
                     Text(
                         "Order",
-                        fontFamily = FontFamily(Font(R.font.spartan_bold)),
-                        color = MaterialTheme.colorScheme.onTertiary
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
+                        color = VeryDarkRed
                     )
                 },
                 onValueChange = {},
@@ -247,8 +256,8 @@ fun SearchScreen(
                     )
                 },
                 textStyle = TextStyle(
-                    fontFamily = FontFamily(Font(R.font.spartan_bold))
-                ),
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
+                    ),
                 singleLine = true,
                 colors = colors,
                 shape = RoundedCornerShape(20.dp),
@@ -274,10 +283,8 @@ fun SearchScreen(
                                     viewModel.updateRooms().collect { uiState ->
                                         when (uiState) {
                                             is UiState.Success -> {
-
                                             }
                                             is UiState.Error -> {
-
                                             }
                                             else -> {
                                             }
@@ -291,8 +298,8 @@ fun SearchScreen(
                     ) {
                         Text(
                             text = selectionOption,
-                            fontFamily = FontFamily(Font(R.font.spartan_bold)),
-                            color = MaterialTheme.colorScheme.primary
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
+                            color = MtsBackgroundBlack
                         )
                     }
                 }
@@ -316,18 +323,18 @@ fun SearchScreen(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = null,
-                        tint = Color.Gray
+                        tint = VeryDarkRed
                     )
                 },
                 placeholder = {
                     Text(
                         text = "Search",
-                        fontFamily = FontFamily(Font(R.font.spartan_bold))
-                    )
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium))
+                        )
                 },
                 textStyle = TextStyle(
-                    fontFamily = FontFamily(Font(R.font.spartan_bold))
-                ),
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium))
+                    ),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
                     imeAction = ImeAction.Search
@@ -357,7 +364,8 @@ fun SearchScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Box(modifier = Modifier.fillMaxSize()) {
                 CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center),
+                    trackColor = MtsRed
                 )
             }
         } else if(connectionState.value == ConnectivityObserver.Status.Unavailable) {
@@ -371,7 +379,7 @@ fun SearchScreen(
                     style = TextStyle(
                         fontSize = 20.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         color = MaterialTheme.colorScheme.onSurface
                     ),
                     fontWeight = FontWeight.Bold,
@@ -408,7 +416,7 @@ fun RoomSectionSearch(rooms: UiState<List<RoomItem>>, isLoading : Boolean,
             style = TextStyle(
                 fontSize = 13.sp,
                 fontWeight = FontWeight(600),
-                fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                 color = MaterialTheme.colorScheme.onTertiary
             ),
             fontWeight = FontWeight.Bold,
@@ -441,7 +449,8 @@ fun RoomSectionSearch(rooms: UiState<List<RoomItem>>, isLoading : Boolean,
                 else -> {
                     Box(modifier = Modifier.fillMaxSize()) {
                         CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center)
+                            modifier = Modifier.align(Alignment.Center),
+                            trackColor = MtsRed
                         )
                     }
                 }
@@ -461,7 +470,7 @@ fun RoomSectionSearchList(rooms: List<RoomItem>, isLoading : Boolean,
             style = TextStyle(
                 fontSize = 13.sp,
                 fontWeight = FontWeight(600),
-                fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                 color = MaterialTheme.colorScheme.onTertiary
             ),
             fontWeight = FontWeight.Bold,
@@ -565,7 +574,7 @@ fun RoomCardSearch(
                     style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         color = MaterialTheme.colorScheme.onTertiary
                     ),
                     fontWeight = FontWeight.Bold,
@@ -586,7 +595,7 @@ fun RoomCardSearch(
                     style = TextStyle(
                         fontSize = 13.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         color = MaterialTheme.colorScheme.onTertiary
                     ),
                     fontWeight = FontWeight.Bold,
@@ -607,7 +616,7 @@ fun RoomCardSearch(
                     style = TextStyle(
                         fontSize = 13.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         color = MaterialTheme.colorScheme.onTertiary
                     ),
                     fontWeight = FontWeight.Bold,
@@ -622,8 +631,8 @@ fun RoomCardSearch(
                     style = TextStyle(
                         fontSize = 13.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
-                        color = MaterialTheme.colorScheme.onSurface
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
+                        color = MaterialTheme.colorScheme.outlineVariant
                     ),
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
@@ -636,6 +645,7 @@ fun RoomCardSearch(
                     text = "Enter",
                     color = MaterialTheme.colorScheme.onTertiary,
                     fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
                         .clickable {
@@ -643,7 +653,7 @@ fun RoomCardSearch(
                         }
                         .align(Alignment.BottomEnd)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colorScheme.onSurface)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
                         .padding(vertical = 6.dp, horizontal = 15.dp)
                 )
             }
@@ -690,7 +700,7 @@ fun CustomDialog(
             ){
                 Text(
                     text = "Let's create your room!",
-                    fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                     fontSize = 24.sp,
                     textAlign = TextAlign.Center
                 )
@@ -718,7 +728,7 @@ fun CustomDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text("Make private:",
-                            fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                             fontSize = 16.sp
                             )
                         Switch(
@@ -756,6 +766,7 @@ fun CustomDialog(
                         shape = CircleShape
                     ) {
                         Text(
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                             text = "Cancel",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold,
@@ -776,6 +787,7 @@ fun CustomDialog(
                     ) {
                         Text(
                             text = "Confirm",
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
@@ -830,7 +842,7 @@ fun CustomEnterDialog(
                     else
                         "Enter the password:"
                     ,
-                    fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                     fontSize = 24.sp,
                     textAlign = TextAlign.Center
                 )
@@ -860,6 +872,7 @@ fun CustomEnterDialog(
                         Text(
                             text = "Cancel",
                             style = MaterialTheme.typography.bodyMedium,
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                         )
@@ -878,6 +891,7 @@ fun CustomEnterDialog(
                     ) {
                         Text(
                             text = "Confirm",
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
@@ -924,8 +938,8 @@ fun TextFieldComponent(textValueStart : String = "",
         label = {
             Text(
                 text = labelValue,
-                fontFamily = FontFamily(Font(R.font.spartan_bold))
-            )
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
+                )
         }
     )
 }
@@ -989,8 +1003,8 @@ fun PasswordTextFieldComponent(passwordStart : String = "",
         label = {
             Text(
                 text = labelValue,
-                fontFamily = FontFamily(Font(R.font.spartan_bold))
-            )
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
+                )
         },
         visualTransformation = if (isVisible.value) VisualTransformation.None else PasswordVisualTransformation()
     )

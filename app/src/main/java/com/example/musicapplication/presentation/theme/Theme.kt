@@ -17,7 +17,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
+    //задники
     primary = MtsBackgroundGreyDark,
+    //красное
     onPrimary = MtsRed,
     primaryContainer = MtsRed2,
     secondary = MtsRed5,
@@ -27,23 +29,29 @@ private val DarkColorScheme = darkColorScheme(
     onTertiaryContainer = MtsTextGrey,
     onTertiary = MtsTextWhite,
     surface = MtsRed3,
-    secondaryContainer = MtsTextGrey,
-    onSurface = MtsBackgroundBlack
+    secondaryContainer = MtsRed6,
+    onSurface = MtsBackgroundBlack,
+    scrim = MtsTextWhite,
+    outlineVariant = DarkRed
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = MtsTextWhite,
+    //задники
+    primary = MtsBackgroundGreyDark,
+    //красное
     onPrimary = MtsRed,
     primaryContainer = MtsRed2,
     secondary = MtsRed5,
-    onSecondary = MtsRed4,
-    tertiary = MtsBackgroundGreyDark,
+    onSecondary = MtsRed2,
+    tertiary = MtsBackgroundGreyLight,
     tertiaryContainer = MtsIconsGrey,
-    onTertiaryContainer = MtsBackgroundGreyLight,
-    onTertiary = MtsBackgroundBlack,
+    onTertiaryContainer = MtsTextGrey,
+    onTertiary = MtsTextWhite,
     surface = MtsRed3,
-    secondaryContainer = MtsTextGrey,
-    onSurface = MtsBackgroundBlack
+    secondaryContainer = MtsRed6,
+    onSurface = MtsBackgroundBlack,
+    scrim = MtsTextWhite,
+    outlineVariant = DarkRed
 )
 
 @Composable

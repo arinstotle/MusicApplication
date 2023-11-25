@@ -13,6 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,40 +31,32 @@ import com.example.musicapplication.presentation.viewModels.AuthViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-//@Preview(showBackground = true)
 fun AuthScreen(
     navController:NavController,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-
     var visible by remember { mutableStateOf(false) }
-
     val connectionState = viewModel.connectionState.collectAsState()
-
-
     LaunchedEffect(key1 = viewModel.fragmentState) {
         if(visible){
-            visible=!visible
+            visible =! visible
             delay(300)
         }
         delay(300)
         visible=!visible
     }
-
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(DarkBackground),
+        .background(MaterialTheme.colorScheme.primary),
         verticalArrangement = Arrangement.Bottom) {
-
-        if(viewModel.authState.value.isCreated && viewModel.authState.value.isAuthorized){
-            navController.navigate(Screen.MainScreen.route){
-                popUpTo(Screen.MainScreen.route){
-                    inclusive=true
+        if(viewModel.authState.value.isCreated && viewModel.authState.value.isAuthorized) {
+            navController.navigate(Screen.MainScreen.route) {
+                popUpTo(Screen.MainScreen.route) {
+                    inclusive = true
                 }
             }
         }
         else if(!viewModel.authState.value.isCreated) {
-
             AnimatedVisibility(
                 visible = visible,
                 enter = slideInVertically(

@@ -26,6 +26,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -74,7 +75,6 @@ fun RegistrationScreenFragment(
      onRegister:(authState:AuthState) -> Unit,
      goToLogin: () -> Unit
 ){
-
     val context = LocalContext.current
     val email = remember {
         mutableStateOf(authState.user.email)
@@ -82,30 +82,24 @@ fun RegistrationScreenFragment(
     val password = remember {
         mutableStateOf(authState.user.password)
     }
-
     val nickname = remember {
         mutableStateOf(authState.user.name)
     }
     val repeatedPassword = remember {
         mutableStateOf(authState.user.password)
     }
-
     val passwordVisibility = remember {
         mutableStateOf(false)
     }
-
     val repeatedPasswordVisibility = remember {
         mutableStateOf(false)
     }
-
     val passwordMatch = remember {
         mutableStateOf(true)
     }
-
     val user = remember {
         mutableStateOf(authState.user)
     }
-
     val isNameEmpty = remember {
         mutableStateOf(false)
     }
@@ -118,22 +112,21 @@ fun RegistrationScreenFragment(
     val isRepeatedEmpty = remember {
         mutableStateOf(false)
     }
-
-
     Column(modifier = Modifier
-        .background(DarkBackground)
+        .background(MaterialTheme.colorScheme.primary)
         .fillMaxWidth()
         .padding(start = 14.dp, end = 14.dp, bottom = 50.dp)){
         Card(modifier = Modifier
             .fillMaxWidth()
             .height(110.dp)
-            .background(DarkBackground),
+            .background(MaterialTheme.colorScheme.primary),
             shape = RoundedCornerShape(topStart = 34.dp, topEnd = 34.dp)
         ){
             Box(modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.horizontalGradient(listOf(RegLightPurple, RegDarkPurple)),
+                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.onPrimary,
+                        MaterialTheme.colorScheme.outlineVariant)),
                     alpha = 0.8f
                 )){
                 Image(modifier = Modifier
@@ -152,15 +145,15 @@ fun RegistrationScreenFragment(
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .background(color = DarkBackground, shape = RoundedCornerShape(size = 0.dp))
+                .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(size = 0.dp))
                 .padding(start = 16.dp, top = 25.dp, end = 16.dp)){
                 Text(text = "Create account",
                     style = TextStyle(
                         fontSize = 22.sp,
                         lineHeight = 28.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         fontWeight = FontWeight(700),
-                        color = Color(0xFFFFFFFF)
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 )
                 TextField(modifier = Modifier
@@ -169,20 +162,31 @@ fun RegistrationScreenFragment(
                     .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = nickname.value,
-                    label = {Text(text = "Your name")},
+                    label = {Text(text = "Your name",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
+                        )},
                     onValueChange = {
                         nickname.value = it
                         if(it.isNotBlank()) isNameEmpty.value = false
-                        Log.d("NAME CHANGED", nickname.value.toString())},
+                        },
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
                     colors = if (!isNameEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
+                        )
                     } else {
                         TextFieldDefaults.textFieldColors(
                             unfocusedTextColor = Red,
@@ -191,6 +195,11 @@ fun RegistrationScreenFragment(
                             unfocusedLabelColor = Red,
                             focusedLabelColor = Red,
                             disabledLabelColor = Red,
+                            errorLabelColor = Red,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     })
                 TextField(modifier = Modifier
@@ -199,7 +208,9 @@ fun RegistrationScreenFragment(
                     .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = email.value,
-                    label = {Text(text = "Your email")},
+                    label = {Text(text = "Your email",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)))
+                    },
                     onValueChange = {
                         email.value=it
                         if(it.isNotBlank()) isEmailEmpty.value = false
@@ -207,13 +218,22 @@ fun RegistrationScreenFragment(
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     colors = if (!isEmailEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
+                        )
                     } else {
                         TextFieldDefaults.textFieldColors(
                             unfocusedTextColor = Red,
@@ -222,6 +242,11 @@ fun RegistrationScreenFragment(
                             unfocusedLabelColor = Red,
                             focusedLabelColor = Red,
                             disabledLabelColor = Red,
+                            errorLabelColor = Red,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     }
                 )
@@ -231,7 +256,9 @@ fun RegistrationScreenFragment(
                     .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = password.value,
-                    label = {Text(text = "Password")},
+                    label = {Text(text = "Password",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
+                        )},
                     onValueChange = {
                         password.value=it
                         if(it.isNotBlank()) isPasswordEmpty.value = false
@@ -239,7 +266,7 @@ fun RegistrationScreenFragment(
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
@@ -266,7 +293,16 @@ fun RegistrationScreenFragment(
                     if(passwordVisibility.value) VisualTransformation.None
                         else PasswordVisualTransformation(),
                     colors = if (passwordMatch.value && !isPasswordEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
+                        )
                     } else {
                         TextFieldDefaults.textFieldColors(
                             unfocusedTextColor = Red,
@@ -275,6 +311,11 @@ fun RegistrationScreenFragment(
                             unfocusedLabelColor = Red,
                             focusedLabelColor = Red,
                             disabledLabelColor = Red,
+                            errorLabelColor = Red,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     }
                 )
@@ -284,7 +325,9 @@ fun RegistrationScreenFragment(
                     .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = repeatedPassword.value,
-                    label = {Text(text = "Repeat password")},
+                    label = {Text(text = "Repeat password",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
+                        )},
                     onValueChange = {
                         repeatedPassword.value=it
                         if(it.isNotBlank()) isRepeatedEmpty.value = false
@@ -292,7 +335,7 @@ fun RegistrationScreenFragment(
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
@@ -319,7 +362,16 @@ fun RegistrationScreenFragment(
                     if(repeatedPasswordVisibility.value) VisualTransformation.None
                     else PasswordVisualTransformation(),
                     colors = if (passwordMatch.value && !isRepeatedEmpty.value) {
-                        TextFieldDefaults.textFieldColors()
+                        TextFieldDefaults.textFieldColors(
+                            disabledLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            focusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            errorLabelColor = MaterialTheme.colorScheme.onTertiary,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
+                        )
                     } else {
                         TextFieldDefaults.textFieldColors(
                             unfocusedTextColor = Red,
@@ -328,6 +380,11 @@ fun RegistrationScreenFragment(
                             unfocusedLabelColor = Red,
                             focusedLabelColor = Red,
                             disabledLabelColor = Red,
+                            errorLabelColor = Red,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            cursorColor = MaterialTheme.colorScheme.onTertiary,
+                            errorCursorColor = MaterialTheme.colorScheme.onTertiary
                         )
                     }
                 )
@@ -335,7 +392,7 @@ fun RegistrationScreenFragment(
                     text = "The password must contain a  8 characters at least including 1 uppercase letter, 1 number and 1 special character.",
                     style = TextStyle(
                         fontSize = 13.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
@@ -356,18 +413,16 @@ fun RegistrationScreenFragment(
                         text = "Then you can log into your account",
                         style = TextStyle(
                             fontSize = 22.sp,
-                            fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                             fontWeight = FontWeight(700),
-                            color = Color(0xFFFFFFFF),)
+                            color = MaterialTheme.colorScheme.onTertiary)
                     )
                     TextButton(
                         onClick = {
-
                             isNameEmpty.value = nickname.value.isBlank()
                             isEmailEmpty.value = email.value.isBlank()
                             isPasswordEmpty.value = password.value.isBlank()
                             isRepeatedEmpty.value = repeatedPassword.value.isBlank()
-
                             if(passwordMatch.value
                                 && !isNameEmpty.value
                                 && !isEmailEmpty.value
@@ -399,16 +454,16 @@ fun RegistrationScreenFragment(
                             .wrapContentWidth()
                             .wrapContentHeight()
                             .background(
-                                color = Color(0xFFD1D1D1),
+                                color = MaterialTheme.colorScheme.secondaryContainer,
                                 shape = RoundedCornerShape(size = 38.dp)
                             )
                     ) {
                         Text(text = "Create",
                             style = TextStyle(
                                 fontSize = 17.sp,
-                                fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFF979797)
+                                color = MaterialTheme.colorScheme.onTertiary
                             )
                         )
                     }

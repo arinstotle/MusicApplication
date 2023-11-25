@@ -92,7 +92,7 @@ fun SongCard(song: SongUI, onClick: (SongUI) -> Unit) {
                     style = TextStyle(
                         fontSize = 13.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         color = MaterialTheme.colorScheme.onTertiary
                     ),
                     fontWeight = FontWeight.Bold,
@@ -105,7 +105,7 @@ fun SongCard(song: SongUI, onClick: (SongUI) -> Unit) {
                     style = TextStyle(
                         fontSize = 11.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         color = MaterialTheme.colorScheme.tertiary),
                     fontSize = 14.sp,
                     maxLines = 1,
@@ -117,7 +117,7 @@ fun SongCard(song: SongUI, onClick: (SongUI) -> Unit) {
                 style = TextStyle(
                     fontSize = 11.sp,
                     fontWeight = FontWeight(600),
-                    fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                     color = MaterialTheme.colorScheme.onTertiary
                 ),
                 fontWeight = FontWeight.Bold,
@@ -152,19 +152,20 @@ fun MediaPlayerCard(modifier: Modifier = Modifier, song: SongUI) {
                 .fillMaxWidth()
         ) {
             Image(painter = painterResource(id = R.drawable.ic_launcher_foreground), contentDescription = null)
-
             Spacer(modifier = Modifier.width(8.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = song.title,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = song.artist,
                     fontSize = 12.sp,
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

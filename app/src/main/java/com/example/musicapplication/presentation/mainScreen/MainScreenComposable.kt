@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -69,6 +71,8 @@ import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.theme.DarkBackground
+import com.example.musicapplication.presentation.theme.MtsRed
+import com.example.musicapplication.presentation.theme.MtsTextWhite
 import com.example.musicapplication.presentation.viewModels.MainScreenViewModel
 import com.example.musicapplication.utils.ConnectivityObserver
 import kotlinx.coroutines.delay
@@ -109,7 +113,7 @@ fun MainScreen(
                                     bottomEnd = 16.dp
                                 )
                             )
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .background(MaterialTheme.colorScheme.outlineVariant)
                     ) {
                         GreetingSection(
                             navController, iconClick = {
@@ -137,7 +141,8 @@ fun MainScreen(
                                     .background(DarkBackground)
                             ) {
                                 CircularProgressIndicator(
-                                    modifier = Modifier.align(Alignment.Center)
+                                    modifier = Modifier.align(Alignment.Center),
+                                    trackColor = MtsRed
                                 )
                             }
                         }
@@ -153,7 +158,7 @@ fun MainScreen(
                                 style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight(600),
-                                    fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                                     color = MaterialTheme.colorScheme.onSurface
                                 ),
                                 fontWeight = FontWeight.Bold,
@@ -202,7 +207,6 @@ fun GreetingSection(
     name: String = "John",
     imageResource: Int = R.drawable.sample_avatar,
     iconClick: () -> Unit = {
-
     }
 ) {
     Card(
@@ -210,7 +214,7 @@ fun GreetingSection(
             .fillMaxWidth()
             .padding(15.dp)
             .background(
-                MaterialTheme.colorScheme.secondaryContainer,
+                MaterialTheme.colorScheme.outlineVariant
             )
     ) {
         Row(
@@ -219,7 +223,7 @@ fun GreetingSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    MaterialTheme.colorScheme.secondaryContainer,
+                    MaterialTheme.colorScheme.outlineVariant
                 )
         ) {
             Column(
@@ -227,7 +231,7 @@ fun GreetingSection(
                 modifier = Modifier
                     .padding(8.dp)
                     .background(
-                        MaterialTheme.colorScheme.secondaryContainer,
+                        MaterialTheme.colorScheme.outlineVariant
                     )
                     .clickable(
                         enabled = true,
@@ -237,7 +241,7 @@ fun GreetingSection(
                     )
             ) {
                 Image(
-                    painter = painterResource(R.drawable.sample_avatar),
+                    painter = painterResource(R.drawable.mts_avatar),
                     contentDescription = "avatar",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -248,22 +252,23 @@ fun GreetingSection(
                     "Hello, $name!",
                     Modifier.padding(top = 8.dp),
                     style = TextStyle(
-                        fontSize = 13.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
-                        color = MaterialTheme.colorScheme.onTertiary
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
+                        color = MtsTextWhite
                     ),
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "Listen and Enjoy!",
                     style = TextStyle(
-                        fontSize = 11.sp,
+                        fontSize = 13.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
-                        color = MaterialTheme.colorScheme.tertiary
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
+                        color = MtsRed
                     ),
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -276,9 +281,9 @@ fun GreetingSection(
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.search),
                     contentDescription = "SearchButton",
-                    tint = Color.Gray,
+                    tint = MtsRed,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(35.dp)
                 )
             }
         }
@@ -351,13 +356,13 @@ fun RoomCard(
             Text(
                 text = room.title,
                 style = TextStyle(
-                    fontSize = 13.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight(600),
-                    fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                     color = MaterialTheme.colorScheme.onTertiary
                 ),
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 lineHeight = 26.sp,
@@ -367,13 +372,14 @@ fun RoomCard(
                 text = "Enter",
                 color = MaterialTheme.colorScheme.onTertiary,
                 fontSize = 14.sp,
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .clickable {
                     }
                     .align(Alignment.BottomEnd)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(MaterialTheme.colorScheme.outlineVariant)
                     .padding(vertical = 6.dp, horizontal = 15.dp)
             )
         }
@@ -382,7 +388,7 @@ fun RoomCard(
 
 @ExperimentalFoundationApi
 @Composable
-fun RoomSection(rooms: List<Room>, isLoading : Boolean) {
+fun RoomSection(rooms: List<Room>, isLoading: Boolean) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             color = MaterialTheme.colorScheme.onTertiary,
@@ -390,7 +396,7 @@ fun RoomSection(rooms: List<Room>, isLoading : Boolean) {
             style = TextStyle(
                 fontSize = 13.sp,
                 fontWeight = FontWeight(600),
-                fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                 color = MaterialTheme.colorScheme.onTertiary
             ),
             fontWeight = FontWeight.Bold,
@@ -399,7 +405,9 @@ fun RoomSection(rooms: List<Room>, isLoading : Boolean) {
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(16.dp)
         )
-        LazyColumn(
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp)
         ) {
@@ -440,6 +448,7 @@ data class Room(
     val mediumColor: Color,
     val darkColor: Color
 )
+
 fun Path.standardQuadFromTo(from: Offset, to: Offset) {
     quadraticBezierTo(
         from.x,
@@ -448,30 +457,3 @@ fun Path.standardQuadFromTo(from: Offset, to: Offset) {
         Math.abs(from.y + to.y) / 2f
     )
 }
-
-//val mockedRooms = listOf(
-//    Room(
-//        title = "Room1",
-//        MaterialTheme.colorScheme.secondary,
-//        MaterialTheme.colorScheme.onPrimary,
-//        MaterialTheme.colorScheme.surface
-//    ),
-//    Room(
-//        title = "Room2",
-//        MaterialTheme.colorScheme.secondary,
-//        MaterialTheme.colorScheme.onPrimary,
-//        MaterialTheme.colorScheme.surface
-//    ),
-//    Room(
-//        title = "Room3",
-//        MaterialTheme.colorScheme.secondary,
-//        MaterialTheme.colorScheme.onPrimary,
-//        MaterialTheme.colorScheme.surface
-//    ),
-//    Room(
-//        title = "Room4",
-//        MaterialTheme.colorScheme.secondary,
-//        MaterialTheme.colorScheme.onPrimary,
-//        MaterialTheme.colorScheme.surface
-//    )
-//)
