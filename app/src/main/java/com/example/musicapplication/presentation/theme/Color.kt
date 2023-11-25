@@ -38,6 +38,8 @@ val MtsRed2 = Color(0xFF992E34)
 val MtsRed3 = Color(0xFF7C0006)
 val MtsRed4 = Color(0xFFA53238)
 val MtsRed5 = Color(0xFFFF353F)
+val DarkRed = Color(0xFA440003)
+val VeryDarkRed = Color(0xFA1F0000)
 
 
 val MtsBackgroundBlack = Color(0xFF000000)

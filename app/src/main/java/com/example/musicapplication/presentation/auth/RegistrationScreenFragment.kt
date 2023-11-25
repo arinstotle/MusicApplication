@@ -125,8 +125,8 @@ fun RegistrationScreenFragment(
             Box(modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.secondary,
-                        MaterialTheme.colorScheme.surface)),
+                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.onPrimary,
+                        MaterialTheme.colorScheme.outlineVariant)),
                     alpha = 0.8f
                 )){
                 Image(modifier = Modifier
@@ -151,7 +151,7 @@ fun RegistrationScreenFragment(
                     style = TextStyle(
                         fontSize = 22.sp,
                         lineHeight = 28.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         fontWeight = FontWeight(700),
                         color = MaterialTheme.colorScheme.onTertiary
                     )
@@ -162,7 +162,9 @@ fun RegistrationScreenFragment(
                     .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = nickname.value,
-                    label = {Text(text = "Your name")},
+                    label = {Text(text = "Your name",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
+                        )},
                     onValueChange = {
                         nickname.value = it
                         if(it.isNotBlank()) isNameEmpty.value = false
@@ -170,7 +172,7 @@ fun RegistrationScreenFragment(
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
@@ -206,7 +208,9 @@ fun RegistrationScreenFragment(
                     .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = email.value,
-                    label = {Text(text = "Your email")},
+                    label = {Text(text = "Your email",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)))
+                    },
                     onValueChange = {
                         email.value=it
                         if(it.isNotBlank()) isEmailEmpty.value = false
@@ -214,7 +218,7 @@ fun RegistrationScreenFragment(
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
@@ -252,7 +256,9 @@ fun RegistrationScreenFragment(
                     .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = password.value,
-                    label = {Text(text = "Password")},
+                    label = {Text(text = "Password",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
+                        )},
                     onValueChange = {
                         password.value=it
                         if(it.isNotBlank()) isPasswordEmpty.value = false
@@ -260,7 +266,7 @@ fun RegistrationScreenFragment(
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
@@ -319,7 +325,9 @@ fun RegistrationScreenFragment(
                     .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = repeatedPassword.value,
-                    label = {Text(text = "Repeat password")},
+                    label = {Text(text = "Repeat password",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
+                        )},
                     onValueChange = {
                         repeatedPassword.value=it
                         if(it.isNotBlank()) isRepeatedEmpty.value = false
@@ -327,7 +335,7 @@ fun RegistrationScreenFragment(
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
@@ -384,7 +392,7 @@ fun RegistrationScreenFragment(
                     text = "The password must contain a  8 characters at least including 1 uppercase letter, 1 number and 1 special character.",
                     style = TextStyle(
                         fontSize = 13.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = TextWhite
                     ),
@@ -405,18 +413,16 @@ fun RegistrationScreenFragment(
                         text = "Then you can log into your account",
                         style = TextStyle(
                             fontSize = 22.sp,
-                            fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                             fontWeight = FontWeight(700),
                             color = MaterialTheme.colorScheme.onTertiary)
                     )
                     TextButton(
                         onClick = {
-
                             isNameEmpty.value = nickname.value.isBlank()
                             isEmailEmpty.value = email.value.isBlank()
                             isPasswordEmpty.value = password.value.isBlank()
                             isRepeatedEmpty.value = repeatedPassword.value.isBlank()
-
                             if(passwordMatch.value
                                 && !isNameEmpty.value
                                 && !isEmailEmpty.value
@@ -455,7 +461,7 @@ fun RegistrationScreenFragment(
                         Text(text = "Create",
                             style = TextStyle(
                                 fontSize = 17.sp,
-                                fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                                 fontWeight = FontWeight(400),
                                 color = MaterialTheme.colorScheme.onTertiary
                             )

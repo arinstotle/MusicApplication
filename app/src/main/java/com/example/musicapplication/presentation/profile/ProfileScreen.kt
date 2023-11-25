@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -46,6 +47,7 @@ import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.theme.DarkBackground
+import com.example.musicapplication.presentation.theme.MtsRed
 import com.example.musicapplication.presentation.theme.TextWhite
 import com.example.musicapplication.presentation.viewModels.ProfileViewModel
 
@@ -56,7 +58,6 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     onLogout:()-> Unit = { viewModel.onEvent(ProfileEvent.OnLogout) }
 ) {
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -70,7 +71,7 @@ fun ProfileScreen(
                         text = NavigationRouter.currentScreen.value.title,
                         style = TextStyle(
                             fontSize = 21.sp,
-                            fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                             color = TextWhite
                         )
                     )
@@ -85,9 +86,10 @@ fun ProfileScreen(
                         }
                     }) {
                         Icon(
+                            modifier = Modifier.size(35.dp),
                             imageVector = Icons.Default.ExitToApp,
                             contentDescription = "Logout",
-                            tint = Color.White
+                            tint = MtsRed
                         )
                     }
                 }
@@ -123,12 +125,12 @@ fun ProfileScreenFragment(
             bottom = paddingValues.calculateBottomPadding())){
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(user.photoUrl?: R.drawable.sample_avatar)
+                .data(user.photoUrl?: R.drawable.mts_avatar)
                 .crossfade(true)
                 .build(),
-            placeholder = painterResource(R.drawable.sample_avatar),
+            placeholder = painterResource(R.drawable.mts_avatar),
             contentDescription = "profile_photo",
-            contentScale = ContentScale.FillBounds,
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .width(200.dp)
                 .height(200.dp)
@@ -142,7 +144,7 @@ fun ProfileScreenFragment(
             color = TextWhite,
             style = TextStyle(
                 fontSize = 26.sp,
-                fontFamily = FontFamily(Font(R.font.spartan_extrabold, FontWeight.Normal))
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium, FontWeight.Normal))
             )
         )
         Text(modifier = Modifier
@@ -152,7 +154,7 @@ fun ProfileScreenFragment(
             color = TextWhite,
             style = TextStyle(
                 fontSize = 16.sp,
-                fontFamily = FontFamily(Font(R.font.spartan_extrabold, FontWeight.Normal))
+                fontFamily = FontFamily(Font(R.font.mts_wide_medium, FontWeight.Normal))
             )
         )
     }

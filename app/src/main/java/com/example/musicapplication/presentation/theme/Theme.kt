@@ -30,22 +30,28 @@ private val DarkColorScheme = darkColorScheme(
     onTertiary = MtsTextWhite,
     surface = MtsRed3,
     secondaryContainer = MtsRed6,
-    onSurface = MtsBackgroundBlack
+    onSurface = MtsBackgroundBlack,
+    scrim = MtsTextWhite,
+    outlineVariant = DarkRed
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = MtsTextWhite,
+    //задники
+    primary = MtsBackgroundGreyDark,
+    //красное
     onPrimary = MtsRed,
     primaryContainer = MtsRed2,
     secondary = MtsRed5,
-    onSecondary = MtsRed4,
-    tertiary = MtsBackgroundGreyDark,
+    onSecondary = MtsRed2,
+    tertiary = MtsBackgroundGreyLight,
     tertiaryContainer = MtsIconsGrey,
-    onTertiaryContainer = MtsIconsGrey,
-    onTertiary = MtsBackgroundBlack,
+    onTertiaryContainer = MtsTextGrey,
+    onTertiary = MtsTextWhite,
     surface = MtsRed3,
     secondaryContainer = MtsRed6,
-    onSurface = MtsBackgroundBlack
+    onSurface = MtsBackgroundBlack,
+    scrim = MtsTextWhite,
+    outlineVariant = DarkRed
 )
 
 @Composable

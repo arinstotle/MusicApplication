@@ -95,8 +95,8 @@ fun LoginScreenFragment(
             Box(modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.secondary,
-                        MaterialTheme.colorScheme.surface)),
+                    Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.onPrimary,
+                        MaterialTheme.colorScheme.outlineVariant)),
                     alpha = 0.8f
                 )){
                 Image(modifier = Modifier
@@ -121,13 +121,15 @@ fun LoginScreenFragment(
                     style = TextStyle(
                         fontSize = 22.sp,
                         lineHeight = 28.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         fontWeight = FontWeight(700),
                         color = MaterialTheme.colorScheme.onTertiary
                     )
                 )
                 TextField(value = email.value,
-                    label = {Text(text = "Your email")},
+                    label = {Text(text = "Your email",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
+                        )},
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 17.dp)
@@ -140,7 +142,7 @@ fun LoginScreenFragment(
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = MaterialTheme.colorScheme.onTertiary
                     ),
@@ -178,7 +180,9 @@ fun LoginScreenFragment(
                     .wrapContentHeight(),
                     shape = RoundedCornerShape(5.dp),
                     value = password.value,
-                    label = {Text(text = "Password")},
+                    label = {Text(text = "Password",
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
+                        )},
                     onValueChange = {
                         password.value=it
                         if(it.isNotBlank()) isPasswordEmpty.value = false
@@ -186,7 +190,7 @@ fun LoginScreenFragment(
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                         fontWeight = FontWeight(400),
                         color = MaterialTheme.colorScheme.onTertiary
                     ),
@@ -253,7 +257,7 @@ fun LoginScreenFragment(
                         Text(text = "No account?",
                             style = TextStyle(
                                 fontSize = 22.sp,
-                                fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                                 fontWeight = FontWeight(700),
                                 color = MaterialTheme.colorScheme.onTertiary
                             )
@@ -261,7 +265,7 @@ fun LoginScreenFragment(
                         ClickableText(text = AnnotatedString("Registration"),
                             style = TextStyle(
                                 fontSize = 13.sp,
-                                fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                                fontFamily = FontFamily(Font(R.font.mts_wide_regular)),
                                 fontWeight = FontWeight(400),
                                 color = MaterialTheme.colorScheme.onPrimary),
                             onClick = {
@@ -305,7 +309,7 @@ fun LoginScreenFragment(
                         Text(text = "Login",
                             style = TextStyle(
                                 fontSize = 17.sp,
-                                fontFamily = FontFamily(Font(R.font.spartan_regular)),
+                                fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                                 fontWeight = FontWeight(400),
                                 color = MaterialTheme.colorScheme.onTertiary
                             )

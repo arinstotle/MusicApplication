@@ -75,7 +75,7 @@ fun StreamParticipantsComposable(participantsList: List<ParticipantUI>,
                 text = "Add Participant",
                 style = TextStyle(
                     fontSize = 13.sp,
-                    fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                    fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                     fontWeight = FontWeight(500),
                     color = MaterialTheme.colorScheme.tertiary,
                     ),
@@ -132,7 +132,7 @@ fun ParticipantCard(participant: ParticipantUI, removeParticipantClick: () -> Un
                     style = TextStyle(
                         fontSize = 13.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                         color = MaterialTheme.colorScheme.onTertiary
                         ),
                     fontWeight = FontWeight.Bold,
@@ -146,7 +146,7 @@ fun ParticipantCard(participant: ParticipantUI, removeParticipantClick: () -> Un
                         style = TextStyle(
                             fontSize = 11.sp,
                             fontWeight = FontWeight(600),
-                            fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                            fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
                             color = MaterialTheme.colorScheme.tertiary),
                         fontSize = 14.sp,
                         maxLines = 1,

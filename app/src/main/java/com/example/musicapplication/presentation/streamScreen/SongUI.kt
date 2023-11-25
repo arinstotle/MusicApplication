@@ -7,7 +7,6 @@ data class SongUI(
     val duration: String,
     val media: String
 )
-
 val songList = listOf(
     SongUI(
         imageUrl = "url_1",

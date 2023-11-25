@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.rememberNavController
 import com.example.musicapplication.navigation.Navigation
@@ -21,6 +22,9 @@ import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.theme.DarkBackground
 import com.example.musicapplication.presentation.theme.MusicApplicationTheme
 import com.example.musicapplication.presentation.bottomNavigation.CustomBottomNavigation
+import com.example.musicapplication.presentation.theme.DarkRed
+import com.example.musicapplication.presentation.theme.MtsBackgroundGreyDark
+import com.example.musicapplication.presentation.theme.MtsRed
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -31,8 +35,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            window.statusBarColor = MaterialTheme.colorScheme.background.toArgb()
-            window.navigationBarColor = MaterialTheme.colorScheme.background.toArgb()
+            window.statusBarColor = MtsBackgroundGreyDark.toArgb()
+            window.navigationBarColor = MtsBackgroundGreyDark.toArgb()
             MusicApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize().background(DarkBackground),

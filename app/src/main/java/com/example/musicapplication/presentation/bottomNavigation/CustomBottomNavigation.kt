@@ -42,7 +42,7 @@ fun CustomBottomNavigation(
     val items = Screen.BottomScreens.list
     Row(
         modifier= Modifier
-            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .background(MaterialTheme.colorScheme.primary)
             .padding(8.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -85,7 +85,7 @@ fun CustomButtonNavigationItem(
             Icon(
                 modifier = Modifier.size(30.dp),
                 imageVector = ImageVector.vectorResource(id = item.icon),
-                contentDescription =null,
+                contentDescription = null,
                 tint = contentColor,
             )
             Spacer(modifier = Modifier.width(4.dp))
@@ -96,8 +96,8 @@ fun CustomButtonNavigationItem(
                     style = TextStyle(
                         fontSize = 13.sp,
                         fontWeight = FontWeight(600),
-                        fontFamily = FontFamily(Font(R.font.spartan_extrabold)),
-                    ),
+                        fontFamily = FontFamily(Font(R.font.mts_wide_medium)),
+                        ),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                     maxLines = 1,
