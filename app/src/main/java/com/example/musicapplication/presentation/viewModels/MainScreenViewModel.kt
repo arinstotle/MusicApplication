@@ -7,24 +7,29 @@ import androidx.lifecycle.viewModelScope
 import com.example.musicapplication.data.network.repo.RemoteRepositoryImpl
 import com.example.musicapplication.data.sharedPref.SharedPreferencesHelper
 import com.example.musicapplication.domain.DataState
+import com.example.musicapplication.domain.usecases.EnterToTheRoomUseCase
 import com.example.musicapplication.domain.usecases.GetAllRoomsUseCase
 import com.example.musicapplication.domain.usecases.GetUsersRoomsUseCase
 import com.example.musicapplication.model.OrdersTypes
 import com.example.musicapplication.model.RoomItem
 import com.example.musicapplication.model.UserItem
 import com.example.musicapplication.presentation.UiState
+import com.example.musicapplication.presentation.mainScreen.Room
 import com.example.musicapplication.utils.ConnectivityObserver
 import com.example.musicapplication.utils.NetworkConnectivityObserver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -36,6 +41,7 @@ class MainScreenViewModel @Inject constructor(
     private val sharedPreferencesHelper: SharedPreferencesHelper,
     private val getUsersRoomsUseCase: GetUsersRoomsUseCase,
     private val connectivityObserver: NetworkConnectivityObserver,
+    private val enterToTheRoomUseCase: EnterToTheRoomUseCase,
     ): ViewModel() {
 
     private val _connectionState = MutableStateFlow(ConnectivityObserver.Status.Unavailable)
@@ -103,6 +109,40 @@ class MainScreenViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun enterToTheRoom(room: Room): Flow<UiState<Any>> = flow {
+        if (room.isPrivate) {
+            enterToTheRoomUseCase(room.id!!, room.password!!).collect { state ->
+                when (state) {
+                    is DataState.Initial -> emit(UiState.Start)
+                    is DataState.Result -> emit(UiState.Success(state.data))
+                    is DataState.Exception -> emit(
+                        UiState.FatalError(
+                            state.cause.message ?: state.cause.stackTraceToString()
+                        )
+                    )
+                    else -> {
+                    }
+                }
+            }
+        } else {
+            enterToTheRoomUseCase(room.id!!).collect { state ->
+                when (state) {
+                    is DataState.Initial -> emit(UiState.Start)
+                    is DataState.Result -> emit(UiState.Success(state.data))
+                    is DataState.Exception -> emit(
+                        UiState.FatalError(
+                            state.cause.message ?: state.cause.stackTraceToString()
+                        )
+                    )
+                    else -> {
+                    }
+                }
+            }
+        }
+    }.catch {
+        emit(UiState.FatalError(it.cause?.message.toString()))
     }
 
 

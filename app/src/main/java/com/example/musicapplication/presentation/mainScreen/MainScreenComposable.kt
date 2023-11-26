@@ -1,5 +1,6 @@
 package com.example.musicapplication.presentation.mainScreen
 
+import android.widget.Toast
 import androidx.compose.animation.core.*
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -52,6 +53,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
@@ -67,7 +69,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.musicapplication.R
+import com.example.musicapplication.model.MessageItem
 import com.example.musicapplication.model.RoomItem
+import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.UiState
 import com.example.musicapplication.presentation.theme.DarkBackground
@@ -76,6 +80,7 @@ import com.example.musicapplication.presentation.theme.MtsTextWhite
 import com.example.musicapplication.presentation.viewModels.MainScreenViewModel
 import com.example.musicapplication.utils.ConnectivityObserver
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -83,11 +88,13 @@ fun MainScreen(
     navController: NavController,
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
+    val coroutineScope = rememberCoroutineScope()
     var isLoading by remember {
         mutableStateOf(viewModel.isLoading.value)
     }
     val connectionState = viewModel.connectionState.collectAsState()
     val rooms by viewModel.allRooms.collectAsState()
+    val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         delay(4000)
         isLoading = false
@@ -123,6 +130,37 @@ fun MainScreen(
                         )
                     }
                     if (connectionState.value == ConnectivityObserver.Status.Available) {
+                        val lambda: (Room) -> Unit = { roomItem ->
+                            coroutineScope.launch {
+                                viewModel.enterToTheRoom(roomItem).collect { enterUiState ->
+                                    when (enterUiState) {
+                                        is UiState.Success -> {
+                                            Toast.makeText(
+                                                context,
+                                                "Entering...",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            NavigationRouter.prevScreen.value = Screen.SearchScreen
+                                            navController.navigate(
+                                                Screen.StreamScreen.withArgs(
+                                                    ((enterUiState.data
+                                                            as RoomItem).id).toString()
+                                                )
+                                            )
+                                        }
+                                        is UiState.Error -> {
+                                            Toast.makeText(
+                                                context,
+                                                "Not entering, try again",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                        else -> {
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         if (rooms is UiState.Success<*>) {
                             RoomSection(
                                 isLoading = isLoading,
@@ -131,9 +169,13 @@ fun MainScreen(
                                         it.roomName,
                                         MaterialTheme.colorScheme.secondary,
                                         MaterialTheme.colorScheme.onPrimary,
-                                        MaterialTheme.colorScheme.surface
+                                        MaterialTheme.colorScheme.surface,
+                                        it.id,
+                                        it.password,
+                                        it.isPrivate
                                     )
-                                }.toList()
+                                }.toList(),
+                                roomClick = lambda
                             )
                         } else {
                             Box(
@@ -292,7 +334,7 @@ fun GreetingSection(
 
 @Composable
 fun RoomCard(
-    room: Room
+    room: Room, enterClick: (Room) -> Unit
 ) {
     BoxWithConstraints(
         modifier = Modifier
@@ -376,6 +418,7 @@ fun RoomCard(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .clickable {
+                        enterClick.invoke(room)
                     }
                     .align(Alignment.BottomEnd)
                     .clip(RoundedCornerShape(10.dp))
@@ -388,7 +431,7 @@ fun RoomCard(
 
 @ExperimentalFoundationApi
 @Composable
-fun RoomSection(rooms: List<Room>, isLoading: Boolean) {
+fun RoomSection(rooms: List<Room>, isLoading: Boolean, roomClick: (Room) -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             color = MaterialTheme.colorScheme.onTertiary,
@@ -413,7 +456,7 @@ fun RoomSection(rooms: List<Room>, isLoading: Boolean) {
         ) {
             items(rooms.size) {
                 ShimmerListItem(isLoading = isLoading, contentAfterLoading = {
-                    RoomCard(room = rooms[it])
+                    RoomCard(room = rooms[it], roomClick)
                 })
             }
         }
@@ -446,7 +489,10 @@ data class Room(
     val title: String,
     val lightColor: Color,
     val mediumColor: Color,
-    val darkColor: Color
+    val darkColor: Color,
+    val id: Int?,
+    val password: String?,
+    val isPrivate: Boolean,
 )
 
 fun Path.standardQuadFromTo(from: Offset, to: Offset) {
