@@ -21,6 +21,18 @@
 
 7. Пользователии могут общаться в чате
 
+
+
+
+
+https://github.com/arinstotle/MusicApplication/assets/58369755/fe1e44c8-ba36-48ed-9d34-f87ee77ce96f
+
+
+
+https://github.com/arinstotle/MusicApplication/assets/58369755/211f2f77-7e5c-4594-852a-96f471f9ff12
+
+
+
 Состав команды:
 
 Максуд Сайдходжаев - backend
