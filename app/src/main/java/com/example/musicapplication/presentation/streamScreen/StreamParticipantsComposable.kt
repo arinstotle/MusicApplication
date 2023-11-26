@@ -2,6 +2,8 @@ package com.example.musicapplication.presentation.streamScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,17 +15,27 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,17 +48,31 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.musicapplication.R
 
 @Composable
-fun StreamParticipantsComposable(participantsList: List<ParticipantUI>,
-                                 addParticipantClick: () -> Unit,
-                                 removeParticipantClick: () -> Unit) {
+fun StreamParticipantsComposable(
+    inviteEmail:String,
+    isInviteDialogShow:Boolean,
+    participantsList: List<ParticipantUI>,
+    onInviteClick: () -> Unit,
+    onHideDialog: () -> Unit,
+    addParticipant: (email:String) -> Unit,
+    removeParticipantClick: () -> Unit) {
+
+    val userEmail by remember {
+        mutableStateOf(inviteEmail)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,10 +81,14 @@ fun StreamParticipantsComposable(participantsList: List<ParticipantUI>,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp)
         ) {
             IconButton(
-                onClick = addParticipantClick,
+                onClick = {
+                    onInviteClick()
+                },
                 modifier = Modifier
                     .size(50.dp)
                     .background(MaterialTheme.colorScheme.tertiary, CircleShape)
@@ -70,6 +100,17 @@ fun StreamParticipantsComposable(participantsList: List<ParticipantUI>,
                     contentDescription = "Add participant",
                     tint = MaterialTheme.colorScheme.onTertiary
                 )
+            }
+            if(isInviteDialogShow){
+                EnterUserDataDialog(
+                    email = userEmail,
+                    onDismiss = {
+                        onHideDialog()
+                    },
+                    onConfirm = {
+                        addParticipant(it)
+                        onHideDialog()
+                    })
             }
             Text(
                 text = "Add Participant",
@@ -123,7 +164,9 @@ fun ParticipantCard(participant: ParticipantUI, removeParticipantClick: () -> Un
                 error = painterResource(id = R.drawable.sample_avatar),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.size(60.dp).clip(CircleShape)
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(CircleShape)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -167,4 +210,138 @@ fun ParticipantCard(participant: ParticipantUI, removeParticipantClick: () -> Un
             }
         }
     }
+}
+
+@Composable
+fun EnterUserDataDialog(
+    email: String,
+    onDismiss: () -> Unit,
+    onConfirm: (email:String) -> Unit
+) {
+    var userEmail by remember {
+        mutableStateOf(email)
+    }
+    Dialog(
+        onDismissRequest = {
+            onDismiss()
+        },
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
+    ) {
+        Card(
+            shape = RoundedCornerShape(15.dp),
+            modifier = Modifier
+                .fillMaxWidth(0.95f)
+                .border(
+                    2.dp,
+                    color = MaterialTheme.colorScheme.secondary,
+                    shape = RoundedCornerShape(15.dp)
+                ),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primary
+            )
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalArrangement = Arrangement.spacedBy(25.dp)
+            ){
+                Text(
+                    text = "Enter user email?",
+                    fontFamily = FontFamily(Font(R.font.spartan_bold)),
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center
+                )
+                EmailFieldComponent(labelValue = "User email", onChangeTextAction = {
+                    userEmail = it
+                })
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(30.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Button(
+                        onClick = {
+                            onDismiss()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                        ,
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            onConfirm(userEmail)
+                        },
+                        colors = ButtonDefaults.buttonColors(
+
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        shape = CircleShape
+                    ) {
+                        Text(
+                            text = "Confirm",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EmailFieldComponent(textValueStart : String = "",
+                        labelValue : String,
+                        onChangeTextAction: (String) -> Unit
+) {
+    val textValue = remember {
+        mutableStateOf(textValueStart)
+    }
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp)
+        ,
+        value = textValue.value,
+        onValueChange = { textValue.value = it
+            onChangeTextAction.invoke(it) },
+        shape = RoundedCornerShape(20.dp),
+        textStyle = MaterialTheme.typography.titleMedium.copy(
+            color = MaterialTheme.colorScheme.onSecondary,
+            fontFamily = FontFamily(Font(R.font.spartan_bold))
+        ),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.onSecondary,
+            focusedLabelColor = MaterialTheme.colorScheme.onSecondary,
+            cursorColor = MaterialTheme.colorScheme.onSecondary,
+            containerColor = MaterialTheme.colorScheme.onSurface
+        ),
+        label = {
+            Text(
+                text = labelValue,
+                fontFamily = FontFamily(Font(R.font.spartan_bold))
+            )
+        }
+    )
 }

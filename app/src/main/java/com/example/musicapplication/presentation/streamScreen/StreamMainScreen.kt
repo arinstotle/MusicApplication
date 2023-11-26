@@ -3,34 +3,63 @@ package com.example.musicapplication.presentation.streamScreen
 import android.util.Log
 import androidx.activity.OnBackPressedDispatcher
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.Navigation
+
 import com.example.musicapplication.chatioandroid.data.api.socketio.ChatViewModel
+
+import com.example.musicapplication.MainActivity
+
 import com.example.musicapplication.navigation.NavigationRouter
 import com.example.musicapplication.navigation.Screen
 import com.example.musicapplication.presentation.UiState
+import com.example.musicapplication.presentation.searchRoomScreen.CustomDialog
+import com.example.musicapplication.presentation.searchRoomScreen.PasswordTextFieldComponent
 import com.example.musicapplication.presentation.theme.MusicApplicationTheme
 import com.example.musicapplication.presentation.viewModels.StreamViewModel
+import com.example.musicapplication.utils.Constants
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
@@ -48,6 +77,11 @@ import kotlinx.coroutines.launch
     var currentSong by remember {
         mutableStateOf<SongUI?>(null)
     }
+
+    val inviteEmail = viewModel.inviteState.value
+
+    val activity = LocalContext.current as MainActivity
+
     MusicApplicationTheme {
         Scaffold(
             modifier = Modifier
@@ -111,10 +145,29 @@ import kotlinx.coroutines.launch
                         selectedChipIndex = 3
                     })
                 when (selectedChipIndex) {
-                    1 -> StreamParticipantsComposable(participantsList = roommates,
-                        addParticipantClick = {},
-                        removeParticipantClick = {})
+
                     2 -> StreamChatComposable()
+
+                    1 -> StreamParticipantsComposable(
+                        inviteEmail = inviteEmail,
+                        isInviteDialogShow = viewModel.isInviteDialogShown,
+                        participantsList = roommates,
+                        addParticipant = {
+                            viewModel.onEvent(StreamUserEvent.OnInviteEmailChange(it))
+                            activity.sendEmail(
+                                 it,
+                                 "Invitation to join the room!",
+                                 "${Constants.BASE_URL}${Constants.PATH_ROOMS_WITH_ID}${currentRoom.value.data!!.id}"
+                             )
+                              //viewModel.onEvent(StreamUserEvent.OnInvite(it))
+                        },
+                        removeParticipantClick = {},
+                        onInviteClick = {
+                            viewModel.onInviteUserClick()
+                                        },
+                        onHideDialog = {viewModel.onDismissInviteDialog()})
+                    2 -> Text("Тут будет чат")
+
                     3 -> StreamMusicQueueComposable(songList) { song ->
                         currentSong = song
                         showSongBottomSheet = true
@@ -125,3 +178,4 @@ import kotlinx.coroutines.launch
         }
     }
 }
+
