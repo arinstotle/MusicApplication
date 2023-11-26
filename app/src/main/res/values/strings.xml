@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MTStream</string>
+    <string name="asset_statements" translatable="false">[{ \"include\": \"https://85.193.80.129:8080/.well-known/assetlinks.json\" }]</string>
 </resources>

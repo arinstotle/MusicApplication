@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicApplication"
         tools:targetApi="31">
+        <meta-data
+            android:name="asset_statements"
+            android:resource="@string/asset_statements" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -25,9 +28,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="http" android:host="85.193.80.129:8080" android:pathPrefix="/rooms" />
             </intent-filter>
