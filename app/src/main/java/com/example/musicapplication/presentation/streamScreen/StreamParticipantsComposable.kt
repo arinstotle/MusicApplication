@@ -48,6 +48,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -61,9 +62,17 @@ import com.example.musicapplication.R
 @Composable
 fun StreamParticipantsComposable(
     inviteEmail:String,
+    isInviteDialogShow:Boolean,
     participantsList: List<ParticipantUI>,
-    addParticipantClick: (email:String) -> Unit,
+    onInviteClick: () -> Unit,
+    onHideDialog: () -> Unit,
+    addParticipant: (email:String) -> Unit,
     removeParticipantClick: () -> Unit) {
+
+    val userEmail by remember {
+        mutableStateOf(inviteEmail)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,16 +87,7 @@ fun StreamParticipantsComposable(
         ) {
             IconButton(
                 onClick = {
-                    EnterUserDataDialog(
-                        email = inviteEmail,
-                        onDismiss = {
-//                            viewModel.onDismissEnterDialog()
-//                            viewModel.unsetEnteringRoom()
-//                            viewModel.unsetEnteringEmail()
-                        },
-                        onConfirm = {
-                            addParticipantClick(inviteEmail) }
-                    )
+                    onInviteClick()
                 },
                 modifier = Modifier
                     .size(50.dp)
@@ -100,6 +100,17 @@ fun StreamParticipantsComposable(
                     contentDescription = "Add participant",
                     tint = MaterialTheme.colorScheme.onTertiary
                 )
+            }
+            if(isInviteDialogShow){
+                EnterUserDataDialog(
+                    email = userEmail,
+                    onDismiss = {
+                        onHideDialog()
+                    },
+                    onConfirm = {
+                        addParticipant(it)
+                        onHideDialog()
+                    })
             }
             Text(
                 text = "Add Participant",
@@ -205,7 +216,7 @@ fun ParticipantCard(participant: ParticipantUI, removeParticipantClick: () -> Un
 fun EnterUserDataDialog(
     email: String,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: (email:String) -> Unit
 ) {
     var userEmail by remember {
         mutableStateOf(email)
@@ -243,7 +254,7 @@ fun EnterUserDataDialog(
                     fontSize = 24.sp,
                     textAlign = TextAlign.Center
                 )
-                EmailFieldComponent(labelValue = "", onChangeTextAction = {
+                EmailFieldComponent(labelValue = "User email", onChangeTextAction = {
                     userEmail = it
                 })
                 Row(
@@ -273,7 +284,7 @@ fun EnterUserDataDialog(
                     }
                     Button(
                         onClick = {
-                            onConfirm()
+                            onConfirm(userEmail)
                         },
                         colors = ButtonDefaults.buttonColors(
 
@@ -300,8 +311,7 @@ fun EnterUserDataDialog(
 @Composable
 fun EmailFieldComponent(textValueStart : String = "",
                         labelValue : String,
-                        onChangeTextAction: (String) -> Unit,
-                        keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+                        onChangeTextAction: (String) -> Unit
 ) {
     val textValue = remember {
         mutableStateOf(textValueStart)
@@ -320,7 +330,7 @@ fun EmailFieldComponent(textValueStart : String = "",
             fontFamily = FontFamily(Font(R.font.spartan_bold))
         ),
         singleLine = true,
-        keyboardOptions = keyboardOptions,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = MaterialTheme.colorScheme.onSecondary,
             focusedLabelColor = MaterialTheme.colorScheme.onSecondary,

@@ -89,7 +89,7 @@ class MainActivity() : ComponentActivity() {
     }
 
     @SuppressLint("IntentReset")
-    private fun sendEmail(recipient: String, subject: String, link: String) {
+    fun sendEmail(recipient: String, subject: String, link: String) {
 
         val intent = Intent(Intent.ACTION_SEND)
 

@@ -20,7 +20,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MusicApplication">
-            <intent-filter>
+            <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,9 +29,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="http"
-                    android:host="85.193.80.129:8080"
-                    android:pathPrefix="/rooms" />
+                <data android:scheme="http" android:host="85.193.80.129:8080" android:pathPrefix="/rooms" />
             </intent-filter>
         </activity>
     </application>
