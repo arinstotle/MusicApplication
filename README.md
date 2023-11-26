@@ -23,13 +23,12 @@
 
 
 
-
-
-https://github.com/arinstotle/MusicApplication/assets/58369755/fe1e44c8-ba36-48ed-9d34-f87ee77ce96f
+https://github.com/arinstotle/MusicApplication/assets/58369755/e732cdbf-3230-4a24-b037-d47cd6b1d7c5
 
 
 
-https://github.com/arinstotle/MusicApplication/assets/58369755/211f2f77-7e5c-4594-852a-96f471f9ff12
+https://github.com/arinstotle/MusicApplication/assets/58369755/da9e74fb-c055-410f-ab02-e3acbbb020d0
+
 
 
 
